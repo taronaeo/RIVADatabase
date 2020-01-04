@@ -1,0 +1,36 @@
+<script>
+  export let firebase
+
+  import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
+</script>
+
+<style>
+  h1 {
+    font-weight: bold;
+  }
+
+  h5 {
+    cursor: pointer;
+    margin-bottom: 25px;
+  }
+</style>
+
+<FirebaseApp { firebase }>
+  <User let:user={ user } let:auth={ auth } on:user>
+    <div class="container">
+      <h1>Greetings { user.displayName }!</h1>
+      <h5 on:click="{ () => auth.signOut() }" class="amber-text darken-4">
+        Welcome to RIVAlumni's Database Administration Protocol. Logout?
+      </h5>
+    </div>
+
+    <div slot="signed-out">
+      <div class="container">
+        <h1>Hello Alumni!</h1>
+        <h5 on:click="{ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()) }" class="amber-text darken-4">
+          Please click here to login.
+        </h5>
+      </div>
+    </div>
+  </User>
+</FirebaseApp>
