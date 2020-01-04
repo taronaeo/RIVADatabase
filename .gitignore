@@ -110,6 +110,3 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
-
-# Build directory
-/public
