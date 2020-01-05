@@ -2,6 +2,9 @@
   export let firebase
 
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
+
+  import 'firebase/analytics'
+  import 'firebase/performance'
 </script>
 
 <style>
@@ -15,7 +18,7 @@
   }
 </style>
 
-<FirebaseApp { firebase }>
+<FirebaseApp { firebase } perf analytics>
   <User let:user={ user } let:auth={ auth } on:user>
     <div class="container">
       <h1>Greetings { user.displayName }!</h1>
