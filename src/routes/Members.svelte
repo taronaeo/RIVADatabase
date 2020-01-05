@@ -2,20 +2,24 @@
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
 
   import firebase from 'firebase/app'
+  import 'firebase/analytics'
   import 'firebase/firestore'
+  import 'firebase/performance'
 
   let query = ref => ref.orderBy('Full Name', 'asc').limit(10)
 
-  function previousPage(first) {
-    query = ref => ref.orderBy('Full Name', 'asc').endBefore(first['Full Name']).limitToLast(10)
-  }
-
-  function nextPage(last) {
-    query = ref => ref.orderBy('Full Name', 'asc').startAfter(last['Full Name']).limit(10)
+  function paginate(item, action) {
+    if (!item) return query = ref => ref.orderBy('Full Name', 'asc').limit(10)
+    if (action == 'next') return query = ref => ref.orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
+    if (action == 'previous') return query = ref => ref.orderBy('Full Name', 'asc').endBefore(item['Full Name']).limitToLast(10)
   }
 </script>
 
 <style>
+  nav {
+    margin-bottom: 15px;
+  }
+
   table {
     margin-bottom: 15px;
   }
@@ -29,14 +33,22 @@
   <title>RIVAlumni | Members</title>
 </svelte:head>
 
-<FirebaseApp { firebase }>
+<FirebaseApp { firebase } perf analytics>
   <User let:user={ user }>
-    <!-- { console.log('user:', user) }
-    { console.log('auth:', auth) } -->
-
     <Doc path={ 'users/' + user.uid } let:data={ userData }>
       <div class="container">
         { #if userData.roles.Editor }
+          <!-- TODO: Add Algolia Search Systems here -->
+          <nav class="amber darken-4">
+            <div class="nav-wrapper">
+              <div class="input-field">
+                <input id="search" type="search" placeholder="E.g. { userData.displayName }">
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </div>
+          </nav>
+
           <Collection
             path={ 'members' }
             query={ query }
@@ -44,34 +56,38 @@
             let:data={ members }
             let:first
             let:last>
-            <table class="highlight">
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Gender</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
 
-              <tbody>
-                { #each members as member }
+            { #if members.length < 1 }
+              <p>
+                No data found.
+              </p>
+            { :else }
+              <table class="highlight">
+                <thead>
                   <tr>
-                    <th>{ member['Full Name'] }</th>
-                    <th>{ member['Gender'] }</th>
-                    <th>
-                      <button class="btn">Profile</button>
-                    </th>
+                    <th>Full Name</th>
+                    <th>Gender</th>
+                    <th>Action</th>
                   </tr>
-                { /each }
-                <tr></tr>
-              </tbody>
-            </table>
+                </thead>
 
-            <div slot="after">
-              <div class="row">
-                <span class="left waves-effect waves-light btn amber darken-4" on:click={ () => previousPage(first) }>Previous</span>
-                <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => nextPage(last) }>Next</button>
-              </div>
+                <tbody>
+                  { #each members as member }
+                    <tr>
+                      <th>{ member['Full Name'] }</th>
+                      <th>{ member['Gender'] }</th>
+                      <th>
+                        <button class="btn">Profile</button>
+                      </th>
+                    </tr>
+                  { /each }
+                </tbody>
+              </table>
+            { /if }
+
+            <div class="row">
+              <span class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</span>
+              <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
             </div>
 
             <div slot="loading">

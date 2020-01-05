@@ -21,7 +21,8 @@
     projectId: "rivalumniops",
     storageBucket: "rivalumniops.appspot.com",
     messagingSenderId: "438307082557",
-    appId: "1:438307082557:web:88b948de151c09bb47b554"
+    appId: "1:438307082557:web:88b948de151c09bb47b554",
+    measurementId: "G-5LV4ZQHWZB"
   }
 
 	firebase.initializeApp(firebaseConfig)
