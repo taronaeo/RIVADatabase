@@ -28,6 +28,17 @@
 	firebase.initializeApp(firebaseConfig)
 </script>
 
+<style>
+	main {
+		background-size: 50%;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-image: url('/background.png');
+	}
+</style>
+
 <main>
 	<Navbar />
 
