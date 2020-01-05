@@ -24,14 +24,22 @@ interface User {
   roles: Roles
 }
 
-exports.createUserAccount = functions.auth.user().onCreate(user => {
+exports.createUserAccount = functions.auth.user().onCreate(async user => {
+  let alumni = false
+
+  await admin.firestore().collection('members').where('Email', '==', user.email).limit(1).get().then(snapshot => {
+    if (snapshot.docs.length >= 1) {
+      alumni = true
+    }
+  }).catch(err => console.error(err))
+
   const data: User = {
     uid: user.uid,
     email: user.email,
     photoURL: user.photoURL,
     displayName: user.displayName,
     roles: {
-      Alumni: true
+      Alumni: alumni
     }
   }
 
