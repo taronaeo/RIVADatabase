@@ -1,7 +1,6 @@
 {
   "version": "1.0.0",
   "name": "rivadatabase",
-  "email": "aaron.teo@riv-alumni.com",
   "description": "Administration protocol for RIVA's Central Membership Database",
   "scripts": {
     "build": "rollup -c",
