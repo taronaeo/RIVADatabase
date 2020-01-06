@@ -23,8 +23,8 @@
     <div class="col l4 offset-l2 s12">
       <h5 class="white-text">Links</h5>
       <ul>
-        <li><Link class="grey-text text-lighten-3" href="/">Home</Link></li>
-        <li><Link class="grey-text text-lighten-3" href="/members">Member List</Link></li>
+        <li><Link class="grey-text text-lighten-3" href="/">Dashboard</Link></li>
+        <li><Link class="grey-text text-lighten-3" href="/profile">Profile</Link></li>
         <li><Link class="grey-text text-lighten-3" href="/report">Report Member</Link></li>
       </ul>
     </div>

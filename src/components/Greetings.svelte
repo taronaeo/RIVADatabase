@@ -21,7 +21,7 @@
 <FirebaseApp { firebase } perf analytics>
   <User let:user={ user } let:auth={ auth } on:user>
     <div class="container">
-      <h1>Greetings { user.displayName }!</h1>
+      <h1 class="truncate">Greetings { user.displayName }!</h1>
       <h5 on:click="{ () => auth.signOut() }" class="amber-text darken-4">
         Welcome to RIVAlumni's Database Administration Protocol. Logout?
       </h5>

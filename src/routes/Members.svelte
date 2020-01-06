@@ -59,6 +59,7 @@
 
             { #if members.length < 1 }
               <p>
+                <!-- TODO: Reset the query -->
                 No data found.
               </p>
             { :else }
