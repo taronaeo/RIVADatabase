@@ -36,13 +36,13 @@ interface User {
   email: string | undefined;
   photoURL: string | undefined;
   displayName: string | undefined;
-  membershipID: string | undefined;
+  membershipID: string | null;
   roles: Roles
 }
 
 exports.createUserAccount = functions.auth.user().onCreate(async user => {
   let alumni = false
-  let membershipID = undefined;
+  let membershipID = null;
 
   await database.collection('members').where('Email', '==', user.email).limit(1).get().then(snapshot => {
     snapshot.forEach(doc => {

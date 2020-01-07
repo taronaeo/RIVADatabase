@@ -45,6 +45,14 @@
           </div>
         </div>
       </div>
+
+      <div slot="fallback">
+        <div class="container">
+          <p>
+            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+          </p>
+        </div>
+      </div>
     </Doc>
   </User>
 </FirebaseApp>
