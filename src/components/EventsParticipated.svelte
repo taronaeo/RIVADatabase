@@ -1,5 +1,5 @@
 <script>
-  export let profile
+  export let id
 
   import { Collection } from 'sveltefire'
 </script>
@@ -9,7 +9,7 @@
 <!-- TODO: Add pagination -->
 <Collection
   path={ 'participation'}
-  query={ ref => ref.where('Member ID', '==', profile['id']) }
+  query={ ref => ref.where('Member ID', '==', id) }
   maxWait={ 2000 }
   let:data={ participations }>
 

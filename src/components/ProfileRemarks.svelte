@@ -1,5 +1,5 @@
 <script>
-  export let profile
+  export let id
 
   import { Collection } from 'sveltefire'
 </script>
@@ -8,7 +8,7 @@
 
 <!-- TODO: Add pagination -->
 <Collection
-  path={ 'members/' + profile['id'] + '/remarks' }
+  path={ 'members/' + id + '/remarks' }
   query={ ref => ref.orderBy('Date Occurred', 'asc').limit(5) }
   maxWait={ 2000 }
   let:data={ remarks }>

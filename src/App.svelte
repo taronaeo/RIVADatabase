@@ -38,6 +38,7 @@
 		<Route exact path="/report" component={ Report } />
 		<Route exact path="/profile" component={ Profile } />
 		<Route exact path="/members" component={ Members } />
+		<Route exact path="/profile/:id" component={ Profile } />
 		<Route fallback component={ Dashboard } />
 	</Router>
 

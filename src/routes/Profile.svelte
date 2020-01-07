@@ -1,4 +1,6 @@
 <script>
+  export let router
+
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
 
   import ProfileInformation from '../components/ProfileInformation.svelte'
@@ -23,8 +25,10 @@
   <User let:user>
     <Doc path={ 'users/' + user.uid } let:data={ userData }>
       <div class="container">
-        { #if userData.roles.Alumni }
-          <ProfileInformation { userData } />
+        { #if userData.roles.Alumni && !router.params.id }
+          <ProfileInformation id={ null } userData={ userData } />
+        { :else if userData.roles.Editor && router.params.id }
+          <ProfileInformation id={ router.params.id } userData={ null } />
         { :else }
           <p>
             Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
