@@ -1,4 +1,5 @@
 <script>
+  import { Link } from 'yrv'
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
 
   import firebase from 'firebase/app'
@@ -12,6 +13,10 @@
     if (!item) return query = ref => ref.orderBy('Full Name', 'asc').limit(10)
     if (action == 'next') return query = ref => ref.orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
     if (action == 'previous') return query = ref => ref.orderBy('Full Name', 'asc').endBefore(item['Full Name']).limitToLast(10)
+  }
+
+  function resetSearch() {
+    document.getElementById('search').value = ''
   }
 </script>
 
@@ -44,7 +49,7 @@
               <div class="input-field">
                 <input id="search" type="search" placeholder="E.g. { userData.displayName }">
                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
+                <i class="material-icons" on:click={ resetSearch }>close</i>
               </div>
             </div>
           </nav>
@@ -78,7 +83,9 @@
                       <th>{ member['Full Name'] }</th>
                       <th>{ member['Gender'] }</th>
                       <th>
-                        <button class="btn">Profile</button>
+                        <button class="btn waves-effect waves-light amber darken-4">
+                          <Link href="/profile/{ member['id'] }" class="white-text">Profile</Link>
+                        </button>
                       </th>
                     </tr>
                   { /each }

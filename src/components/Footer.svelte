@@ -25,6 +25,7 @@
       <ul>
         <li><Link class="grey-text text-lighten-3" href="/">Dashboard</Link></li>
         <li><Link class="grey-text text-lighten-3" href="/profile">Profile</Link></li>
+        <li><Link class="grey-text text-lighten-3" href="/members">Member List</Link></li>
         <li><Link class="grey-text text-lighten-3" href="/report">Report Member</Link></li>
       </ul>
     </div>
