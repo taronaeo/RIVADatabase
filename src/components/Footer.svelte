@@ -7,7 +7,6 @@
   .footer-copyright > .container {
     font-weight: bold;
   }
-
 </style>
 
 <footer class="page-footer red">
@@ -34,7 +33,7 @@
   <div class="footer-copyright">
     <div class="container">
       &copy; { new Date().getFullYear() } RIVAlumni, Aaron Teo
-      <a class="grey-text text-lighten-4 right" href="https://instagram.com/riv.alumni">Instagram</a>
+      <a class="grey-text text-lighten-4 right" href="https://instagram.com/riv.alumni" target="_blank">Instagram</a>
     </div>
   </div>
 </footer>
