@@ -4,9 +4,11 @@
   import { FirebaseApp, User } from 'sveltefire'
   import { Link } from 'yrv'
 
+  let closeNav
+
   document.addEventListener('DOMContentLoaded', () => {
-    let elems = document.querySelectorAll('.sidenav')
-    let instances = M.Sidenav.init(elems)
+    let elem = document.querySelectorAll('.sidenav')
+    let instances = M.Sidenav.init(elem)
   })
 </script>
 
@@ -56,7 +58,7 @@
       </div>
     </User>
   </FirebaseApp>
-  <li><Link href="/">Dashboard</Link></li>
-  <li><Link href="/profile">Profile</Link></li>
-  <li><Link href="/report">Report Member</Link></li>
+  <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
+  <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
+  <li><Link href="/report" class="sidenav-close">Report Member</Link></li>
 </ul>
