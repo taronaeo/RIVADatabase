@@ -65,9 +65,13 @@
 
         <div class="row">
           <div class="col s6 bold">Home Number</div>
-          <div class="col s6 truncate">
-            <a href="tel:+65{ pf['Home Number'] }" class="red-text">{ pf['Home Number'] }</a>
-          </div>
+          { #if typeof pf['Home Number'] == 'object'}
+            <div class="col s6 truncate">N/A</div>
+          { :else }
+            <div class="col s6 truncate">
+              <a href="tel:+65{ pf['Home Number'] }" class="red-text">{ pf['Home Number'] }</a>
+            </div>
+          { /if }
         </div>
 
         <div class="row">
@@ -161,9 +165,13 @@
 
     <div class="row">
       <div class="col s6 bold">Home Number</div>
-      <div class="col s6 truncate">
-        <a href="tel:+65{ profile['Home Number'] }" class="red-text">{ profile['Home Number'] }</a>
-      </div>
+      { #if typeof profile['Home Number'] == 'object'}
+        <div class="col s6 truncate">N/A</div>
+      { :else }
+        <div class="col s6 truncate">
+          <a href="tel:+65{ profile['Home Number'] }" class="red-text">{ profile['Home Number'] }</a>
+        </div>
+      { /if }
     </div>
 
     <div class="row">
