@@ -28,10 +28,6 @@
   table {
     margin-bottom: 15px;
   }
-
-  p {
-    font-weight: bold;
-  }
 </style>
 
 <svelte:head>

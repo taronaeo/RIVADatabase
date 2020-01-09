@@ -11,12 +11,6 @@
   import 'firebase/performance'
 </script>
 
-<style>
-  p {
-    font-weight: bold;
-  }
-</style>
-
 <svelte:head>
   <title>RIVAlumni | Profile</title>
 </svelte:head>
@@ -26,9 +20,9 @@
     <Doc path={ 'users/' + user.uid } let:data={ userData }>
       <div class="container">
         { #if userData.roles.Alumni && !router.params.id }
-          <ProfileInformation id={ null } userData={ userData } />
+          <ProfileInformation id={ userData.membershipID } userData={ userData } />
         { :else if userData.roles.Editor && router.params.id }
-          <ProfileInformation id={ router.params.id } userData={ null } />
+          <ProfileInformation id={ router.params.id } userData={ userData } />
         { :else }
           <p>
             Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
