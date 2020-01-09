@@ -33,7 +33,11 @@
   <div class="footer-copyright">
     <div class="container">
       &copy; { new Date().getFullYear() } RIVAlumni, Aaron Teo
-      <a class="grey-text text-lighten-4 right" href="https://instagram.com/riv.alumni" target="_blank">Instagram</a>
+      <a
+        class="grey-text text-lighten-4 right"
+        href="https://instagram.com/riv.alumni"
+        target="_blank"
+        rel="noreferrer noopener">Instagram</a>
     </div>
   </div>
 </footer>
