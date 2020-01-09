@@ -22,13 +22,6 @@
     <div class="col s6 truncate">{ id }</div>
   </div>
 
-  { #if userData }
-    <div class="row">
-      <div class="col s6 bold">User Account ID</div>
-      <div class="col s6 truncate">{ userData.uid }</div>
-    </div>
-  { /if }
-
   <div class="row">
     <div class="col s6 bold">Full Name</div>
     <div class="col s6 truncate">{ profile['Full Name'] }</div>
