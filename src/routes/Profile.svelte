@@ -9,6 +9,8 @@
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
+
+  console.log(router)
 </script>
 
 <svelte:head>
@@ -19,10 +21,8 @@
   <User let:user>
     <Doc path={ 'users/' + user.uid } let:data={ userData }>
       <div class="container">
-        { #if userData.roles.Alumni && !router.params.id }
-          <ProfileInformation id={ userData.membershipID } userData={ userData } />
-        { :else if userData.roles.Editor && router.params.id }
-          <ProfileInformation id={ router.params.id } userData={ userData } />
+        { #if userData.roles.Alumni }
+          <ProfileInformation id={ router.params.id || userData.membershipID } userData={ userData } />
         { :else }
           <p>
             Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.

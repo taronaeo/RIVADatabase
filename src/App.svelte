@@ -7,7 +7,6 @@
 	import Report from './routes/Report.svelte'
 	import Members from './routes/Members.svelte'
 	import Profile from './routes/Profile.svelte'
-	import EditProfile from './routes/EditProfile.svelte'
 	import Dashboard from './routes/Dashboard.svelte'
 
 	import Greetings from './components/Greetings.svelte'
@@ -39,7 +38,7 @@
 		<Route exact path="/profile" component={ Profile } />
 		<Route exact path="/members" component={ Members } />
 		<Route exact path="/profile/:id" component={ Profile } />
-		<Route exact path="/profile/:id/edit" component={ EditProfile } />
+		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route exact path="/report" disabled={ true } component={ Report } />
 		<Route fallback component={ Dashboard } />
 	</Router>

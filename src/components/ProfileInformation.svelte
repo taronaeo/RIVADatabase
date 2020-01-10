@@ -15,114 +15,122 @@
   }
 </style>
 
-<Doc path={ 'members/' + id } maxWait={ 2000 } let:data={ profile }>
-  <h3>Personal Information</h3>
+{ #if userData.membershipID == id || userData.roles.Editor || userData.roles.Administrator }
+  <Doc path={ 'members/' + id } maxWait={ 2000 } let:data={ profile }>
+    <h3>Personal Information</h3>
 
-  <div class="row">
-    <div class="col s6 bold">Membership ID</div>
-    <div class="col s6 truncate">{ id }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Full Name</div>
-    <div class="col s6 truncate">{ profile['Full Name'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Gender</div>
-    <div class="col s6 truncate">{ profile['Gender'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Email</div>
-    { #if typeof profile['Email'] == 'object' }
-      <div class="col s6 truncate">N/A</div>
-    { :else }
-      <div class="col s6 truncate">{ profile['Email'] }</div>
-    { /if }
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Contact Number</div>
-    <div class="col s6 truncate">
-      <a href="tel:+65{ profile['Contact Number'] }" class="red-text">{ profile['Contact Number'] }</a>
+    <div class="row">
+      <div class="col s6 bold">Membership ID</div>
+      <div class="col s6 truncate">{ id }</div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col s6 bold">Home Number</div>
-    { #if typeof profile['Home Number'] == 'object' }
-      <div class="col s6 truncate">N/A</div>
-    { :else }
+    <div class="row">
+      <div class="col s6 bold">Full Name</div>
+      <div class="col s6 truncate">{ profile['Full Name'] }</div>
+    </div>
+
+    <div class="row">
+      <div class="col s6 bold">Gender</div>
+      <div class="col s6 truncate">{ profile['Gender'] }</div>
+    </div>
+
+    <div class="row">
+      <div class="col s6 bold">Email</div>
+      { #if typeof profile['Email'] == 'object' }
+        <div class="col s6 truncate">N/A</div>
+      { :else }
+        <div class="col s6 truncate">{ profile['Email'] }</div>
+      { /if }
+    </div>
+
+    <div class="row">
+      <div class="col s6 bold">Contact Number</div>
       <div class="col s6 truncate">
-        <a href="tel:+65{ profile['Home Number'] }" class="red-text">{ profile['Home Number'] }</a>
+        <a href="tel:+65{ profile['Contact Number'] }" class="red-text">{ profile['Contact Number'] }</a>
       </div>
-    { /if }
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Graduating Class</div>
-    <div class="col s6 truncate">{ profile['Graduating Class'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Graduating Year</div>
-    <div class="col s6 truncate">{ profile['Graduating Year'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Membership Status</div>
-    <div class="col s6 truncate">{ profile['Membership Status'] }</div>
-  </div>
-
-  <hr />
-
-  <h3>Emergency Contact Details</h3>
-
-  <div class="row">
-    <div class="col s6 bold">Name Of Next-Of-Kin</div>
-    <div class="col s6">{ profile['Name Of Next-Of-Kin'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Relationship With Next-Of-Kin</div>
-    <div class="col s6">{ profile['Relationship With Next-Of-Kin'] }</div>
-  </div>
-
-  <div class="row">
-    <div class="col s6 bold">Contact Number Of Next-Of-Kin</div>
-    <div class="col s6">
-      <a href="tel:+65{ profile['Contact Number Of Next-Of-Kin'] }" class="red-text">{ profile['Contact Number Of Next-Of-Kin'] }</a>
     </div>
-  </div>
 
-  <hr />
+    <div class="row">
+      <div class="col s6 bold">Home Number</div>
+      { #if typeof profile['Home Number'] == 'object' }
+        <div class="col s6 truncate">N/A</div>
+      { :else }
+        <div class="col s6 truncate">
+          <a href="tel:+65{ profile['Home Number'] }" class="red-text">{ profile['Home Number'] }</a>
+        </div>
+      { /if }
+    </div>
 
-  <EventsParticipated { id } />
+    <div class="row">
+      <div class="col s6 bold">Graduating Class</div>
+      <div class="col s6 truncate">{ profile['Graduating Class'] }</div>
+    </div>
 
-  { #if userData.roles.Editor }
+    <div class="row">
+      <div class="col s6 bold">Graduating Year</div>
+      <div class="col s6 truncate">{ profile['Graduating Year'] }</div>
+    </div>
+
+    <div class="row">
+      <div class="col s6 bold">Membership Status</div>
+      <div class="col s6 truncate">{ profile['Membership Status'] }</div>
+    </div>
+
     <hr />
 
-    <ProfileRemarks { id } />
-  { /if }
+    <h3>Emergency Contact Details</h3>
 
-  <div class="fixed-action-btn">
-    <button class="btn-floating btn-large deep-orange">
-      <Link href="/profile/{ userData.membershipID }/edit">
-        <i class="material-icons">mode_edit</i>
-      </Link>
-    </button>
-  </div>
-
-  <div slot="loading">
-    <div class="progress">
-      <div class="indeterminate"></div>
+    <div class="row">
+      <div class="col s6 bold">Name Of Next-Of-Kin</div>
+      <div class="col s6">{ profile['Name Of Next-Of-Kin'] }</div>
     </div>
-  </div>
 
-  <div slot="fallback">
-    <p>
-      No record found.
-    </p>
-  </div>
-</Doc>
+    <div class="row">
+      <div class="col s6 bold">Relationship With Next-Of-Kin</div>
+      <div class="col s6">{ profile['Relationship With Next-Of-Kin'] }</div>
+    </div>
+
+    <div class="row">
+      <div class="col s6 bold">Contact Number Of Next-Of-Kin</div>
+      <div class="col s6">
+        <a href="tel:+65{ profile['Contact Number Of Next-Of-Kin'] }" class="red-text">{ profile['Contact Number Of Next-Of-Kin'] }</a>
+      </div>
+    </div>
+
+    <hr />
+
+    <EventsParticipated { id } />
+
+    { #if userData.roles.Editor }
+      <hr />
+
+      <ProfileRemarks { id } />
+    { /if }
+
+    <div class="fixed-action-btn">
+      <button class="btn-floating btn-large deep-orange">
+        <Link href="/profile/{ userData.membershipID }/edit">
+          <i class="material-icons">mode_edit</i>
+        </Link>
+      </button>
+    </div>
+
+    <div slot="loading">
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+
+    <div slot="fallback">
+      <p>
+        No record found.
+      </p>
+    </div>
+  </Doc>
+{ :else }
+  <p>
+    Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
+    This error occurred because the account that you are currently signed into has not been linked to any RIVAlumni Membership Accounts.
+    If you believe this is an error or require further assistance, please contact Aaron Teo (aaron.teo@riv-alumni.com)
+  </p>
+{ /if }
