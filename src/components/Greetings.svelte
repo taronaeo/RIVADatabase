@@ -22,7 +22,7 @@
   <User let:user={ user } let:auth={ auth } persist={ localStorage }>
     <div class="container">
       <h1 class="truncate">Greetings { user.displayName }!</h1>
-      <h5 on:click="{ () => auth.signOut() }" class="amber-text darken-4">
+      <h5 on:click="{ () => auth.signOut() }" class="red-text">
         Welcome to RIVAlumni's Database Administration Protocol. Logout?
       </h5>
     </div>

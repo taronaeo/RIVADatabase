@@ -2,6 +2,7 @@
   export let id
   export let userData
 
+  import { Link } from 'yrv'
   import { Collection, Doc } from 'sveltefire'
 
   import ProfileRemarks from './ProfileRemarks.svelte'
@@ -99,11 +100,19 @@
 
   <EventsParticipated { id } />
 
-  <hr />
-
   { #if userData.roles.Editor }
+    <hr />
+
     <ProfileRemarks { id } />
   { /if }
+
+  <div class="fixed-action-btn">
+    <button class="btn-floating btn-large deep-orange">
+      <Link href="/profile/{ userData.membershipID }/edit">
+        <i class="material-icons">mode_edit</i>
+      </Link>
+    </button>
+  </div>
 
   <div slot="loading">
     <div class="progress">

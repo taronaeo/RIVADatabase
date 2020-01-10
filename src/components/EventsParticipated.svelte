@@ -8,7 +8,7 @@
 
 <!-- TODO: Add pagination -->
 <Collection
-  path={ 'participation'}
+  path={ 'participation' }
   query={ ref => ref.where('Member ID', '==', id) }
   maxWait={ 2000 }
   let:data={ participations }>
