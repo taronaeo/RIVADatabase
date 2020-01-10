@@ -1,5 +1,6 @@
 <script>
   export let router
+  export let edit = router.path.split('/')[3] == 'edit'
 
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
 
@@ -9,8 +10,6 @@
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
-
-  console.log(router)
 </script>
 
 <svelte:head>
@@ -22,7 +21,7 @@
     <Doc path={ 'users/' + user.uid } let:data={ userData }>
       <div class="container">
         { #if userData.roles.Alumni }
-          <ProfileInformation id={ router.params.id || userData.membershipID } userData={ userData } />
+          <ProfileInformation id={ router.params.id || userData.membershipID } userData={ userData } { edit } />
         { :else }
           <p>
             Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
