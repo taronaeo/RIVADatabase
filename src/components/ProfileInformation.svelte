@@ -126,7 +126,7 @@
           <input id="homeNumber" type="tel" value={ profile['Home Number'] }>
         </div>
       { :else }
-        { #if profile['Home Number'] == 0 }
+        { #if profile['Home Number'] == 0 || typeof profile['Home Number'] == 'object' }
           <div class="col s6 truncate">N/A</div>
         { :else }
           <div class="col s6 truncate">
