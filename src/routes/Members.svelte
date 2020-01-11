@@ -21,6 +21,10 @@
 </script>
 
 <style>
+  tbody th {
+    font-weight: normal;
+  }
+
   nav {
     margin-bottom: 15px;
   }
@@ -59,10 +63,7 @@
             let:last>
 
             { #if members.length < 1 }
-              <p>
-                <!-- TODO: Reset the query -->
-                No data found.
-              </p>
+              { paginate() }
             { :else }
               <table class="highlight">
                 <thead>
@@ -79,17 +80,17 @@
                       <th>{ member['Full Name'] }</th>
                       <th>{ member['Gender'] }</th>
                       <th>
-                        <button class="btn waves-effect waves-light blue">
-                          <Link href="/profile/{ member['id'] }" class="white-text">
+                        <Link href="/profile/{ member['id'] }" class="white-text">
+                          <button class="btn waves-effect waves-light blue">
                             <i class="material-icons">remove_red_eye</i>
-                          </Link>
-                        </button>
+                          </button>
+                        </Link>
 
-                        <button class="btn waves-effect waves-light amber darken-4">
-                          <Link href="/profile/{ member['id'] }/edit" class="white-text">
+                        <Link href="/profile/{ member['id'] }/edit" class="white-text">
+                          <button class="btn waves-effect waves-light amber darken-4">
                             <i class="material-icons">mode_edit</i>
-                          </Link>
-                        </button>
+                          </button>
+                        </Link>
                       </th>
                     </tr>
                   { /each }

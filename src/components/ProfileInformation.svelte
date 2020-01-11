@@ -33,6 +33,7 @@
   }
 
   function initializeSelect() {
+    // TODO: Needs further testing due to setTimeout()
     let elems = document.querySelectorAll('select')
     let instances = M.FormSelect.init(elems)
   }
@@ -223,18 +224,18 @@
     { /if }
 
     { #if edit }
-      <div class="fixed-action-btn">
-        <button class="btn-floating btn-large green pulse" on:click="{ () => updateData(ref) }">
+      <div class="fixed-action-btn" on:click="{ () => updateData(ref) }">
+        <button class="btn-floating btn-large green pulse">
           <i class="material-icons">check</i>
         </button>
       </div>
     { :else }
       <div class="fixed-action-btn">
-        <button class="btn-floating btn-large deep-orange pulse">
-          <Link href="/profile/{ id }/edit">
+        <Link href="/profile/{ id }/edit">
+          <button class="btn-floating btn-large deep-orange pulse">
             <i class="material-icons">mode_edit</i>
-          </Link>
-        </button>
+          </button>
+        </Link>
       </div>
     { /if }
 

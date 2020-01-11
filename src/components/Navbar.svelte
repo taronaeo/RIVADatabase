@@ -1,8 +1,8 @@
 <script>
   export let firebase
 
-  import { FirebaseApp, User } from 'sveltefire'
   import { Link } from 'yrv'
+  import { FirebaseApp, User, Doc } from 'sveltefire'
 
   let closeNav
 
@@ -28,14 +28,26 @@
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><Link href="/">Dashboard</Link></li>
         <li><Link href="/profile">Profile</Link></li>
-        <li><Link href="/report">Report Member</Link></li>
+        <!-- <li><Link href="/report">Report Member</Link></li> -->
+        <li>
+          <a href="#!" class="dropdown-trigger" data-target="management">
+            Management
+            <i class="material-icons right">arrow_drop_down</i>
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<ul id="mobile-sidenav" class="sidenav">
-  <FirebaseApp { firebase }>
+<ul id="management" class="dropdown-content">
+  <li><Link href="/members">Manage Members</Link></li>
+  <li><Link href="/manage/users">Manage Users</Link></li>
+  <li><Link href="/manage/events">Manage Events</Link></li>
+</ul>
+
+<FirebaseApp { firebase }>
+  <ul id="mobile-sidenav" class="sidenav">
     <User let:user>
       <li>
         <div class="user-view">
@@ -57,8 +69,24 @@
         </li>
       </div>
     </User>
-  </FirebaseApp>
-  <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
-  <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
-  <li><Link href="/report" class="sidenav-close">Report Member</Link></li>
-</ul>
+
+    <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
+    <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
+    <li><Link href="/report" class="sidenav-close">Report Member</Link></li>
+
+    <div class="divider"></div>
+
+    <User let:user>
+      <Doc
+        path={ 'users/' + user.uid }
+        maxWait={ 2000 }
+        let:data={ userData }>
+
+        { #if userData.roles.Editor || userData.roles.Administrator }
+          <li><Link href="/manage/users" class="sidenav-close">Manage Users</Link></li>
+          <li><Link href="/manage/events" class="sidenav-close">Manage Events</Link></li>
+        { /if }
+      </Doc>
+    </User>
+  </ul>
+</FirebaseApp>

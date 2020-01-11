@@ -4,6 +4,7 @@
 	import Navbar from './components/Navbar.svelte'
 	import Footer from './components/Footer.svelte'
 
+	import Users from './routes/Users.svelte'
 	import Report from './routes/Report.svelte'
 	import Members from './routes/Members.svelte'
 	import Profile from './routes/Profile.svelte'
@@ -37,6 +38,9 @@
 		<Route exact path="/" component={ Dashboard } />
 		<Route exact path="/profile" component={ Profile } />
 		<Route exact path="/members" component={ Members } />
+		<Route exact path="/manage/users" component={ Users } />
+		<Route exact path="/manage/users/:id/view" component={ Users } />
+		<Route exact path="/manage/users/:id/edit" component={ Users } />
 		<Route exact path="/profile/:id" component={ Profile } />
 		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route exact path="/report" disabled={ true } component={ Report } />
