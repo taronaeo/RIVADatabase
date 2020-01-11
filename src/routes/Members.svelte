@@ -79,8 +79,16 @@
                       <th>{ member['Full Name'] }</th>
                       <th>{ member['Gender'] }</th>
                       <th>
+                        <button class="btn waves-effect waves-light blue">
+                          <Link href="/profile/{ member['id'] }" class="white-text">
+                            <i class="material-icons">remove_red_eye</i>
+                          </Link>
+                        </button>
+
                         <button class="btn waves-effect waves-light amber darken-4">
-                          <Link href="/profile/{ member['id'] }" class="white-text">Profile</Link>
+                          <Link href="/profile/{ member['id'] }/edit" class="white-text">
+                            <i class="material-icons">mode_edit</i>
+                          </Link>
                         </button>
                       </th>
                     </tr>
