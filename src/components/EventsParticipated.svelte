@@ -10,7 +10,7 @@
 <Collection
   path={ 'participation' }
   query={ ref => ref.where('Member ID', '==', id) }
-  maxWait={ 2000 }
+  maxWait={ 5000 }
   let:data={ participations }>
 
   { #if participations.length < 1 }

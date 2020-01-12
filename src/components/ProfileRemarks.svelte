@@ -10,7 +10,7 @@
 <Collection
   path={ 'members/' + id + '/remarks' }
   query={ ref => ref.orderBy('Date Occurred', 'asc').limit(5) }
-  maxWait={ 2000 }
+  maxWait={ 5000 }
   let:data={ remarks }>
 
   { #if remarks.length < 1 }

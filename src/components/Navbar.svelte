@@ -77,7 +77,7 @@
     <User let:user>
       <Doc
         path={ 'users/' + user.uid }
-        maxWait={ 2000 }
+        maxWait={ 5000 }
         let:data={ userData }>
 
         { #if userData.roles.Editor || userData.roles.Administrator }

@@ -40,7 +40,10 @@
 
 <FirebaseApp { firebase } perf analytics>
   <User let:user={ user }>
-    <Doc path={ 'users/' + user.uid } let:data={ userData }>
+    <Doc
+      path={ 'users/' + user.uid }
+      maxWait={ 5000 }
+      let:data={ userData }>
       <div class="container">
         { #if userData.roles.Editor }
           <!-- TODO: Add Algolia Search Systems here -->

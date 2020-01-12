@@ -52,7 +52,7 @@
 { #if userData.membershipID == id || userData.roles.Editor || userData.roles.Administrator }
   <Doc
     path={ 'members/' + id }
-    maxWait={ 2000 }
+    maxWait={ 5000 }
     let:ref
     let:data={ profile }
     on:data={ () => window.setTimeout(initializeSelect, 500) }>

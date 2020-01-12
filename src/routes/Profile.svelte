@@ -18,7 +18,10 @@
 
 <FirebaseApp { firebase } perf analytics>
   <User let:user>
-    <Doc path={ 'users/' + user.uid } let:data={ userData }>
+    <Doc
+      path={ 'users/' + user.uid }
+      maxWait={ 5000 }
+      let:data={ userData }>
       <div class="container">
         { #if userData.roles.Alumni }
           <ProfileInformation id={ router.params.id || userData.membershipID } userData={ userData } { edit } />
