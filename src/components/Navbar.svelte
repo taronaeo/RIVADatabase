@@ -85,6 +85,16 @@
           <li><Link href="/manage/events" class="sidenav-close">Manage Events</Link></li>
           <li><Link href="/members" class="sidenav-close">Manage Members</Link></li>
         { /if }
+
+        <div slot="loading">
+          <div class="container progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
+
+        <div slot="fallback">
+          <li><a href="#!" on:click|preventDefault="">An error has occurred.</a></li>
+        </div>
       </Doc>
     </User>
   </ul>
