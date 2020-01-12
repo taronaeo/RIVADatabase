@@ -41,9 +41,9 @@
 </nav>
 
 <ul id="management" class="dropdown-content">
-  <li><Link href="/members">Manage Members</Link></li>
   <li><Link href="/manage/users">Manage Users</Link></li>
   <li><Link href="/manage/events">Manage Events</Link></li>
+  <li><Link href="/members">Manage Members</Link></li>
 </ul>
 
 <FirebaseApp { firebase }>
@@ -85,6 +85,7 @@
         { #if userData.roles.Editor || userData.roles.Administrator }
           <li><Link href="/manage/users" class="sidenav-close">Manage Users</Link></li>
           <li><Link href="/manage/events" class="sidenav-close">Manage Events</Link></li>
+          <li><Link href="/members" class="sidenav-close">Manage Members</Link></li>
         { /if }
       </Doc>
     </User>

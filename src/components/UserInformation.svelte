@@ -41,6 +41,22 @@
     }
   }
 
+  function deleteAccount(ref) {
+    ref.delete()
+      .then(() => {
+        M.toast({ html: 'Account successfully deleted.', displayLength: 3000 })
+        return navigateTo('/manage/users/')
+      })
+      .catch(() => {
+        return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
+      })
+  }
+
+  function confirmDelete() {
+    let elems = document.querySelectorAll('.modal')
+    let instances = M.Modal.init(elems)
+  }
+
   function updateData(ref) {
     let result = {}
     const options = document.getElementById('roles').options
@@ -86,9 +102,19 @@
     let:ref
     let:data={ user }
     on:data={ () => window.setTimeout(initializeSelect, 500) }>
-  
+
     { #if edit }
       <h3>Edit Profile</h3>
+      { #if id == userData['uid'] }
+        <div class="row">
+          <div class="card red">
+            <div class="card-content white-text valign-wrapper">
+              <i class="material-icons left">warning</i>
+              Warning: You are editing your own user data! Proceed with caution.
+            </div>
+          </div>
+        </div>
+      { /if }
     { :else }
       <h3>User Profile</h3>
     { /if }
@@ -138,10 +164,16 @@
         <div class="col s6">
           <select id="roles" multiple>
             { #each roles as role }
-              <option
-                value="{ role.id }"
-                selected="{ user['roles'][role.id] == true }"
-                disabled="{ userData.roles.Administrator == false }">{ role.name }</option>
+              { #if userData.roles.Administrator }
+                <option
+                  value="{ role.id }"
+                  selected="{ user['roles'][role.id] == true }">{ role.name }</option>
+              { :else }
+                <option
+                  value="{ role.id }"
+                  selected="{ user['roles'][role.id] == true }"
+                  disabled="{ role.name == 'Administrator' }">{ role.name }</option>
+              { /if }
             { /each }
           </select>
         </div>
@@ -162,6 +194,36 @@
         </div>
       { /if }
     </div>
+
+    { #if userData.roles.Administrator }
+      <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+          <h3 class="truncate">Confirmation</h3>
+          <p>Are you sure you want to delete the following account?</p>
+          <p class="bold" style="word-break: break-all;">{ user['email'] } ({ id })</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-close waves-effect waves-red btn-flat red-text"
+            on:click={ () => deleteAccount(ref) }>
+            Confirm
+          </button>
+          <button class="modal-close waves-effect waves-green btn-flat bold green-text">Reject</button>
+        </div>
+      </div>
+
+      <div class="row valign-wrapper">
+        <div class="col s6 bold">Delete Account</div>
+        <div class="col s6">
+          <a
+            href="#confirmationModal"
+            class="btn waves-orange waves-effect waves-light modal-trigger red"
+            on:click|preventDefault={ confirmDelete }>
+            Delete Account
+          </a>
+        </div>
+      </div>
+    { /if }
 
     { #if edit }
       <div class="fixed-action-btn">
