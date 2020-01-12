@@ -28,7 +28,6 @@
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><Link href="/">Dashboard</Link></li>
         <li><Link href="/profile">Profile</Link></li>
-        <!-- <li><Link href="/report">Report Member</Link></li> -->
         <li>
           <a href="#!" class="dropdown-trigger" data-target="management">
             Management
@@ -72,7 +71,6 @@
 
     <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
     <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
-    <li><Link href="/report" class="sidenav-close">Report Member</Link></li>
 
     <div class="divider"></div>
 

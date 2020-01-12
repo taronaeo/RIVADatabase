@@ -30,7 +30,7 @@
     <div slot="signed-out">
       <div class="container">
         <h1>Hello Alumni!</h1>
-        <h5 on:click="{ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()) }" class="amber-text darken-4">
+        <h5 on:click="{ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()) }" class="red-text">
           Please click here to login.
         </h5>
       </div>

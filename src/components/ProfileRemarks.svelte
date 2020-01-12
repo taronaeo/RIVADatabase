@@ -28,9 +28,10 @@
 
       <tbody>
         { #each remarks as remark }
+
           <tr>
             <td>{ remark['Event Code'] }</td>
-            <td>{ remark['Date Occurred'].toDate() }</td>
+            <td>{ new Date(remark['Date Occurred'].seconds * 1000).toLocaleDateString() }</td>
             <td>{ remark['Remarks'] }</td>
             <td>{ remark['Written By'] }</td>
           </tr>
