@@ -45,7 +45,7 @@
     ref.delete()
       .then(() => {
         M.toast({ html: 'Account successfully deleted.', displayLength: 3000 })
-        return navigateTo('/manage/users/')
+        return navigateTo('/manage/users')
       })
       .catch(() => {
         return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
