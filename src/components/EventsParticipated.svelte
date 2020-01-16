@@ -23,6 +23,7 @@
         <tr>
           <th>Event Code</th>
           <th>Event Name</th>
+          <th>Event Role</th>
           <th>VIA Hours</th>
         </tr>
       </thead>
@@ -32,6 +33,7 @@
           <tr>
             <td>{ participation['Event Code'] }</td>
             <td>{ participation['Event Name'] }</td>
+            <td>{ participation['Role'] }</td>
             <td>{ participation['VIA Hours'] }</td>
           </tr>
         { /each }

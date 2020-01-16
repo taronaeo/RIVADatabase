@@ -5,6 +5,7 @@
 	import Footer from './components/Footer.svelte'
 
 	import Users from './routes/Users.svelte'
+	import Events from './routes/Events.svelte'
 	import Members from './routes/Members.svelte'
 	import Profile from './routes/Profile.svelte'
 	import Dashboard from './routes/Dashboard.svelte'
@@ -40,6 +41,9 @@
 		<Route exact path="/manage/users" component={ Users } />
 		<Route exact path="/manage/users/:id/view" component={ Users } />
 		<Route exact path="/manage/users/:id/edit" component={ Users } />
+		<Route exact path="/manage/events" component={ Events } />
+		<Route exact path="/manage/events/:id/view" component={ Events } />
+		<Route exact path="/manage/events/:id/edit" component={ Events } />
 		<Route exact path="/profile/:id" component={ Profile } />
 		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route fallback component={ Dashboard } />

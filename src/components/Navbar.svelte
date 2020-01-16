@@ -72,8 +72,6 @@
     <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
     <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
 
-    <div class="divider"></div>
-
     <User let:user>
       <Doc
         path={ 'users/' + user.uid }
@@ -81,6 +79,8 @@
         let:data={ userData }>
 
         { #if userData.roles.Editor || userData.roles.Administrator }
+          <div class="divider"></div>
+
           <li><Link href="/manage/users" class="sidenav-close">Manage Users</Link></li>
           <li><Link href="/manage/events" class="sidenav-close">Manage Events</Link></li>
           <li><Link href="/members" class="sidenav-close">Manage Members</Link></li>

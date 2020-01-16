@@ -1,110 +1,81 @@
 <script>
+  export let router;
+  export let view = router.path.split('/')[4] == 'view'
+  export let edit = router.path.split('/')[4] == 'edit'
+
   import { Link } from 'yrv'
-  import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
+  import { FirebaseApp, User, Collection, Doc } from 'sveltefire'
+  
+  import EventInformation from '../components/EventInformation.svelte'
 
   import firebase from 'firebase/app'
-  import 'firebase/analytics'
   import 'firebase/firestore'
+  import 'firebase/analytics'
   import 'firebase/performance'
-
-  let query = ref => ref.orderBy('Full Name', 'asc').limit(10)
-
-  function paginate(item, action) {
-    if (!item) return query = ref => ref.orderBy('Full Name', 'asc').limit(10)
-    if (action == 'next') return query = ref => ref.orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
-    if (action == 'previous') return query = ref => ref.orderBy('Full Name', 'asc').endBefore(item['Full Name']).limitToLast(10)
-  }
-
-  function resetSearch() {
-    document.getElementById('search').value = ''
-  }
 </script>
 
-<style>
-  tbody th {
-    font-weight: normal;
-  }
-
-  nav {
-    margin-bottom: 15px;
-  }
-
-  table {
-    margin-bottom: 15px;
-  }
-</style>
-
 <svelte:head>
-  <title>RIVAlumni | Members</title>
+  <title>RIVAlumni | Events</title>
 </svelte:head>
 
 <FirebaseApp { firebase } perf analytics>
-  <User let:user={ user }>
+  <User let:user>
     <Doc
       path={ 'users/' + user.uid }
       maxWait={ 5000 }
       let:data={ userData }>
+
       <div class="container">
         { #if userData.roles.Editor || userData.roles.Administrator }
-          <!-- TODO: Add Algolia Search Systems here -->
-          <nav class="amber darken-4">
-            <div class="nav-wrapper">
-              <div class="input-field">
-                <input id="search" type="search" placeholder="E.g. { userData.displayName }">
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons" on:click={ resetSearch }>close</i>
-              </div>
-            </div>
-          </nav>
-
           <Collection
-            path={ 'members' }
-            query={ query }
+            path={ '/events' }
+            query={ ref => ref.where('Event Year', '==', Number(new Date().getFullYear())) - 1 }
             maxWait={ 5000 }
-            let:data={ members }
-            let:first
-            let:last>
+            let:data={ events }>
 
-            { #if members.length < 1 }
-              { paginate() }
+            { #if view || edit }
+              <EventInformation id={ router.params.id } { edit } { userData } />
+            { :else if events.length < 1 }
+              <p>
+                No records found.
+              </p>
             { :else }
               <table class="highlight">
                 <thead>
                   <tr>
-                    <th>Full Name</th>
-                    <th>Gender</th>
+                    <th>Event Year</th>
+                    <th>Event Code</th>
+                    <th>Event Name</th>
+                    <th>VIA Hours</th>
                     <th>Action</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  { #each members as member }
+                  { #each events as event }
                     <tr>
-                      <th>{ member['Full Name'] }</th>
-                      <th>{ member['Gender'] }</th>
-                      <th>
-                        <Link href="/profile/{ member['id'] }" class="white-text">
+                      <td>{ event['Event Year'] }</td>
+                      <td>{ event['Event Code'] }</td>
+                      <td>{ event['Event Name'] }</td>
+                      <td>{ event['VIA Hours'] }</td>
+                      <td>
+                        <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
                           <button class="btn waves-effect waves-light blue">
                             <i class="material-icons">remove_red_eye</i>
                           </button>
                         </Link>
 
-                        <Link href="/profile/{ member['id'] }/edit" class="white-text">
+                        <Link href="/manage/events/{ event['Event Code'] }/edit" class="white-text">
                           <button class="btn waves-effect waves-light amber darken-4">
                             <i class="material-icons">mode_edit</i>
                           </button>
                         </Link>
-                      </th>
+                      </td>
                     </tr>
                   { /each }
                 </tbody>
               </table>
             { /if }
-
-            <div class="row">
-              <span class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</span>
-              <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
-            </div>
 
             <div slot="loading">
               <div class="progress">
@@ -117,6 +88,7 @@
                 An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
               </p>
             </div>
+
           </Collection>
         { :else }
           <p>
@@ -125,7 +97,7 @@
           </p>
         { /if }
       </div>
-
+      
       <div slot="loading">
         <div class="container">
           <div class="progress">
