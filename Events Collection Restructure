@@ -1,12 +1,13 @@
 Events Collection
-- Event Year: 2019
-- Event Code: 20191211
-- Event Name: END OF YEAR OUTING
-- Event Overall In-Charge: Ivan Lieu Jun Wen
-- Event Assistant In-Charge: Teo Tiang Hao Aaron
+- Event Year: NUMBER (YYYY)
+- Event Code: NUMBER (YYYYMMDD)
+- Event Name: STRING
+- Access List: Array[Member ID] (Managed by Cloud Functions, Firestore Rules)
+- Event Overall In-Charge: STRING (Managed by Cloud Functions)
+- Event Assistant In-Charge: STRING (Managed by Cloud Functions)
 - Event Members: Participation Collection
 
 Participation Collection
-- Member ID: yzpfkGl1uRvDc1WqIlrz
-- Role: AIC
-- VIA Hours: 0 Hours
+- Member ID: STRING
+- Role: STRING (XXX)
+- VIA Hours: NUMBER (X HOURS)
