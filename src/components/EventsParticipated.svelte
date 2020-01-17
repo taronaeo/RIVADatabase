@@ -1,6 +1,8 @@
 <script>
   export let id
+  export let userData
 
+  import { Link } from 'yrv'
   import { Collection } from 'sveltefire'
 </script>
 
@@ -8,8 +10,8 @@
 
 <!-- TODO: Add pagination -->
 <Collection
-  path={ 'participation' }
-  query={ ref => ref.where('Member ID', '==', id) }
+  path={ 'events' }
+  query={ ref => ref.where('AccessList', 'array-contains', id) }
   maxWait={ 5000 }
   let:data={ participations }>
 
@@ -23,8 +25,10 @@
         <tr>
           <th>Event Code</th>
           <th>Event Name</th>
-          <th>Event Role</th>
           <th>VIA Hours</th>
+          { #if userData.roles.Editor || userData.roles.Administrator }
+            <th>Action</th>
+          { /if }
         </tr>
       </thead>
 
@@ -33,8 +37,21 @@
           <tr>
             <td>{ participation['Event Code'] }</td>
             <td>{ participation['Event Name'] }</td>
-            <td>{ participation['Role'] }</td>
             <td>{ participation['VIA Hours'] }</td>
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <td>
+                <Link href="/manage/events/{ participation['Event Code'] }/view">
+                  <button class="btn waves-effect waves-light blue">
+                    <i class="material-icons">remove_red_eye</i>
+                  </button>
+                </Link>
+
+                <!-- TODO: Not done yet -->
+                <button class="btn waves-effect waves-light red">
+                  <i class="material-icons">delete</i>
+                </button>
+              </td>
+            { /if }
           </tr>
         { /each }
       </tbody>

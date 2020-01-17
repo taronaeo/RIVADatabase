@@ -215,7 +215,7 @@
 
     <div class="divider"></div>
 
-    <EventsParticipated { id } />
+    <EventsParticipated { id } { userData } />
 
     { #if userData.roles.Editor }
       <div class="divider"></div>
