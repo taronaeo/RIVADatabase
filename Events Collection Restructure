@@ -2,6 +2,7 @@ Events Collection
 - Event Year: NUMBER (YYYY)
 - Event Code: NUMBER (YYYYMMDD)
 - Event Name: STRING
+- Google Drive: STRING (Google Drive Link)
 - Access List: Array[Member ID] (Managed by Cloud Functions, Firestore Rules)
 - Event Overall In-Charge: STRING (Managed by Cloud Functions)
 - Event Assistant In-Charge: STRING (Managed by Cloud Functions)

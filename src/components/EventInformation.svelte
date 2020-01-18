@@ -4,7 +4,7 @@
   export let userData
 
   import { Link } from 'yrv'
-  import { Doc } from 'sveltefire'
+  import { Collection, Doc } from 'sveltefire'
   import { years } from '../plugins/graduationInformation.js'
 
   function initializeSelect() {
@@ -71,13 +71,15 @@
     </div>
 
     <div class="row valign-wrapper">
-      <div class="col s6 bold">VIA Hours</div>
+      <div class="col s6 bold">Google Drive</div>
       { #if edit }
         <div class="col s6">
-          <input id="viaHours" type="number" value={ eventData['VIA Hours']}>
+          <input id="googleDrive" type="url" value={ eventData['Google Drive'] }>
         </div>
       { :else }
-        <div class="col s6 truncate">{ eventData['VIA Hours'] } Hours</div>
+        <div class="col s6 truncate">
+          <a href="{ eventData['Google Drive'] }" class="btn waves-effect waves-light" target="_blank">Drive</a>
+        </div>
       { /if }
     </div>
 
@@ -93,41 +95,50 @@
 
     <div class="divider"></div>
 
-    <h3>Roles</h3>
+    <h3>Participation</h3>
 
-    { #each eventData['Roles'] as role }
-      <h5>{ role['ID'] } - { role['Definition'] }</h5>
+    <Collection
+      path={ '/participation' }
+      query={ ref => ref.orderBy('Role', 'asc').limit(10) }
+      traceId={ 'participationCollection' }
+      maxWait={ 5000 }
+      let:data={ participation }>
 
       <table class="highlight">
         <thead>
           <tr>
-            <th>Member ID</th>
+            <th>Role</th>
+            <th>Full Name</th>
+            <th>VIA Hours</th>
             <th>Action</th>
           </tr>
         </thead>
 
         <tbody>
-          { #each role['Members'] as member }
+          { #each participation as prt }
             <tr>
-              <td>{ member }</td>
+              <td>{ prt['Role'] }</td>
+              <td>{ prt['Full Name'] }</td>
+              <td>{ prt['VIA Hours'] }</td>
               <td>
-                <Link href="/profile/{ member }">
+                <Link href="/manage/participation/{ prt.id }/view">
                   <button class="btn waves-effect waves-light blue">
                     <i class="material-icons">remove_red_eye</i>
                   </button>
                 </Link>
 
-                <!-- <Link href="/profile/{ member }/edit">
+                <Link href="/manage/participation/{ prt.id }/edit">
                   <button class="btn waves-effect waves-light amber darken-4">
                     <i class="material-icons">mode_edit</i>
                   </button>
-                </Link> -->
+                </Link>
               </td>
             </tr>
           { /each }
         </tbody>
       </table>
-    { /each }
+    
+    </Collection>
     
     { #if edit }
       <div class="fixed-action-btn">

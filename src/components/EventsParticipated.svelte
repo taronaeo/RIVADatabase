@@ -11,11 +11,11 @@
 <!-- TODO: Add pagination -->
 <Collection
   path={ 'events' }
-  query={ ref => ref.where('AccessList', 'array-contains', id) }
+  query={ ref => ref.where('Access List', 'array-contains', id) }
   maxWait={ 5000 }
-  let:data={ participations }>
+  let:data={ events }>
 
-  { #if participations.length < 1 }
+  { #if events.length < 1 }
     <p>
       No records found.
     </p>
@@ -23,9 +23,9 @@
     <table class="highlight">
       <thead>
         <tr>
+          <th>Event Year</th>
           <th>Event Code</th>
           <th>Event Name</th>
-          <th>VIA Hours</th>
           { #if userData.roles.Editor || userData.roles.Administrator }
             <th>Action</th>
           { /if }
@@ -33,14 +33,14 @@
       </thead>
 
       <tbody>
-        { #each participations as participation }
+        { #each events as evt }
           <tr>
-            <td>{ participation['Event Code'] }</td>
-            <td>{ participation['Event Name'] }</td>
-            <td>{ participation['VIA Hours'] }</td>
+            <td>{ evt['Event Year'] }</td>
+            <td>{ evt['Event Code'] }</td>
+            <td>{ evt['Event Name'] }</td>
             { #if userData.roles.Editor || userData.roles.Administrator }
               <td>
-                <Link href="/manage/events/{ participation['Event Code'] }/view">
+                <Link href="/manage/events/{ evt['Event Code'] }/view">
                   <button class="btn waves-effect waves-light blue">
                     <i class="material-icons">remove_red_eye</i>
                   </button>

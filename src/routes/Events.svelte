@@ -46,7 +46,6 @@
                     <th>Event Year</th>
                     <th>Event Code</th>
                     <th>Event Name</th>
-                    <th>VIA Hours</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -57,7 +56,6 @@
                       <td>{ event['Event Year'] }</td>
                       <td>{ event['Event Code'] }</td>
                       <td>{ event['Event Name'] }</td>
-                      <td>{ event['VIA Hours'] }</td>
                       <td>
                         <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
                           <button class="btn waves-effect waves-light blue">

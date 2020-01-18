@@ -15,6 +15,7 @@
       'Full Name': document.getElementById('fullName').value,
       'Gender': document.getElementById('gender').value,
       'Email': document.getElementById('email').value,
+      'Current School': document.getElementById('school').value,
       'Contact Number': Number(document.getElementById('contactNumber').value),
       'Home Number': Number(document.getElementById('homeNumber').value),
       'Graduating Class': document.getElementById('class').value,
@@ -104,6 +105,17 @@
         { :else }
           <div class="col s6 truncate">{ profile['Email'] }</div>
         { /if }
+      { /if }
+    </div>
+
+    <div class="row valign-wrapper">
+      <div class="col s6 bold">Current School</div>
+      { #if edit }
+        <div class="col s6">
+          <input id="school" type="text" value={ profile['Current School'] }>
+        </div>
+      { :else }
+        <div class="col s6 truncate">{ profile['Current School'] }</div>
       { /if }
     </div>
 
