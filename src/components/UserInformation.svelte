@@ -241,5 +241,17 @@
         </Link>
       </div>
     { /if }
+
+    <div slot="loading">
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+
+    <div slot="fallback">
+      <p>
+        An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+      </p>
+    </div>
   </Doc>
 { /if }

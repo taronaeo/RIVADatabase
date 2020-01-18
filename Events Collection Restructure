@@ -9,6 +9,8 @@ Events Collection
 - Event Members: Participation Collection
 
 Participation Collection
+- Event Code: NUMBER (YYYYMMDD)
 - Member ID: STRING
+- Full Name: STRING
 - Role: STRING (XXX)
 - VIA Hours: NUMBER (X HOURS)

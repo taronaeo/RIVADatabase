@@ -106,6 +106,20 @@
           </Collection>
         { /if }
       </div>
+
+      <div slot="loading">
+        <div class="container">
+          <div class="progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
+      </div>
+
+      <div slot="fallback">
+        <p>
+          An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+        </p>
+      </div>
     </Doc>
   </User>
 </FirebaseApp>

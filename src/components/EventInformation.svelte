@@ -78,7 +78,7 @@
         </div>
       { :else }
         <div class="col s6 truncate">
-          <a href="{ eventData['Google Drive'] }" class="btn waves-effect waves-light" target="_blank">Drive</a>
+          <a href="{ eventData['Google Drive'] }" class="btn waves-effect waves-light amber darken-4" target="_blank">Drive</a>
         </div>
       { /if }
     </div>
@@ -155,6 +155,18 @@
         </Link>
       </div>
     { /if }
+
+    <div slot="loading">
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+
+    <div slot="fallback">
+      <p>
+        An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+      </p>
+    </div>
   </Doc>
 { :else }
   <p>
