@@ -43,6 +43,7 @@
 		<Route exact path="/manage/users/:id/view" component={ Users } />
 		<Route exact path="/manage/users/:id/edit" component={ Users } />
 		<Route exact path="/manage/events" component={ Events } />
+		<Route exact path="/manage/events/:id" component={ Events } />
 		<Route exact path="/manage/events/:id/view" component={ Events } />
 		<Route exact path="/manage/events/:id/edit" component={ Events } />
 		<Route exact path="/manage/participation/:id" component={ Participation } />

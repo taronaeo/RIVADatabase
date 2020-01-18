@@ -41,16 +41,17 @@
             <td>{ evt['Event Name'] }</td>
             { #if userData.roles.Editor || userData.roles.Administrator }
               <td>
-                <Link href="/manage/events/{ evt['Event Code'] }/view">
+                <Link href="/manage/events/{ evt['Event Code' ]}/view">
                   <button class="btn waves-effect waves-light blue">
                     <i class="material-icons">remove_red_eye</i>
                   </button>
                 </Link>
 
-                <!-- TODO: Not done yet -->
-                <button class="btn waves-effect waves-light red">
-                  <i class="material-icons">delete</i>
-                </button>
+                <Link href="/manage/events/{ evt['Event Code' ]}/edit">
+                  <button class="btn waves-effect waves-light amber darken-4">
+                    <i class="material-icons">mode_edit</i>
+                  </button>
+                </Link>
               </td>
             { /if }
           </tr>

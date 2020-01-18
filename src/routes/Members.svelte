@@ -104,7 +104,7 @@
             { /if }
 
             <div class="row">
-              <span class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</span>
+              <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</button>
               <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
             </div>
 

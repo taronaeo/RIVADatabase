@@ -41,7 +41,7 @@
       <div class="container">
         { #if (userData.roles.Editor || userData.roles.Administrator) && (view || edit) }
           <UserInformation id={ router.params.id } { userData } { edit } />
-        { :else }
+        { :else if (userData.roles.Editor || userData.roles.Administrator) }
           <Collection
             path={ 'users' }
             query={ ref => ref.orderBy('membershipID', 'desc').limit(10) }
@@ -104,6 +104,11 @@
               </p>
             </div>
           </Collection>
+        { :else }
+          <p>
+            Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
+            Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+          </p>
         { /if }
       </div>
 
@@ -116,9 +121,11 @@
       </div>
 
       <div slot="fallback">
-        <p>
-          An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-        </p>
+        <div class="container">
+          <p>
+            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+          </p>
+        </div>
       </div>
     </Doc>
   </User>
