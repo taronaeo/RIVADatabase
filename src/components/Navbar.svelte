@@ -75,6 +75,7 @@
     <User let:user>
       <Doc
         path={ 'users/' + user.uid }
+        traceId={ 'Navbar' }
         maxWait={ 5000 }
         let:data={ userData }>
 

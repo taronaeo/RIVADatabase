@@ -100,7 +100,7 @@
     <Collection
       path={ '/participation' }
       query={ ref => ref.orderBy('Role', 'asc').limit(10) }
-      traceId={ 'participationCollection' }
+      traceId={ 'eventInformation' }
       maxWait={ 5000 }
       let:data={ participation }>
 

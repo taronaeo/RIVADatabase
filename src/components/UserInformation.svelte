@@ -98,6 +98,7 @@
 { #if userData.roles.Editor || userData.roles.Administrator }
   <Doc
     path={ 'users/' + id }
+    traceId={ 'userInformation' }
     maxWait={ 5000 }
     let:ref
     let:data={ user }

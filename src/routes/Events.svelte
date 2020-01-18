@@ -22,6 +22,7 @@
   <User let:user>
     <Doc
       path={ 'users/' + user.uid }
+      traceId={ 'events' }
       maxWait={ 5000 }
       let:data={ userData }>
 

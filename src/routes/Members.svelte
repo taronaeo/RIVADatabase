@@ -42,6 +42,7 @@
   <User let:user={ user }>
     <Doc
       path={ 'users/' + user.uid }
+      traceId={ 'membersDoc' }
       maxWait={ 5000 }
       let:data={ userData }>
       <div class="container">
@@ -60,6 +61,7 @@
           <Collection
             path={ 'members' }
             query={ query }
+            traceId={ 'membersCollection' }
             maxWait={ 5000 }
             let:data={ members }
             let:first

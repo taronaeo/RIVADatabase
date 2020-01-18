@@ -20,6 +20,7 @@
   <User let:user>
     <Doc
       path={ 'users/' + user.uid }
+      traceId={ 'profile' }
       maxWait={ 5000 }
       let:data={ userData }>
       <div class="container">

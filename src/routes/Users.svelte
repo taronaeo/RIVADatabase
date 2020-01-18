@@ -34,6 +34,7 @@
   <User let:user>
     <Doc
       path={ 'users/' + user.uid }
+      traceId={ 'usersDoc' }
       maxWait={ 5000 }
       let:data={ userData }>
 
@@ -44,6 +45,7 @@
           <Collection
             path={ 'users' }
             query={ ref => ref.orderBy('membershipID', 'desc').limit(10) }
+            traceId={ 'usersCollection' }
             maxWait={ 5000 }
             let:data={ users }>
 

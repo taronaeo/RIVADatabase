@@ -53,6 +53,7 @@
 { #if userData.membershipID == id || userData.roles.Editor || userData.roles.Administrator }
   <Doc
     path={ 'members/' + id }
+    traceId={ 'profileInformation' }
     maxWait={ 5000 }
     let:ref
     let:data={ profile }

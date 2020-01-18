@@ -12,6 +12,7 @@
 <Collection
   path={ 'events' }
   query={ ref => ref.where('Access List', 'array-contains', id) }
+  traceId={ 'eventsParticipated' }
   maxWait={ 5000 }
   let:data={ events }>
 

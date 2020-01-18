@@ -10,6 +10,7 @@
 <Collection
   path={ 'members/' + id + '/remarks' }
   query={ ref => ref.orderBy('Date Occurred', 'asc').limit(5) }
+  traceId={ 'profileRemarks' }
   maxWait={ 5000 }
   let:data={ remarks }>
 
