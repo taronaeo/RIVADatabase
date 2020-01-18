@@ -152,7 +152,7 @@
 
     <div class="row valign-wrapper">
       <div class="col s6 bold">Graduating Class</div>
-      { #if edit && (userData.roles.Editor || userData.roles.Administrator) }
+      { #if edit }
         <div class="col s6">
           <select id="class">
             { #each classes as cls }
@@ -167,7 +167,7 @@
 
     <div class="row valign-wrapper">
       <div class="col s6 bold">Graduating Year</div>
-      { #if edit && (userData.roles.Editor || userData.roles.Administrator) }
+      { #if edit }
         <div class="col s6">
           <select id="year">
             { #each years as year }
