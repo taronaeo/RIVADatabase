@@ -21,7 +21,10 @@
 <nav>
   <div class="nav-wrapper red">
     <div class="container">
-      <a href="/" class="brand-logo">RIVAlumni</a>
+      <a href="/" class="brand-logo">
+        RIVAlumni
+        <b>Beta</b>
+      </a>
       <a href="#!" data-target="mobile-sidenav" class="sidenav-trigger">
         <i class="material-icons">menu</i>
       </a>

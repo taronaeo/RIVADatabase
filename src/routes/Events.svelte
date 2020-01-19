@@ -12,7 +12,21 @@
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
+
+  let query = ref => ref.orderBy('Event Year', 'asc').limit(5)
+
+  function paginate(item, action) {
+    if (!item) return query = ref => ref.orderBy('Event Year', 'asc').limit(5)
+    if (action == 'next') return query = ref => ref.orderBy('Event Year', 'asc').startAfter(item['Event Code']).limit(5)
+    if (action == 'previous') return query = ref => ref.orderBy('Event Year', 'asc').endBefore(item['Event Code']).limitToLast(5)
+  }
 </script>
+
+<style>
+  table {
+    margin-bottom: 15px;
+  }
+</style>
 
 <svelte:head>
   <title>RIVAlumni | Events</title>
@@ -30,16 +44,16 @@
         { #if userData.roles.Editor || userData.roles.Administrator }
           <Collection
             path={ '/events' }
-            query={ ref => ref.orderBy('Event Year', 'asc') }
+            query={ query }
             maxWait={ 5000 }
-            let:data={ events }>
+            let:data={ events }
+            let:first
+            let:last>
 
             { #if view || edit }
               <EventInformation id={ router.params.id } { edit } { userData } />
             { :else if events.length < 1 }
-              <p>
-                No records found.
-              </p>
+              { paginate() }
             { :else }
               <table class="highlight">
                 <thead>
@@ -74,6 +88,11 @@
                   { /each }
                 </tbody>
               </table>
+
+              <div class="row">
+                <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</button>
+                <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
+              </div>
             { /if }
 
             <div slot="loading">

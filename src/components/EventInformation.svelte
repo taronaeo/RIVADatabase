@@ -12,7 +12,7 @@
 
   function updateData(ref) {
     ref.set({
-      'Event Year': document.getElementById('year').value,
+      'Event Year': Number(document.getElementById('year').value),
       'Event Name': document.getElementById('eventName').value,
       'Google Drive': document.getElementById('googleDrive').value,
       'Roles': roles,
@@ -115,13 +115,7 @@
 
     <div class="row valign-wrapper">
       <div class="col s6 bold">Event Code</div>
-      { #if edit }
-        <div class="col s6">
-          <input id="eventCode" type="number" value={ id }>
-        </div>
-      { :else }
-        <div class="col s6 truncate">{ id }</div>
-      { /if }
+      <div class="col s6 truncate">{ id }</div>
     </div>
 
     <div class="row valign-wrapper">
