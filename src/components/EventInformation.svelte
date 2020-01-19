@@ -57,6 +57,14 @@
     if (action == 'previous') return query = ref => ref.where('Event Code', '==', Number(id)).orderBy('Full Name', 'asc').endBefore(item['Full Name']).limitToLast(10)
   }
 
+  function initializeButton() {
+    // TODO: Needs further testing due to setTimeout()
+    let elems = document.querySelectorAll('.fixed-action-btn')
+    let instances = M.FloatingActionButton.init(elems, {
+      hoverEnabled: false,
+    })
+  }
+
   function initializeSelect() {
     // TODO: Needs further testing due to setTimeout()
     let elems = document.querySelectorAll('select')
@@ -80,6 +88,7 @@
     maxWait={ 5000 }
     let:ref
     let:data={ eventData }
+    on:data={ () => window.setTimeout(initializeButton, 500) }
     on:data={ () => window.setTimeout(initializeSelect, 500) }
     on:data={ e => syncRoles(e) }>
 
@@ -262,11 +271,26 @@
       </div>
     { :else }
       <div class="fixed-action-btn">
-        <Link href="/manage/events/{ id }/edit">
-          <button class="btn-floating btn-large deep-orange pulse">
-            <i class="material-icons">mode_edit</i>
-          </button>
-        </Link>
+        <button class="btn-floating btn-large blue pulse">
+          <i class="material-icons">remove_red_eye</i>
+        </button>
+
+        <ul>
+          <li>
+            <Link href="/manage/participation/{ id }/add">
+              <button class="btn-floating green">
+                <i class="material-icons">add</i>
+              </button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/manage/events/{ id }/edit">
+              <button class="btn-floating deep-orange">
+                <i class="material-icons">mode_edit</i>
+              </button>
+            </Link>
+          </li>
+        </ul>
       </div>
     { /if }
 

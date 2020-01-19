@@ -88,7 +88,9 @@
 
           <div class="row valign-wrapper">
             <div class="col s6 bold">Member ID</div>
-            <div class="col s6 truncate">{ participation['Member ID'] }</div>
+            <div class="col s6 truncate">
+              <Link href="/profile/{ participation['Member ID'] }" class="red-text">{ participation['Member ID'] }</Link>
+            </div>
           </div>
 
           <div class="row valign-wrapper">

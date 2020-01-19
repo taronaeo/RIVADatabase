@@ -10,6 +10,7 @@
 	import Profile from './routes/Profile.svelte'
 	import Dashboard from './routes/Dashboard.svelte'
 	import Participation from './routes/Participation.svelte'
+	import AddParticipation from './routes/AddParticipation.svelte'
 
 	import Greetings from './components/Greetings.svelte'
 
@@ -49,6 +50,7 @@
 		<Route exact path="/manage/participation/:id" component={ Participation } />
 		<Route exact path="/manage/participation/:id/view" component={ Participation } />
 		<Route exact path="/manage/participation/:id/edit" component={ Participation } />
+		<Route exact path="/manage/participation/:id/add" component={ AddParticipation } />
 		<Route exact path="/profile/:id" component={ Profile } />
 		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route fallback component={ Dashboard } />
