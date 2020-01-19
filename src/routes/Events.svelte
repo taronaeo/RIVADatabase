@@ -30,7 +30,7 @@
         { #if userData.roles.Editor || userData.roles.Administrator }
           <Collection
             path={ '/events' }
-            query={ ref => ref.where('Event Year', '==', Number(new Date().getFullYear())) - 1 }
+            query={ ref => ref.orderBy('Event Year', 'asc') }
             maxWait={ 5000 }
             let:data={ events }>
 

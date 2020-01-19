@@ -105,7 +105,6 @@
     on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
     { #if edit }
-      <h3>Edit Profile</h3>
       { #if id == userData['uid'] }
         <div class="row">
           <div class="card red">
@@ -116,6 +115,8 @@
           </div>
         </div>
       { /if }
+
+      <h3>Edit Profile</h3>
     { :else }
       <h3>User Profile</h3>
     { /if }
