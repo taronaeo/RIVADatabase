@@ -108,6 +108,14 @@
               <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
             </div>
 
+            <div class="fixed-action-btn">
+              <Link href="/members/add">
+                <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
+                  <i class="material-icons">add</i>
+                </button>
+              </Link>
+            </div>
+
             <div slot="loading">
               <div class="progress">
                 <div class="indeterminate"></div>

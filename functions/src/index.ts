@@ -66,3 +66,13 @@ exports.createUserAccount = functions.auth.user().onCreate(async user => {
 
   return admin.firestore().doc('users/' + user.uid).set(data, { merge: true })
 })
+
+exports.newMember = functions.firestore
+  .document('members/{memberID}')
+  .onCreate(async (snap, context) => {
+    const membershipID = context.params.memberID
+
+    return await database.collection('/members').doc(membershipID).set({
+      'Membership ID': membershipID
+    }, { merge: true }).catch(err => console.error(err))
+  })
