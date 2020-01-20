@@ -27,7 +27,7 @@
 </style>
 
 <svelte:head>
-  <title>RIVAlumni | Manage Users</title>
+  <title>RIVAlumni | Users</title>
 </svelte:head>
 
 <FirebaseApp { firebase } perf analytics>
