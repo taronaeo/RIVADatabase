@@ -13,6 +13,14 @@
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
+
+  let query = ref => ref.orderBy('displayName', 'asc').limit(10)
+
+  function paginate(item, action) {
+    if (!item) return query = ref => ref.orderBy('displayName', 'asc').limit(10)
+    if (action == 'next') return query = ref => ref.orderBy('displayName', 'asc').startAfter(item['email']).limit(10)
+    if (action == 'previous') return query = ref => ref.orderBy('displayName', 'asc').endBefore(item['email']).limitToLast(10)
+  }
 </script>
 
 <style>
@@ -40,44 +48,63 @@
 
       <Collection
         path={ '/users' }
-        query={ ref => ref.orderBy('displayName', 'asc').limit(10) }
+        query={ query }
         traceId={ 'UserDataCollection' }
         maxWait={ 5000 }
+        let:first
+        let:last
         let:data={ users }>
 
         <div class="container">
           { #if userData.roles.Editor || userData.roles.Administrator }
-            <table class="highlight">
-              <thead>
-                <tr>
-                  <th>Display Name</th>
-                  <th>Email</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                { #each users as user }
+            { #if users.length < 1 }
+              { paginate() }
+            { :else }
+              <table class="highlight">
+                <thead>
                   <tr>
-                    <th>{ user['displayName'] }</th>
-                    <th>{ user['email'] }</th>
-                    <th>
-                      <Link href="/manage/users/{ user['id'] }/view" class="white-text">
-                        <button class="btn waves-effect waves-light blue">
-                          <i class="material-icons">remove_red_eye</i>
-                        </button>
-                      </Link>
-
-                      <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
-                        <button class="btn waves-effect waves-light amber darken-4">
-                          <i class="material-icons">mode_edit</i>
-                        </button>
-                      </Link>
-                    </th>
+                    <th>Display Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
                   </tr>
-                { /each }
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  { #each users as user }
+                    <tr>
+                      <th>{ user['displayName'] }</th>
+                      <th>{ user['email'] }</th>
+                      <th>
+                        <Link href="/manage/users/{ user['id'] }/view" class="white-text">
+                          <button class="btn waves-effect waves-light blue">
+                            <i class="material-icons">remove_red_eye</i>
+                          </button>
+                        </Link>
+
+                        <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
+                          <button class="btn waves-effect waves-light amber darken-4">
+                            <i class="material-icons">mode_edit</i>
+                          </button>
+                        </Link>
+                      </th>
+                    </tr>
+                  { /each }
+                </tbody>
+              </table>
+            { /if }
+
+            <div class="row">
+              <p>
+                <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
+                  <i class="material-icons left">navigate_before</i>
+                  Prev
+                </button>
+                <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
+                  <i class="material-icons right">navigate_next</i>
+                  Next
+                </button>
+              </p>
+            </div>
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
