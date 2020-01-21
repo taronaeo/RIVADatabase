@@ -74,7 +74,7 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Event Code</div>
-              <div class="col s6">{ router.params.id }</div>
+              <div class="col s6 truncate">{ router.params.id }</div>
             </div>
 
             <div class="row valign-wrapper">
@@ -83,6 +83,27 @@
                 <input id="eventName" type="text" value={ event['Event Name'] }>
               </div>
             </div>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Google Drive</div>
+              <div class="col s6">
+                <input id="googleDrive" type="text" value={ event['Google Drive'] }>
+              </div>
+            </div>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Event Overall In-Charge</div>
+              <div class="col s6 truncate">{ event['Event Overall In-Charge']}</div>
+            </div>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Event Assistant In-Charge</div>
+              <div class="col s6 truncate">{ event['Event Assistant In-Charge'] }</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h3>Roles</h3>
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
