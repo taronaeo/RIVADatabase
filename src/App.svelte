@@ -10,6 +10,7 @@
 	import Profile from './routes/Profile.svelte'
 	import ViewUser from './routes/ViewUser.svelte'
 	import EditUser from './routes/EditUser.svelte'
+	import AddEvent from './routes/AddEvent.svelte'
 	import Dashboard from './routes/Dashboard.svelte'
 	import AddMember from './routes/AddMember.svelte'
 	import ViewEvent from './routes/ViewEvent.svelte'
@@ -50,6 +51,7 @@
 		<Route exact path="/manage/users/:id/view" component={ ViewUser } />
 		<Route exact path="/manage/users/:id/edit" component={ EditUser } />
 		<Route exact path="/manage/events" component={ Events } />
+		<Route exact path="/manage/events/add" component={ AddEvent } />
 		<Route exact path="/manage/events/:id" component={ ViewEvent } />
 		<Route exact path="/manage/events/:id/view" component={ ViewEvent } />
 		<Route exact path="/manage/events/:id/edit" component={ EditEvent } />
