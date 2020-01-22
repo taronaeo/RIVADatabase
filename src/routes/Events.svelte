@@ -7,12 +7,12 @@
   import 'firebase/analytics'
   import 'firebase/performance'
 
-  let query = ref => ref.orderBy('Event Year', 'asc').limit(5)
+  let query = ref => ref.orderBy('Event Year', 'desc').limit(5)
 
   function paginate(item, action) {
-    if (!item) return query = ref => ref.orderBy('Event Year', 'asc').limit(5)
-    if (action == 'next') return query = ref => ref.orderBy('Event Year', 'asc').startAfter(item['Event Code']).limit(5)
-    if (action == 'previous') return query = ref => ref.orderBy('Event Year', 'asc').endBefore(item['Event Code']).limitToLast(5)
+    if (!item) return query = ref => ref.orderBy('Event Year', 'desc').limit(5)
+    if (action == 'next') return query = ref => ref.orderBy('Event Year', 'desc').startAfter(item['Event Code']).limit(5)
+    if (action == 'previous') return query = ref => ref.orderBy('Event Year', 'desc').endBefore(item['Event Code']).limitToLast(5)
   }
 </script>
 

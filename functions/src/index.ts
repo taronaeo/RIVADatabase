@@ -40,6 +40,24 @@ interface User {
   roles: Roles
 }
 
+exports.newMember = functions.firestore
+  .document('members/{memberID}')
+  .onCreate(async (snap, context) => {
+    const membershipID = context.params.memberID
+
+    return await database.collection('/members').doc(membershipID).set({
+      'Membership ID': membershipID
+    }, { merge: true }).catch(err => console.error(err))
+  })
+
+exports.newEvent = functions.firestore
+  .document('events/{eventID}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data()
+
+    console.log(data)
+  })
+
 exports.createUserAccount = functions.auth.user().onCreate(async user => {
   let alumni = false
   let membershipID = null;
@@ -66,13 +84,3 @@ exports.createUserAccount = functions.auth.user().onCreate(async user => {
 
   return admin.firestore().doc('users/' + user.uid).set(data, { merge: true })
 })
-
-exports.newMember = functions.firestore
-  .document('members/{memberID}')
-  .onCreate(async (snap, context) => {
-    const membershipID = context.params.memberID
-
-    return await database.collection('/members').doc(membershipID).set({
-      'Membership ID': membershipID
-    }, { merge: true }).catch(err => console.error(err))
-  })
