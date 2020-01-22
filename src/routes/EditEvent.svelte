@@ -1,14 +1,64 @@
+<!-- 
+  This route should only be accessed by users
+  that has the following roles/permissions:
+
+  Editor or Administrator
+ -->
+
 <script>
   export let router
 
-  import { Link } from 'yrv'
-  import { years } from '../plugins/graduationInformation.js'
+  import { Link, navigateTo } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
+  import { years } from '../plugins/graduationInformation.js'
 
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
+
+  let roles = []
+
+  function addRole() {
+    roles.push({
+      Definition: document.getElementById('newDefinition').value,
+      ID: document.getElementById('newID').value,
+    })
+
+    document.getElementById('newDefinition').value = ''
+    document.getElementById('newID').value = ''
+
+    roles = roles
+  }
+
+  function removeRole(i) {
+    roles.splice(i, 1)
+    roles = roles
+  }
+
+  function syncRoles(e) {
+    const data = e.detail.data
+
+    data['Roles'].forEach(role => {
+      roles.push({ Definition: role['Definition'], ID: role['ID'] })
+    })
+  }
+
+  function saveChanges(ref) {
+    ref.set({
+      'Event Year': Number(document.getElementById('eventYear').value),
+      'Event Name': document.getElementById('eventName').value,
+      'Google Drive': document.getElementById('googleDrive').value,
+      'Roles': roles,
+    }, { merge: true })
+    .then(() => {
+      M.toast({ html: 'Event data successfully updated.', displayLength: 3000 })
+      return navigateTo('/manage/events/' + router.params.id + '/view')
+    })
+    .catch(() => {
+      return M.toast({ html: 'An error occurred.', displayLength: 3000 })
+    })
+  }
 
   function initializeSelect() {
     let elems = document.querySelectorAll('select')
@@ -19,6 +69,10 @@
 <style>
   nav {
     padding: 0px 20px 0px 20px;
+  }
+
+  .bold {
+    font-weight: bold;
   }
 </style>
 
@@ -38,7 +92,9 @@
         path={ '/events/' + router.params.id }
         traceId={ 'EventDataDoc' }
         maxWait={ 5000 }
+        let:ref
         let:data={ event }
+        on:data={ e => syncRoles(e) }
         on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
         <div class="container">
@@ -104,6 +160,40 @@
             <div class="divider"></div>
 
             <h3>Roles</h3>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Definition</div>
+              <div class="col s6 bold">ID</div>
+              <div class="col s1 bold">Action</div>
+            </div>
+
+            <div class="row valign-wrapper">
+              <div class="col s6">
+                <input id="newDefinition" type="text" placeholder="Overall In-Charge">
+              </div>
+
+              <div class="col s6">
+                <input id="newID" type="text" placeholder="OIC">
+              </div>
+
+              <div class="col s1">
+                <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
+                  <i class="material-icons">check</i>
+                </button>
+              </div>
+            </div>
+
+            { #each roles as role, i }
+              <div class="row valign-wrapper">
+                <div class="col s6 truncate">{ role['Definition'] }</div>
+                <div class="col s6 truncate">{ role['ID'] }</div>
+                <div class="col s1">
+                  <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
+                    <i class="material-icons">close</i>
+                  </button>
+                </div>
+              </div>
+            { /each }
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
