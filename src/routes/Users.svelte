@@ -58,7 +58,7 @@
         <div class="container">
           { #if userData.roles.Editor || userData.roles.Administrator }
             { #if users.length < 1 }
-              { paginate() }
+              { () => window.setTimeout(paginate, 2000) }
             { :else }
               <table class="highlight">
                 <thead>
