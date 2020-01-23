@@ -25,7 +25,7 @@
   <h3>Participation Records</h3>
 
   { #if participations.length < 1 }
-    { paginate() }
+    { () => window.setTimeout(paginate, 2000) }
   { :else }
     <table class="highlight">
       <thead>

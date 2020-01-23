@@ -162,21 +162,21 @@
             <h3>Roles</h3>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Definition</div>
-              <div class="col s6 bold">ID</div>
-              <div class="col s1 bold">Action</div>
+              <div class="col s5 bold">Definition</div>
+              <div class="col s5 bold">ID</div>
+              <div class="col s2 bold">Action</div>
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6">
+              <div class="col s5">
                 <input id="newDefinition" type="text" placeholder="Overall In-Charge">
               </div>
 
-              <div class="col s6">
+              <div class="col s5">
                 <input id="newID" type="text" placeholder="OIC">
               </div>
 
-              <div class="col s1">
+              <div class="col s2">
                 <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
                   <i class="material-icons">check</i>
                 </button>
@@ -185,9 +185,9 @@
 
             { #each roles as role, i }
               <div class="row valign-wrapper">
-                <div class="col s6 truncate">{ role['Definition'] }</div>
-                <div class="col s6 truncate">{ role['ID'] }</div>
-                <div class="col s1">
+                <div class="col s5 truncate">{ role['Definition'] }</div>
+                <div class="col s5 truncate">{ role['ID'] }</div>
+                <div class="col s2">
                   <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
                     <i class="material-icons">close</i>
                   </button>
