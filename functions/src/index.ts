@@ -55,7 +55,7 @@ exports.newEvent = functions.firestore
   .onCreate(async (snap, context) => {
     const data = snap.data()
 
-    console.log(data)
+    console.log(JSON.stringify(data))
   })
 
 exports.createUserAccount = functions.auth.user().onCreate(async user => {
