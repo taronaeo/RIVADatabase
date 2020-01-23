@@ -6,6 +6,12 @@
 
   let query = ref => ref.where('Event Code', '==', Number(id)).orderBy('Full Name', 'asc').limit(10)
 
+  function rateLimit(func, duration) {
+    setTimeout(func, duration)
+
+    return 'Loading...'
+  }
+
   function paginate(item, action) {
     if (!item) return query = ref => ref.where('Event Code', '==', Number(id)).orderBy('Full Name', 'asc').limit(10)
     if (action == 'next') return query = ref => ref.where('Event Code', '==', Number(id)).orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
@@ -25,7 +31,9 @@
   <h3>Participation Records</h3>
 
   { #if participations.length < 1 }
-    { () => window.setTimeout(paginate, 2000) }
+    <p>
+      { rateLimit(paginate, 1000) }
+    </p>
   { :else }
     <table class="highlight">
       <thead>

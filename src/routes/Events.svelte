@@ -9,6 +9,12 @@
 
   let query = ref => ref.orderBy('Event Year', 'desc').limit(5)
 
+  function rateLimit(func, duration) {
+    setTimeout(func, duration)
+
+    return 'Loading...'
+  }
+
   function paginate(item, action) {
     if (!item) return query = ref => ref.orderBy('Event Year', 'desc').limit(5)
     if (action == 'next') return query = ref => ref.orderBy('Event Year', 'desc').startAfter(item['Event Code']).limit(5)
@@ -39,7 +45,9 @@
         <div class="container">
           { #if userData.roles.Editor || userData.roles.Administrator }
             { #if events.length < 1 }
-              { () => window.setTimeout(paginate, 2000) }
+              <p>
+                { rateLimit(paginate, 1000) }
+              </p>
             { :else }
               <table class="highlight">
                 <thead>
