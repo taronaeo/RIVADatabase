@@ -66,11 +66,16 @@
     document.getElementById('newDefinition').value = ''
     document.getElementById('newID').value = ''
 
+    document.getElementById('newDefinition').focus()
+
     roles = roles
   }
 
   function removeRole(i) {
     roles.splice(i, 1)
+
+    document.getElementById('newDefinition').focus()
+
     roles = roles
   }
 
