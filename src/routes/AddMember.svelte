@@ -9,6 +9,21 @@
   import 'firebase/performance'
 
   function addMember(another) {
+    if (document.getElementById('fullName').value == '')
+      return M.toast({ html: 'Full Name must not be blank!', displayLength: 3000 })
+    
+    if (document.getElementById('contactNumber').value == '')
+      return M.toast({ html: 'Contact Number must not be blank!', displayLength: 3000 })
+
+    if (document.getElementById('nokName').value == '')
+      return M.toast({ html: 'Name Of Next-Of-Kin must not be blank!', displayLength: 3000 })
+
+    if (document.getElementById('nokRelationship').value == '')
+      return M.toast({ html: 'Relationship Of Next-Of-Kin must not be blank!', displayLength: 3000 })
+
+    if (document.getElementById('nokNumber').value == '')
+      return M.toast({ html: 'Contact Number Of Next-Of-Kin must not be blank!', displayLength: 3000 })
+
     firebase.firestore().collection('/members').add({
       'Full Name': document.getElementById('fullName').value,
       'Gender': document.getElementById('gender').value,
@@ -64,7 +79,7 @@
           <h3>Personal Information</h3>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Full Name</div>
+            <div class="col s6 bold">Full Name *</div>
             <div class="col s6">
               <input id="fullName" type="text" placeholder="Alston Tan">
             </div>
@@ -95,7 +110,7 @@
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Contact Number</div>
+            <div class="col s6 bold">Contact Number *</div>
             <div class="col s6">
               <input id="contactNumber" type="tel" placeholder="81234567">
             </div>
@@ -109,7 +124,7 @@
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Graduating Class</div>
+            <div class="col s6 bold">Graduating Class *</div>
             <div class="col s6">
               <select id="class">
                 { #each classes as cls }
@@ -120,7 +135,7 @@
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Graduating Year</div>
+            <div class="col s6 bold">Graduating Year *</div>
             <div class="col s6">
               <select id="year">
                 { #each years as year }
@@ -131,36 +146,40 @@
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Membership Status</div>
+            <div class="col s6 bold">Membership Status *</div>
             <div class="col s6">
               <input id="status" type="text" value="ACTIVE">
             </div>
           </div>
+
+          <p>* Note: Those fields must not be blank.</p>
 
           <div class="divider"></div>
 
           <h3>Emergency Contact Details</h3>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Name Of Next-Of-Kin</div>
+            <div class="col s6 bold">Name Of Next-Of-Kin *</div>
             <div class="col s6">
               <input id="nokName" type="text" placeholder="Agnes Lee">
             </div>
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Relationship With Next-Of-Kin</div>
+            <div class="col s6 bold">Relationship With Next-Of-Kin *</div>
             <div class="col s6">
               <input id="nokRelationship" type="text" placeholder="Mother">
             </div>
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Contact Number Of Next-Of-Kin</div>
+            <div class="col s6 bold">Contact Number Of Next-Of-Kin *</div>
             <div class="col s6">
               <input id="nokNumber" type="tel" placeholder="81234567">
             </div>
           </div>
+
+          <p>* Note: Those fields must not be blank.</p>
 
           <div class="divider"></div>
 

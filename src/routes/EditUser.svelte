@@ -130,14 +130,14 @@
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Display Name</div>
+              <div class="col s6 bold">Display Name *</div>
               <div class="col s6 truncate">
                 <input id="displayName" type="text" value={ user['displayName'] }>
               </div>
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Email</div>
+              <div class="col s6 bold">Email *</div>
               <div class="col s6 truncate">
                 <input id="email" type="email" value={ user['email'] }>
               </div>
@@ -177,6 +177,8 @@
                 </button>
               </div>
             </div>
+
+            <p>* Note: Those fields must not be blank.</p>
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
