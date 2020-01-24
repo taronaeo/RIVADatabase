@@ -25,17 +25,17 @@
       return M.toast({ html: 'Contact Number Of Next-Of-Kin must not be blank!', displayLength: 3000 })
 
     firebase.firestore().collection('/members').add({
-      'Full Name': document.getElementById('fullName').value,
+      'Full Name': document.getElementById('fullName').value.trim(),
       'Gender': document.getElementById('gender').value,
-      'Email': document.getElementById('email').value || 'N/A',
-      'Current School': document.getElementById('school').value || 'N/A',
+      'Email': document.getElementById('email').value.trim() || 'N/A',
+      'Current School': document.getElementById('school').value.trim() || 'N/A',
       'Contact Number': Number(document.getElementById('contactNumber').value),
       'Home Number': Number(document.getElementById('homeNumber').value) || 0,
       'Graduating Class': document.getElementById('class').value,
       'Graduating Year': Number(document.getElementById('year').value),
       'Membership Status': document.getElementById('status').value,
-      'Name Of Next-Of-Kin': document.getElementById('nokName').value,
-      'Relationship With Next-Of-Kin': document.getElementById('nokRelationship').value,
+      'Name Of Next-Of-Kin': document.getElementById('nokName').value.trim(),
+      'Relationship With Next-Of-Kin': document.getElementById('nokRelationship').value.trim(),
       'Contact Number Of Next-Of-Kin': Number(document.getElementById('nokNumber').value),
     })
     .then(() => {

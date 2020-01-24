@@ -41,8 +41,8 @@
       firebase.firestore().collection('events').doc(document.getElementById('eventCode').value).set({
         'Event Year': Number(document.getElementById('eventYear').value),
         'Event Code': Number(document.getElementById('eventCode').value),
-        'Event Name': document.getElementById('eventName').value.toUpperCase(),
-        'Google Drive': document.getElementById('googleDrive').value || null,
+        'Event Name': document.getElementById('eventName').value.toUpperCase().trim(),
+        'Google Drive': document.getElementById('googleDrive').value.trim() || null,
         'Event Overall In-Charge': document.getElementById('eventOIC').value,
         'Event Assistant In-Charge': document.getElementById('eventAIC').value,
         'Roles': roles,
@@ -59,8 +59,8 @@
 
   function addRole() {
     roles.push({
-      Definition: document.getElementById('newDefinition').value,
-      ID: document.getElementById('newID').value,
+      Definition: document.getElementById('newDefinition').value.trim(),
+      ID: document.getElementById('newID').value.trim(),
     })
 
     document.getElementById('newDefinition').value = ''

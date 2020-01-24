@@ -33,8 +33,8 @@
     }
 
     ref.set({
-      'displayName': document.getElementById('displayName').value,
-      'email': document.getElementById('email').value,
+      'displayName': document.getElementById('displayName').value.trim(),
+      'email': document.getElementById('email').value.trim(),
       'roles': result,
     }, { merge: true })
       .then(() => {

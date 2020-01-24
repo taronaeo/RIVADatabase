@@ -21,12 +21,14 @@
 
   function addRole() {
     roles.push({
-      Definition: document.getElementById('newDefinition').value,
-      ID: document.getElementById('newID').value,
+      Definition: document.getElementById('newDefinition').value.trim(),
+      ID: document.getElementById('newID').value.trim(),
     })
 
     document.getElementById('newDefinition').value = ''
     document.getElementById('newID').value = ''
+
+    document.getElementById('newDefinition').focus()
 
     roles = roles
   }
@@ -47,8 +49,8 @@
   function saveChanges(ref) {
     ref.set({
       'Event Year': Number(document.getElementById('eventYear').value),
-      'Event Name': document.getElementById('eventName').value,
-      'Google Drive': document.getElementById('googleDrive').value,
+      'Event Name': document.getElementById('eventName').value.trim(),
+      'Google Drive': document.getElementById('googleDrive').value.trim() || null,
       'Roles': roles,
     }, { merge: true })
     .then(() => {
