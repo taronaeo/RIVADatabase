@@ -48,6 +48,20 @@ interface Participation {
   "VIA Hours": number;
 }
 
+function compare(a: any, b: any) {
+  const memberA = a['Full Name']
+  const memberB = b['Full Name']
+  
+  let comparison = 0
+  
+  if (memberA > memberB) {
+    comparison = 1
+  } else if (memberA < memberB) {
+    comparison = -1
+  }
+  return comparison
+}
+
 exports.newMember = functions.firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
@@ -65,7 +79,7 @@ exports.newMemberAggregation = functions.firestore
     const fullName = snap.data()!['Full Name']
 
     await database.collection('members').doc('dataAggregation').get().then(snapshot => {
-      let members = snapshot.data()!['members']
+      const members = snapshot.data()!['members']
       let memberCount = snapshot.data()!['membersCount']
 
       members.push({
@@ -73,8 +87,10 @@ exports.newMemberAggregation = functions.firestore
         'Membership ID': membershipID,
       })
 
+      const sortedMembers = members.sort(compare)
+
       return database.collection('members').doc('dataAggregation').set({
-        'members': members,
+        'members': sortedMembers,
         'membersCount': ++memberCount
       }, { merge: true }).catch(err => console.error(err))
     }).catch(err => console.error(err))
@@ -86,7 +102,7 @@ exports.createUserAccount = functions.auth.user().onCreate(async user => {
 
   await database.collection('members').where('Email', '==', user.email).limit(1).get().then(snapshot => {
     snapshot.forEach(doc => {
-      if (user.email == doc.data()['Email']) {
+      if (user.email === doc.data()['Email']) {
         alumni = true
         membershipID = doc.id
       }
