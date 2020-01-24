@@ -49,6 +49,8 @@
   <li><Link href="/manage/users">Manage Users</Link></li>
   <li><Link href="/manage/events">Manage Events</Link></li>
   <li><Link href="/members">Manage Members</Link></li>
+  <li><Link href="/manage/participation">Manage Participations</Link></li>
+
 </ul>
 
 <FirebaseApp { firebase }>
@@ -94,6 +96,7 @@
           <li><Link href="/manage/users" class="sidenav-close">Manage Users</Link></li>
           <li><Link href="/manage/events" class="sidenav-close">Manage Events</Link></li>
           <li><Link href="/members" class="sidenav-close">Manage Members</Link></li>
+          <li><Link href="/manage/participation" class="sidenav-close">Manage Participations</Link></li>
         { /if }
 
         <div slot="loading">
