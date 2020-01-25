@@ -18,6 +18,7 @@
 	import Participation from './routes/Participation.svelte'
 	import AddParticipation from './routes/AddParticipation.svelte'
 	import ViewParticipation from './routes/ViewParticipation.svelte'
+	import EditParticipation from './routes/EditParticipation.svelte'
 
 	import Greetings from './components/Greetings.svelte'
 
@@ -59,7 +60,7 @@
 		<Route exact path="/manage/participation" component={ Participation } />
 		<Route exact path="/manage/participation/add" component={ AddParticipation } />
 		<Route exact path="/manage/participation/:id/view" component={ ViewParticipation } />
-		<Route exact path="/manage/participation/:id/edit" component={ Participation } />
+		<Route exact path="/manage/participation/:id/edit" component={ EditParticipation } />
 		<Route exact path="/profile/:id" component={ Profile } />
 		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route fallback component={ Dashboard } />
