@@ -1,5 +1,5 @@
 <script>
-  import { navigateTo } from 'yrv'
+  import { Link, navigateTo } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
   import { classes, years } from '../plugins/graduationInformation'
 
@@ -8,7 +8,7 @@
   import 'firebase/analytics'
   import 'firebase/performance'
 
-  function addMember(another) {
+  function addMember() {
     if (document.getElementById('fullName').value == '')
       return M.toast({ html: 'Full Name must not be blank!', displayLength: 3000 })
     
@@ -41,7 +41,6 @@
     .then(() => {
       M.toast({ html: 'Successfully added member.', displayLength: 3000 })
       
-      if (another) return navigateTo('/members/add', { 'reload': true })
       return navigateTo('/members')
     })
     .catch(() => {
@@ -56,6 +55,10 @@
 </script>
 
 <style>
+  nav {
+    padding: 0px 20px 0px 20px;
+  }
+
   input:-webkit-autofill,
   input:-webkit-autofill:hover, 
   input:-webkit-autofill:focus, 
@@ -88,6 +91,22 @@
 
       <div class="container">
         { #if userData.roles.Editor || userData.roles.Administrator }
+          <nav class="white">
+            <div class="nav-wrapper">
+              <div class="col s12">
+                <Link href="/members" class="black-text left left-align">
+                  <i class="material-icons left">block</i>
+                  Cancel
+                </Link>
+
+                <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ addMember }>
+                  <i class="material-icons right">done</i>
+                  Create Event
+                </a>
+              </div>
+            </div>
+          </nav>
+
           <h3>Personal Information</h3>
 
           <div class="row valign-wrapper">
@@ -192,24 +211,6 @@
           </div>
 
           <p>* Note: Those fields must not be blank.</p>
-
-          <div class="divider"></div>
-
-          <div class="row">
-            <p>
-              <button
-                class="btn waves-effect waves-light green left"
-                on:click={ () => addMember(false) }>
-                Submit
-              </button>
-
-              <button
-                class="btn waves-effect waves-light amber darken-4 right"
-                on:click={ () => addMember(true) }>
-                Submit another
-              </button>
-            </p>
-          </div>
         { :else }
           <p>
             Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.

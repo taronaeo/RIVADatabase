@@ -63,6 +63,8 @@
 
         <div class="container">
           { #if userData.roles.Editor || userData.roles.Administrator }
+            <h3>Users Record</h3>
+
             { #if users.length < 1 }
               <p>
                 { rateLimit(paginate, 1000) }

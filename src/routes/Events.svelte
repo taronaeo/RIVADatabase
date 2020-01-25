@@ -44,6 +44,8 @@
 
         <div class="container">
           { #if userData.roles.Editor || userData.roles.Administrator }
+            <h3>Events Record</h3>
+
             { #if events.length < 1 }
               <p>
                 { rateLimit(paginate, 1000) }

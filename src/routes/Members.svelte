@@ -53,8 +53,10 @@
       let:data={ userData }>
       <div class="container">
         { #if userData.roles.Editor || userData.roles.Administrator }
+          <h3>Members Record</h3>
+          
           <!-- TODO: Add Algolia Search Systems here -->
-          <nav class="amber darken-4">
+          <!-- <nav class="amber darken-4">
             <div class="nav-wrapper">
               <div class="input-field">
                 <input id="search" type="search" placeholder="E.g. { userData.displayName }">
@@ -62,7 +64,7 @@
                 <i class="material-icons" on:click={ resetSearch }>close</i>
               </div>
             </div>
-          </nav>
+          </nav> -->
 
           <Collection
             path={ 'members' }
@@ -112,8 +114,16 @@
             { /if }
 
             <div class="row">
-              <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>Previous</button>
-              <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>Next</button>
+              <p>
+                <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
+                  <i class="material-icons left">navigate_before</i>
+                  Prev
+                </button>
+                <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
+                  <i class="material-icons right">navigate_next</i>
+                  Next
+                </button>
+              </p>
             </div>
 
             <div class="fixed-action-btn">
