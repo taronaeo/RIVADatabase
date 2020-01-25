@@ -88,6 +88,18 @@ exports.newMember = functions.firestore
     }, { merge: true }).catch(err => console.error(err))
   })
 
+exports.newUserAggregation = functions.firestore
+  .document('users/{userID}')
+  .onCreate(async (snap, context) => {
+    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
+      let usersCount = snapshot.data()!['usersCount']
+
+      return database.collection('users').doc('dataAggregation').set({
+        'usersCount': ++usersCount,
+      }, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
 exports.newMemberAggregation = functions.firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
@@ -132,6 +144,18 @@ exports.newEventAggregation = functions.firestore
       return database.collection('events').doc('dataAggregation').set({
         'events': sortedEvents,
         'eventsCount': ++eventsCount,
+      }, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+exports.newParticipationAggregation = functions.firestore
+  .document('participation/{participationID}')
+  .onCreate(async (snap, context) => {
+    await database.collection('participation').doc('dataAggregation').get().then(snapshot => {
+      let participationsCount = snapshot.data()!['participationsCount']
+
+      return database.collection('participation').doc('dataAggregation').set({
+        'participationsCount': ++participationsCount,
       }, { merge: true }).catch(err => console.error(err))
     }).catch(err => console.error(err))
   })

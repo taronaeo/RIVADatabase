@@ -101,7 +101,7 @@
 
                 <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ addMember }>
                   <i class="material-icons right">done</i>
-                  Create Event
+                  Add Member
                 </a>
               </div>
             </div>
