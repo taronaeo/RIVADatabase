@@ -19,6 +19,8 @@
   }
 </script>
 
+<h3>Participation Records</h3>
+
 <Collection
   path={ '/participation' }
   query={ query }
@@ -27,8 +29,6 @@
   let:first
   let:last
   let:data={ participations }>
-
-  <h3>Participation Records</h3>
 
   { #if participations.length < 1 }
     <p>

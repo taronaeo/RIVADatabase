@@ -57,9 +57,9 @@
 		<Route exact path="/manage/events/:id/edit" component={ EditEvent } />
 		<Route exact path="/manage/events/create" component={ CreateEvent } />
 		<Route exact path="/manage/participation" component={ Participation } />
+		<Route exact path="/manage/participation/add" component={ AddParticipation } />
 		<Route exact path="/manage/participation/:id/view" component={ ViewParticipation } />
 		<Route exact path="/manage/participation/:id/edit" component={ Participation } />
-		<Route exact path="/manage/participation/:id/add" component={ AddParticipation } />
 		<Route exact path="/profile/:id" component={ Profile } />
 		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route fallback component={ Dashboard } />

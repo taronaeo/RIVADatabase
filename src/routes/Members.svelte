@@ -31,9 +31,9 @@
     font-weight: normal;
   }
 
-  nav {
+  /* nav {
     margin-bottom: 15px;
-  }
+  } */
 
   table {
     margin-bottom: 15px;
