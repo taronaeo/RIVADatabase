@@ -48,14 +48,13 @@
         'Role': document.getElementById('role').value,
         'VIA Hours': Number(document.getElementById('viaHours').value),
       }, { merge: true })
-        .then(() => {
-          M.toast({ html: 'Participation successfully added.', displayLength: 3000 })
-          return navigateTo('/manage/events/' + document.getElementById('eventCode').value + '/view')
-        })
         .catch(() => {
           return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
         })
     })
+
+    M.toast({ html: 'Participation successfully added.', displayLength: 3000 })
+    return navigateTo('/manage/events/' + document.getElementById('eventCode').value + '/view')
   }
 </script>
 
