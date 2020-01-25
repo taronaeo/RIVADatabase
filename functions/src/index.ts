@@ -48,7 +48,22 @@ interface Participation {
   "VIA Hours": number;
 }
 
-function compare(a: any, b: any) {
+function compareEvents(a: any, b: any) {
+  const eventA = a['Event Code']
+  const eventB = b['Event Code']
+
+  let comparison = 0
+
+  if (eventA > eventB) {
+    comparison = 1
+  } else if (eventA < eventB) {
+    comparison = -1
+  }
+
+  return comparison * -1
+}
+
+function compareMembers(a: any, b: any) {
   const memberA = a['Full Name']
   const memberB = b['Full Name']
   
@@ -59,6 +74,7 @@ function compare(a: any, b: any) {
   } else if (memberA < memberB) {
     comparison = -1
   }
+
   return comparison
 }
 
@@ -80,18 +96,42 @@ exports.newMemberAggregation = functions.firestore
 
     await database.collection('members').doc('dataAggregation').get().then(snapshot => {
       const members = snapshot.data()!['members']
-      let memberCount = snapshot.data()!['membersCount']
+      let membersCount = snapshot.data()!['membersCount']
 
       members.push({
         'Full Name': fullName,
         'Membership ID': membershipID,
       })
 
-      const sortedMembers = members.sort(compare)
+      const sortedMembers = members.sort(compareMembers)
 
       return database.collection('members').doc('dataAggregation').set({
         'members': sortedMembers,
-        'membersCount': ++memberCount
+        'membersCount': ++membersCount,
+      }, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+exports.newEventAggregation = functions.firestore
+  .document('events/{eventID}')
+  .onCreate(async (snap, context) => {
+    const eventID = context.params.eventID
+    const eventName = snap.data()!['Event Name']
+
+    await database.collection('events').doc('dataAggregation').get().then(snapshot => {
+      const events = snapshot.data()!['events']
+      let eventsCount = snapshot.data()!['eventsCount']
+
+      events.push({
+        'Event Code': Number(eventID),
+        'Event Name': eventName,
+      })
+
+      const sortedEvents = events.sort(compareEvents)
+
+      return database.collection('events').doc('dataAggregation').set({
+        'events': sortedEvents,
+        'eventsCount': ++eventsCount,
       }, { merge: true }).catch(err => console.error(err))
     }).catch(err => console.error(err))
   })
