@@ -22,7 +22,7 @@
 <h3>Participation Records</h3>
 
 <Collection
-  path={ '/participation' }
+  path={ '/participations' }
   query={ query }
   traceId={ 'ParticipationDataCollection' }
   maxWait={ 5000 }

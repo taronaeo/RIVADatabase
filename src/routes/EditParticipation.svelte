@@ -62,7 +62,7 @@
       let:data={ userData }>
 
       <Doc
-        path={ '/participation/' + router.params.id }
+        path={ '/participations/' + router.params.id }
         traceId={ 'ParticipationDataDoc' }
         maxWait={ 5000 }
         let:ref

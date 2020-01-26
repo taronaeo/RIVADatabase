@@ -45,7 +45,7 @@
             let:data={ events }>
 
             <Doc
-              path={ '/participation/dataAggregation' }
+              path={ '/participations/dataAggregation' }
               traceId={ 'ParticipationsDataDoc' }
               maxWait={ 5000 }
               let:data={ participations }>
@@ -170,6 +170,8 @@
                     </div>
                   </div>
                 { /if }
+
+                <h3>About You</h3>
               </div>
 
               <div slot="loading">

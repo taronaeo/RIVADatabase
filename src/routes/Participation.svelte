@@ -42,7 +42,7 @@
       let:data={ userData }>
 
       <Collection
-        path={ '/participation' }
+        path={ '/participations' }
         query={ query }
         traceId={ 'ParticipationsDataCollection' }
         maxWait={ 5000 }

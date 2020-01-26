@@ -149,14 +149,39 @@ exports.newEventAggregation = functions.firestore
   })
 
 exports.newParticipationAggregation = functions.firestore
-  .document('participation/{participationID}')
+  .document('participations/{participationID}')
   .onCreate(async (snap, context) => {
-    await database.collection('participation').doc('dataAggregation').get().then(snapshot => {
-      let participationsCount = snapshot.data()!['participationsCount']
+    const eventCode = snap.data()!['Event Code']
 
-      return database.collection('participation').doc('dataAggregation').set({
-        'participationsCount': ++participationsCount,
-      }, { merge: true }).catch(err => console.error(err))
+    await database.collection('events').where('Event Code', '==', eventCode).limit(1).get().then(snapshot => {
+      snapshot.forEach(async event => {
+        const eventName = event.data()['Event Name']
+        const eventYear = event.data()['Event Year']
+        const memberID = snap.data()!['Member ID']
+        const fullName = snap.data()!['Full Name']
+        const viaHours = snap.data()!['VIA Hours']
+
+        await database.collection('participations').doc('dataAggregation').get().then(aggregation => {
+          const participations = aggregation.data()!['participations']
+          let participationsCount = aggregation.data()!['participationsCount']
+
+          participations.push({
+            'Event Code': Number(eventCode),
+            'Event Name': eventName,
+            'Event Year': Number(eventYear),
+            'Member ID': memberID,
+            'Full Name': fullName,
+            'VIA Hours': Number(viaHours),
+          })
+
+          const sortedParticipations = participations.sort(compareEvents)
+
+          return database.collection('participations').doc('dataAggregation').set({
+            'participations': sortedParticipations,
+            'participationsCount': ++participationsCount,
+          }, { merge: true }).catch(err => console.error(err))
+        }).catch(err => console.error(err))
+      })
     }).catch(err => console.error(err))
   })
 

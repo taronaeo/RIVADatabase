@@ -1,3 +1,4 @@
+<!-- FIXME: THIS DOCUMENT NEEDS FIXING, MEMORY LEAK BUG -->
 <script>
   export let id
   export let userData
@@ -16,7 +17,7 @@
 
 <!-- FIXME: Still needs checking, unverified success -->
 <Collection
-  path={ 'participation' }
+  path={ 'participations' }
   query={ ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').limit(10) }
   traceId={ 'eventsParticipated' }
   maxWait={ 5000 }
@@ -105,5 +106,4 @@
       An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
     </p>
   </div>
-
 </Collection>

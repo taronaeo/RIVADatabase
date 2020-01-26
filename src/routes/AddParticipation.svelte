@@ -41,7 +41,7 @@
     }
 
     result.forEach(member => {
-      firebase.firestore().collection('/participation').doc().set({
+      firebase.firestore().collection('/participations').doc().set({
         'Event Code': Number(document.getElementById('eventCode').value),
         'Member ID': member['Member ID'],
         'Full Name': member['Full Name'],
