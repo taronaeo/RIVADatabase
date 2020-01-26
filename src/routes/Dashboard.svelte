@@ -6,6 +6,12 @@
   import 'firebase/firestore'
   import 'firebase/analytics'
   import 'firebase/performance'
+
+  let membershipID
+
+  function myParticipations(participations) {
+    return participations['Member ID'] == membershipID
+  }
 </script>
 
 <style>
@@ -24,34 +30,67 @@
       path={ '/users/' + user.uid }
       traceId={ 'UserDataDoc' }
       maxWait={ 5000 }
-      let:data={ userData }>
+      let:data={ userData }
+      on:data={ e => membershipID = e.detail.data.membershipID }>
 
       <Doc
-        path={ '/users/dataAggregation' }
-        traceId={ 'UsersDataDoc' }
+        path={ '/events/dataAggregation' }
+        traceId={ 'EventsDataDoc' }
         maxWait={ 5000 }
-        let:data={ users }>
+        let:data={ events }>
 
         <Doc
-          path={ '/members/dataAggregation' }
-          traceId={ 'MembersDataDoc' }
+          path={ '/participations/dataAggregation' }
+          traceId={ 'ParticipationsDataDoc' }
           maxWait={ 5000 }
-          let:data={ members }>
+          let:data={ participations }>
 
-          <Doc
-            path={ '/events/dataAggregation' }
-            traceId={ 'EventsDataDoc' }
-            maxWait={ 5000 }
-            let:data={ events }>
+          <div class="container">
+            <h3>About You</h3>
 
-            <Doc
-              path={ '/participations/dataAggregation' }
-              traceId={ 'ParticipationsDataDoc' }
-              maxWait={ 5000 }
-              let:data={ participations }>
+            <div class="row">
+              <div class="col s12 m6 l6">
+                <div class="card grey darken-2">
+                  <div class="card-content white-text center-align">
+                    <p><i class="material-icons large">person</i></p>
+                    <h6 class="bold truncate">My Profile</h6>
+                  </div>
 
-              <div class="container">
-                { #if userData.roles.Editor || userData.roles.Administrator }
+                  <div class="card-action">
+                    <Link href="/profile">
+                      <i class="material-icons white-text">remove_red_eye</i>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12 m6 l6">
+                <div class="card grey darken-2">
+                  <div class="card-content white-text center-align">
+                    <h1>
+                      { participations['participations'].filter(myParticipations).length }
+                      /
+                      { events['events'].length }
+                    </h1>
+                    <h6 class="bold truncate">Events completed so far</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <Doc
+                path={ '/users/dataAggregation' }
+                traceId={ 'UsersDataDoc' }
+                maxWait={ 5000 }
+                let:data={ users }>
+
+                <Doc
+                  path={ '/members/dataAggregation' }
+                  traceId={ 'MembersDataDoc' }
+                  maxWait={ 5000 }
+                  let:data={ members }>
+
                   <h3>Management Panel</h3>
 
                   <div class="row">
@@ -169,44 +208,42 @@
                       </div>
                     </div>
                   </div>
-                { /if }
 
-                <h3>About You</h3>
-              </div>
+                  <div slot="loading">
+                    <div class="container">
+                      <div class="progress">
+                        <div class="indeterminate"></div>
+                      </div>
+                    </div>
+                  </div>
 
-              <div slot="loading">
-                <div class="container">
-                  <div class="progress">
-                    <div class="indeterminate"></div>
+                  <div slot="fallback">
+                    <div class="container">
+                      <p>
+                        An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+                      </p>
+                    </div>
+                  </div>
+                </Doc>
+
+                <div slot="loading">
+                  <div class="container">
+                    <div class="progress">
+                      <div class="indeterminate"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div slot="fallback">
-                <div class="container">
-                  <p>
-                    An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-                  </p>
+                <div slot="fallback">
+                  <div class="container">
+                    <p>
+                      An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Doc>
-
-            <div slot="loading">
-              <div class="container">
-                <div class="progress">
-                  <div class="indeterminate"></div>
-                </div>
-              </div>
-            </div>
-
-            <div slot="fallback">
-              <div class="container">
-                <p>
-                  An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-                </p>
-              </div>
-            </div>
-          </Doc>
+              </Doc>
+            { /if }
+          </div>
 
           <div slot="loading">
             <div class="container">
