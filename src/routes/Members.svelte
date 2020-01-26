@@ -127,7 +127,7 @@
             </div>
 
             <div class="fixed-action-btn">
-              <Link href="/members/add">
+              <Link href="/manage/members/add">
                 <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
                   <i class="material-icons">add</i>
                 </button>

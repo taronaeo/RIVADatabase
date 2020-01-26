@@ -80,11 +80,11 @@
                         </div>
 
                         <div class="card-action">
-                          <Link href="/members/add">
+                          <Link href="/manage/members/add">
                             <i class="material-icons white-text">add</i>
                           </Link>
 
-                          <Link href="/members">
+                          <Link href="/manage/members">
                             <i class="material-icons white-text">remove_red_eye</i>
                           </Link>
                         </div>

@@ -47,8 +47,8 @@
 	<Router>
 		<Route exact path="/" component={ Dashboard } />
 		<Route exact path="/profile" component={ Profile } />
-		<Route exact path="/members" component={ Members } />
-		<Route exact path="/members/add" component={ AddMember } />
+		<Route exact path="/manage/members" component={ Members } />
+		<Route exact path="/manage/members/add" component={ AddMember } />
 		<Route exact path="/manage/users" component={ Users } />
 		<Route exact path="/manage/users/:id/view" component={ ViewUser } />
 		<Route exact path="/manage/users/:id/edit" component={ EditUser } />

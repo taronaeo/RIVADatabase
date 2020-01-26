@@ -41,7 +41,7 @@
     .then(() => {
       M.toast({ html: 'Successfully added member.', displayLength: 3000 })
       
-      return navigateTo('/members')
+      return navigateTo('/manage/members')
     })
     .catch(() => {
       return M.toast({ html: 'An error occurred.', displayLength: 3000 })
@@ -94,7 +94,7 @@
           <nav class="white">
             <div class="nav-wrapper">
               <div class="col s12">
-                <Link href="/members" class="black-text left left-align">
+                <Link href="/manage/members" class="black-text left left-align">
                   <i class="material-icons left">block</i>
                   Cancel
                 </Link>
