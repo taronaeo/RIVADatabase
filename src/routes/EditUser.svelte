@@ -26,6 +26,12 @@
     let result = {}
     const options = document.getElementById('roles').options
 
+    if (document.getElementById('displayName').value == '')
+      return M.toast({ html: 'Display Name must not be empty!'})
+
+    if (document.getElementById('email').value == '')
+      return M.toast({ html: 'Email must not be empty!'})
+
     for (var i = 0; i < options.length; i++) {
       let opt = options[i]
       if (opt.selected) result[opt.value] = true

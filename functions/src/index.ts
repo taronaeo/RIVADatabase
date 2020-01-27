@@ -100,6 +100,18 @@ exports.newUserAggregation = functions.firestore
     }).catch(err => console.error(err))
   })
 
+exports.deleteUserAggregation = functions.firestore
+  .document('users/{userID}')
+  .onDelete(async (snap, context) => {
+    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
+      let usersCount = snapshot.data()!['usersCount']
+
+      return database.collection('users').doc('dataAggregation').set({
+        'usersCount': --usersCount,
+      }, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
 exports.newMemberAggregation = functions.firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {

@@ -18,6 +18,11 @@
   .bold {
     font-weight: bold !important;
   }
+
+  .myProfile {
+    font-size: 7.5rem;
+    line-height: 110%
+  }
 </style>
 
 <svelte:head>
@@ -50,18 +55,14 @@
 
             <div class="row">
               <div class="col s12 m6 l6">
-                <div class="card grey darken-2">
-                  <div class="card-content white-text center-align">
-                    <p><i class="material-icons large">person</i></p>
-                    <h6 class="bold truncate">My Profile</h6>
+                <Link href="/profile">
+                  <div class="card grey darken-2">
+                    <div class="card-content white-text center-align">
+                      <p><i class="material-icons large myProfile">person</i></p>
+                      <h6 class="bold truncate">My Profile</h6>
+                    </div>
                   </div>
-
-                  <div class="card-action">
-                    <Link href="/profile">
-                      <i class="material-icons white-text">remove_red_eye</i>
-                    </Link>
-                  </div>
-                </div>
+                </Link>
               </div>
 
               <div class="col s12 m6 l6">
@@ -72,7 +73,7 @@
                       /
                       { events['events'].length }
                     </h1>
-                    <h6 class="bold truncate">Events completed so far</h6>
+                    <h6 class="bold truncate">Events Completed So Far</h6>
                   </div>
                 </div>
               </div>

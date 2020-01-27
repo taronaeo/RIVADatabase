@@ -1,27 +1,29 @@
-<!-- FIXME: THIS DOCUMENT NEEDS FIXING, MEMORY LEAK BUG -->
 <script>
   export let id
   export let userData
 
   import { Link } from 'yrv'
-  import { Collection } from 'sveltefire'
-</script>
+  import { Collection, Doc } from 'sveltefire'
 
-<style>
-  table {
-    margin-bottom: 15px;
+  let query = ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').limit(5)
+
+  function paginate(item, action) {
+    if (!item) return query = ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').limit(5)
+    if (action == 'next') return query = ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').startAfter(item['Event Code']).limit(5)
+    if (action == 'previous') return query = ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').endBefore(item['Event Code']).limitToLast(5)
   }
-</style>
+</script>
 
 <h3>Events Participated</h3>
 
-<!-- FIXME: Still needs checking, unverified success -->
 <Collection
   path={ 'participations' }
-  query={ ref => ref.where('Member ID', '==', id).orderBy('Event Code', 'desc').limit(10) }
-  traceId={ 'eventsParticipated' }
+  query={ query }
+  traceId={ 'ParticipationsDataCollection' }
   maxWait={ 5000 }
-  let:data={ participation }>
+  let:first
+  let:last
+  let:data={ participations }>
 
   <table class="highlight">
     <thead>
@@ -38,19 +40,19 @@
     </thead>
 
     <tbody>
-      { #if participation.length < 1 }
-        <p>No records found.</p>
+      { #if participations.length < 1 }
+        <p>No other records found.</p>
       { :else }
-        { #each participation as prt }
+        { #each participations as prt }
           <Collection
             path={ 'events' }
-            query={ ref => ref.where('Event Code', '==', prt['Event Code']).orderBy('Event Year', 'desc').limit(10) }
-            traceId={ 'eventsParticipated' }
+            query={ ref => ref.where('Event Code', '==', prt['Event Code']).orderBy('Event Year', 'desc').limit(1) }
+            traceId={ 'EventsDataCollection' }
             maxWait={ 5000 }
             let:data={ events }>
 
             { #if events.length < 1 }
-              <p>No records found.</p>
+              <p>No other records found.</p>
             { :else }
               { #each events as event }
                 <tr>
@@ -78,12 +80,6 @@
               { /each }
             { /if }
 
-            <div slot="loading">
-              <div class="progress">
-                <div class="indeterminate"></div>
-              </div>
-            </div>
-
             <div slot="fallback">
               <p>
                 An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
@@ -94,6 +90,19 @@
       { /if }
     </tbody>
   </table>
+
+  <div class="row">
+    <p>
+      <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
+        <i class="material-icons left">navigate_before</i>
+        Prev
+      </button>
+      <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
+        <i class="material-icons right">navigate_next</i>
+        Next
+      </button>
+    </p>
+  </div>
 
   <div slot="loading">
     <div class="progress">
