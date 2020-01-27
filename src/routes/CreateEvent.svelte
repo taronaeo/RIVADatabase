@@ -27,6 +27,9 @@
 
     if (eventOIC.options[eventOIC.selectedIndex].innerText == eventAIC.options[eventAIC.selectedIndex].innerText)
       return M.toast({ html: 'The same person must not be in both event roles!', displayLength: 3000 })
+    
+    if (roles.length < 1)
+      return M.toast({ html: 'Event Roles must not be empty!', displayLength: 3000 })
 
     await firebase.firestore().collection('events').where('Event Code', '==', Number(document.getElementById('eventCode').value)).limit(1).get()
       .then(data => {
@@ -81,6 +84,10 @@
 
   function generateRoles() {
     roles.push(
+      {
+        Definition: 'Advisor',
+        ID: 'AVR',
+      },
       {
         Definition: 'Overall In-Charge',
         ID: 'OIC',

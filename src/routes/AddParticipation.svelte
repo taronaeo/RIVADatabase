@@ -175,7 +175,7 @@
               <div class="row valign-wrapper">
                 <div class="col s6 bold">VIA Hours</div>
                 <div class="col s6">
-                  <input id="viaHours" type="number" value="0">
+                  <input id="viaHours" type="number" value="0" min="0">
                 </div>
               </div>
 

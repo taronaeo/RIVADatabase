@@ -131,7 +131,7 @@
               <div class="row valign-wrapper">
                 <div class="col s6 bold">VIA Hours</div>
                 <div class="col s6">
-                  <input id="viaHours" type="text" value={ prt['VIA Hours'] }>
+                  <input id="viaHours" type="number" value={ prt['VIA Hours'] } min="0">
                 </div>
               </div>
 
