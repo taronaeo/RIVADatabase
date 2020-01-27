@@ -101,7 +101,22 @@
           on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
           <div class="container">
-            { #if userData.roles.Editor || userData.roles.Administrator }
+            { #if userData.roles.Administrator === false }
+              <nav class="red">
+                <div class="nav-wrapper">
+                  <div class="col s12 white-text">
+                    <i class="material-icons left">warning</i>
+                    Notice: You do not have permissions to add participations.
+
+                    <Link href="/manage/participation" class="white-text right">
+                      <i class="material-icons right">keyboard_return</i>
+
+                      Return
+                    </Link>
+                  </div>
+                </div>
+              </nav>
+            { :else }
               <nav class="white">
                 <div class="nav-wrapper">
                   <div class="col s12">
@@ -117,7 +132,9 @@
                   </div>
                 </div>
               </nav>
+            { /if }
 
+            { #if userData.roles.Editor || userData.roles.Administrator }
               <h3>Participation Data</h3>
 
               <div class="row valign-wrapper">

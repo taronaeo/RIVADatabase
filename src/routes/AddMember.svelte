@@ -90,7 +90,22 @@
       on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
       <div class="container">
-        { #if userData.roles.Editor || userData.roles.Administrator }
+        { #if userData.roles.Administrator === false }
+          <nav class="red">
+            <div class="nav-wrapper">
+              <div class="col s12 white-text">
+                <i class="material-icons left">warning</i>
+                Notice: You do not have permissions to add members.
+
+                <Link href="/manage/members" class="white-text right">
+                  <i class="material-icons right">keyboard_return</i>
+
+                  Return
+                </Link>
+              </div>
+            </div>
+          </nav>
+        { :else }
           <nav class="white">
             <div class="nav-wrapper">
               <div class="col s12">
@@ -99,14 +114,19 @@
                   Cancel
                 </Link>
 
-                <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ addMember }>
+                <a
+                  href="#!"
+                  class="black-text right right-align modal-trigger"
+                  on:click|preventDefault|stopPropagation={ addMember }>
                   <i class="material-icons right">done</i>
                   Add Member
                 </a>
               </div>
             </div>
           </nav>
+        { /if }
 
+        { #if userData.roles.Editor || userData.roles.Administrator }
           <h3>Personal Information</h3>
 
           <div class="row valign-wrapper">
