@@ -126,6 +126,7 @@
                 <a
                   href="#confirmationModal"
                   class="btn waves-orange waves-effect modal-trigger red"
+                  class:disabled={ userData.roles.Administrator === false }
                   on:click|preventDefault={ confirmDelete }>
 
                   Erase

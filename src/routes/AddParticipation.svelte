@@ -28,7 +28,7 @@
     currentEvent = document.getElementById('eventCode').value
   }
 
-  function addParticipation() {
+  async function addParticipation() {
     let result = []
     const members = document.getElementById('names').options
 
@@ -40,21 +40,28 @@
       })
     }
 
-    result.forEach(member => {
-      firebase.firestore().collection('/participations').doc().set({
-        'Event Code': Number(document.getElementById('eventCode').value),
-        'Member ID': member['Member ID'],
-        'Full Name': member['Full Name'],
-        'Role': document.getElementById('role').value,
-        'VIA Hours': Number(document.getElementById('viaHours').value),
-      }, { merge: true })
-        .catch(() => {
-          return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
-        })
+    const promise = new Promise((resolve, reject) => {
+      result.forEach(member => {
+        firebase.firestore().collection('/participations').doc().set({
+          'Event Code': Number(document.getElementById('eventCode').value),
+          'Member ID': member['Member ID'],
+          'Full Name': member['Full Name'],
+          'Role': document.getElementById('role').value,
+          'VIA Hours': Number(document.getElementById('viaHours').value),
+        }, { merge: true })
+          .then(() => resolve())
+          .catch(() => reject())
+      })
     })
 
-    M.toast({ html: 'Participation successfully added.', displayLength: 3000 })
-    return navigateTo('/manage/events/' + document.getElementById('eventCode').value + '/view')
+    await Promise.all([promise])
+      .then(() => {
+        M.toast({ html: 'Participation successfully added.', displayLength: 3000 })
+        return navigateTo('/manage/events/' + document.getElementById('eventCode').value + '/view')
+      })
+      .catch(() => {
+        return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
+      })
   }
 </script>
 
