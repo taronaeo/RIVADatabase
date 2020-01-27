@@ -18,17 +18,52 @@
 // Do know that Google's Development Team is fixing and/or tinkering with some
 // runtime code. Continuiously retry the deployment and it will succeed at some point.
 
+// Libraries required for Google Cloud Functions
+// to work and operate properly. Any missing
+// libraries would cause a catastrophic database
+// operations failure. Hence, please import and
+// remove all necessary libraries -- nothing else.
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
+// Initialize server-side Firebase Admin SDK
+// Credentials are automatically handled by
+// Google's Servers as they are already
+// authenticated as the "sudo-user".
 admin.initializeApp()
 
+// Link Firestore Admin SDK to a
+// variable
 const database = admin.firestore()
 
+// Interfaces provide a structure as to
+// how the database should present and/or
+// store data. All database operations
+// should use interfaces for maintainability
+// and reusability.
 interface Roles {
   Alumni?: boolean;
   Editor?: boolean;
   Administrator?: boolean;
+}
+
+interface MembersList {
+  'Full Name': string;
+  'Membership ID': string;
+}
+
+interface EventsList {
+  'Event Code': number;
+  'Event Name': string;
+}
+
+interface ParticipationsList {
+  'Event Year': number;
+  'Event Code': number;
+  'Event Name': string;
+  'Member ID': string;
+  'Full Name': string;
+  'VIA Hours': number;
 }
 
 interface User {
@@ -40,14 +75,64 @@ interface User {
   roles: Roles
 }
 
-interface Participation {
-  "Event Code": number;
-  "Member ID": string;
-  "Full Name": string;
-  "Role": string;
-  "VIA Hours": number;
+interface Member {
+  'Membership ID'?: string;
+  'Full Name'?: string;
+  'Gender'?: string;
+  'Email'?: string;
+  'Current School'?: string;
+  'Contact Number'?: number;
+  'Home Number'?: string;
+  'Graduating Class'?: string;
+  'Graduating Year'?: number;
+  'Membership Status'?: string;
+  'Name Of Next-Of-Kin'?: string;
+  'Relationship With Next-Of-Kin'?: string;
+  'Contact Number Of Next-Of-Kin'?: number;
 }
 
+interface Event {
+  'Event Year'?: number;
+  'Event Code'?: number;
+  'Event Name'?: string;
+  'Event Overall In-Charge'?: string;
+  'Event Assistant In-Charge'?: string;
+}
+
+interface Participation {
+  'Event Code': number;
+  'Member ID': string;
+  'Full Name': string;
+  'Role': string;
+  'VIA Hours': number;
+}
+
+interface UserAggregation {
+  'usersCount': number;
+}
+
+interface MemberAggregation {
+  'members': Array<MembersList>;
+  'membersCount': number;
+}
+
+interface EventAggregation {
+  'events': Array<EventsList>;
+  'eventsCount': number;
+}
+
+interface ParticipationAggregation {
+  'participations': Array<ParticipationsList>;
+  'participationsCount': number;
+}
+
+// Functions provide code maintainability
+// and reusability when database operations
+// get more complex and code understandability
+// becomes more difficult. Any removal of
+// existing functions may cause a catastrophic
+// failure in database operations. Hence,
+// proceed with caution.
 function compareEvents(a: any, b: any) {
   const eventA = a['Event Code']
   const eventB = b['Event Code']
@@ -78,123 +163,19 @@ function compareMembers(a: any, b: any) {
   return comparison
 }
 
+// Firestore onCreate event listeners
+
 exports.newMember = functions.firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
-    const membershipID = context.params.memberID
+    const memberID = context.params.memberID
+    const member: Member = {
+      "Membership ID": memberID
+    }
 
-    return await database.collection('/members').doc(membershipID).set({
-      'Membership ID': membershipID
-    }, { merge: true }).catch(err => console.error(err))
-  })
-
-exports.newUserAggregation = functions.firestore
-  .document('users/{userID}')
-  .onCreate(async (snap, context) => {
-    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
-      let usersCount = snapshot.data()!['usersCount']
-
-      return database.collection('users').doc('dataAggregation').set({
-        'usersCount': ++usersCount,
-      }, { merge: true }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  })
-
-exports.deleteUserAggregation = functions.firestore
-  .document('users/{userID}')
-  .onDelete(async (snap, context) => {
-    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
-      let usersCount = snapshot.data()!['usersCount']
-
-      return database.collection('users').doc('dataAggregation').set({
-        'usersCount': --usersCount,
-      }, { merge: true }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  })
-
-exports.newMemberAggregation = functions.firestore
-  .document('members/{memberID}')
-  .onCreate(async (snap, context) => {
-    const membershipID = context.params.memberID
-    const fullName = snap.data()!['Full Name']
-
-    await database.collection('members').doc('dataAggregation').get().then(snapshot => {
-      const members = snapshot.data()!['members']
-      let membersCount = snapshot.data()!['membersCount']
-
-      members.push({
-        'Full Name': fullName,
-        'Membership ID': membershipID,
-      })
-
-      const sortedMembers = members.sort(compareMembers)
-
-      return database.collection('members').doc('dataAggregation').set({
-        'members': sortedMembers,
-        'membersCount': ++membersCount,
-      }, { merge: true }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  })
-
-exports.newEventAggregation = functions.firestore
-  .document('events/{eventID}')
-  .onCreate(async (snap, context) => {
-    const eventID = context.params.eventID
-    const eventName = snap.data()!['Event Name']
-
-    await database.collection('events').doc('dataAggregation').get().then(snapshot => {
-      const events = snapshot.data()!['events']
-      let eventsCount = snapshot.data()!['eventsCount']
-
-      events.push({
-        'Event Code': Number(eventID),
-        'Event Name': eventName,
-      })
-
-      const sortedEvents = events.sort(compareEvents)
-
-      return database.collection('events').doc('dataAggregation').set({
-        'events': sortedEvents,
-        'eventsCount': ++eventsCount,
-      }, { merge: true }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  })
-
-exports.newParticipationAggregation = functions.firestore
-  .document('participations/{participationID}')
-  .onCreate(async (snap, context) => {
-    const eventCode = snap.data()!['Event Code']
-
-    await database.collection('events').where('Event Code', '==', eventCode).limit(1).get().then(snapshot => {
-      snapshot.forEach(async event => {
-        const eventName = event.data()['Event Name']
-        const eventYear = event.data()['Event Year']
-        const memberID = snap.data()!['Member ID']
-        const fullName = snap.data()!['Full Name']
-        const viaHours = snap.data()!['VIA Hours']
-
-        await database.collection('participations').doc('dataAggregation').get().then(aggregation => {
-          const participations = aggregation.data()!['participations']
-          let participationsCount = aggregation.data()!['participationsCount']
-
-          participations.push({
-            'Event Code': Number(eventCode),
-            'Event Name': eventName,
-            'Event Year': Number(eventYear),
-            'Member ID': memberID,
-            'Full Name': fullName,
-            'VIA Hours': Number(viaHours),
-          })
-
-          const sortedParticipations = participations.sort(compareEvents)
-
-          return database.collection('participations').doc('dataAggregation').set({
-            'participations': sortedParticipations,
-            'participationsCount': ++participationsCount,
-          }, { merge: true }).catch(err => console.error(err))
-        }).catch(err => console.error(err))
-      })
-    }).catch(err => console.error(err))
+    return await database.collection('/members').doc(memberID)
+      .set(member, { merge: true })
+      .catch(err => console.error(err))
   })
 
 exports.createUserAccount = functions.auth.user().onCreate(async user => {
@@ -227,48 +208,185 @@ exports.createUserAccount = functions.auth.user().onCreate(async user => {
 exports.newEvent = functions.firestore
   .document('events/{eventID}')
   .onCreate(async (snap, context) => {
-    const data = snap.data()
-    const eventID = context.params.eventID
+    const event: Event = {}
+    const eventOIC = snap.data()!["Event Overall In-Charge"]
+    const eventAIC = snap.data()!["Event Assistant In-Charge"]
 
-    await database.collection('members').where('Membership ID', '==', data!["Event Overall In-Charge"]).limit(1).get()
+    await database.collection('members').where('Membership ID', '==', eventOIC).limit(1).get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          const eventOIC = doc.data()['Full Name']
           const participation: Participation = {
-            "Event Code": data!['Event Code'],
-            "Member ID": data!["Event Overall In-Charge"],
-            "Full Name": eventOIC,
+            "Event Code": snap.data()!['Event Code'],
+            "Member ID": snap.data()!["Event Overall In-Charge"],
+            "Full Name": doc.data()['Full Name'],
             "Role": "OIC",
             "VIA Hours": 0,
           }
 
-          database.collection('events').doc(eventID).set({
-            'Event Overall In-Charge': eventOIC
-          }, { merge: true }).catch(err => console.error(err))
+          event['Event Overall In-Charge'] = doc.data()['Full Name']
 
           database.collection('participation').add(participation).catch(err => console.error(err))
         })
       })
       .catch(err => console.error(err))
 
-    await database.collection('members').where('Membership ID', '==', data!["Event Assistant In-Charge"]).limit(1).get()
+    await database.collection('members').where('Membership ID', '==', eventAIC).limit(1).get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          const eventAIC = doc.data()['Full Name']
           const participation: Participation = {
-            "Event Code": data!['Event Code'],
-            "Member ID": data!["Event Assistant In-Charge"],
-            "Full Name": eventAIC,
+            "Event Code": snap.data()!['Event Code'],
+            "Member ID": snap.data()!["Event Assistant In-Charge"],
+            "Full Name": doc.data()['Full Name'],
             "Role": "AIC",
             "VIA Hours": 0,
           }
 
-          database.collection('events').doc(eventID).set({
-            'Event Assistant In-Charge': eventAIC
-          }, { merge: true }).catch(err => console.error(err))
+          event['Event Assistant In-Charge'] = doc.data()['Full Name']
 
           database.collection('participation').add(participation).catch(err => console.error(err))
         })
       })
       .catch(err => console.error(err))
+    
+    return database.collection('events').doc(context.params.eventID).set(event, { merge: true })
+      .catch(err => console.error(err))
+  })
+
+// Database aggregation functions
+exports.newUserAggregation = functions.firestore
+  .document('users/{userID}')
+  .onCreate(async (snap, context) => {
+    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
+      const userAggregation: UserAggregation = {
+        usersCount: ++snapshot.data()!['usersCount']
+      }
+
+      return snapshot.ref.set(userAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+exports.newMemberAggregation = functions.firestore
+  .document('members/{memberID}')
+  .onCreate(async (snap, context) => {
+    await database.collection('members').doc('dataAggregation').get().then(snapshot => {
+      const memberList: MembersList = {
+        "Membership ID": context.params.memberID,
+        "Full Name": snap.data()!['Full Name'],
+      }
+
+      const memberAggregation: MemberAggregation = {
+        members: snapshot.data()!['members'],
+        membersCount: ++snapshot.data()!['membersCount']
+      }
+
+      memberAggregation.members.push(memberList)
+      memberAggregation.members = memberAggregation.members.sort(compareMembers)
+
+      return snapshot.ref.set(memberAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+exports.newEventAggregation = functions.firestore
+  .document('events/{eventID}')
+  .onCreate(async (snap, context) => {
+    await database.collection('events').doc('dataAggregation').get().then(snapshot => {
+      const eventsList: EventsList = {
+        "Event Code": Number(context.params.eventID),
+        "Event Name": snap.data()!['Event Name'],
+      }
+
+      const eventAggregation: EventAggregation = {
+        events: snapshot.data()!['events'],
+        eventsCount: ++snapshot.data()!['eventsCount'],
+      }
+
+      eventAggregation.events.push(eventsList)
+      eventAggregation.events = eventAggregation.events.sort(compareEvents)
+
+      return snapshot.ref.set(eventAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+exports.newParticipationAggregation = functions.firestore
+  .document('participations/{participationID}')
+  .onCreate(async (snap, context) => {
+    const eventCode = snap.data()!['Event Code']
+
+    await database.collection('events').where('Event Code', '==', eventCode).limit(1).get().then(snapshot => {
+      snapshot.forEach(async event => {
+        await database.collection('participations').doc('dataAggregation').get().then(aggregation => {
+          const participationsList: ParticipationsList = {
+            'Event Year': Number(event.data()['Event Year']),
+            'Event Code': Number(eventCode),
+            'Event Name': event.data()['Event Name'],
+            'Member ID': snap.data()!['Member ID'],
+            'Full Name': snap.data()!['Full Name'],
+            'VIA Hours': Number(snap.data()!['VIA Hours']),
+          }
+
+          const participationAggregation: ParticipationAggregation = {
+            'participations': aggregation.data()!['participations'],
+            'participationsCount': ++aggregation.data()!['participationsCount']
+          }
+
+          participationAggregation.participations.push(participationsList)
+          participationAggregation.participations.sort(compareEvents)
+
+          return aggregation.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
+        }).catch(err => console.error(err))
+      })
+    }).catch(err => console.error(err))
+  })
+
+// Firebase onDelete event listeners
+
+// deleteUserAggregation listens for any database
+// delete event that happens in the 'users'
+// collection.
+//
+// Order of operations:
+// 1. Get 'dataAggregation' document
+// 2. Extract the usersCount from the document
+// 3. Subtract usersCount by 1 and push the changes
+//    to the document
+exports.deleteUserAggregation = functions.firestore
+  .document('users/{userID}')
+  .onDelete(async (snap, context) => {
+    await database.collection('users').doc('dataAggregation').get().then(snapshot => {
+      const userAggregation: UserAggregation = {
+        'usersCount': --snapshot.data()!['usersCount']
+      }
+
+      return snapshot.ref.set(userAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
+// deleteMemberAggregation listens for any database
+// delete event that happens in the 'members'
+// collection.
+//
+// Order of operations:
+// 1. Initialize memberID variable
+// 2. Get 'dataAggregation document
+// 3. Extract membersCount from the document
+// 4. Filter any Membership ID that isn't equivalent
+//    to memberID
+// 5. Push new members array and membersCount with
+//    the subtraction by 1 to the dataAggregation
+//    document
+exports.deleteMemberAggregation = functions.firestore
+  .document('members/{memberID}')
+  .onDelete(async (snap, context) => {
+    await database.collection('members').doc('dataAggregation').get().then(snapshot => {
+      const memberAggregation: MemberAggregation = {
+        'members': snapshot.data()!['members'],
+        'membersCount': --snapshot.data()!['membersCount']
+      }
+
+      memberAggregation.members.filter((value: any) => {
+        return value['Membership ID'] !== context.params.memberID
+      })
+
+      return snapshot.ref.set(memberAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
   })
