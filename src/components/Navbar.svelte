@@ -4,8 +4,6 @@
   import { Link } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
 
-  let closeNav
-
   document.addEventListener('DOMContentLoaded', () => {
     let elem = document.querySelectorAll('.sidenav')
     let instances = M.Sidenav.init(elem)
@@ -30,7 +28,7 @@
       </a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><Link href="/">Dashboard</Link></li>
-        <li><Link href="/profile">Profile</Link></li>
+        <li><Link href="/manage/members/me">Profile</Link></li>
       </ul>
     </div>
   </div>
@@ -61,6 +59,6 @@
     </User>
 
     <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
-    <li><Link href="/profile" class="sidenav-close">Profile</Link></li>
+    <li><Link href="/manage/members/me" class="sidenav-close">Profile</Link></li>
   </ul>
 </FirebaseApp>

@@ -23,7 +23,7 @@
       <h5 class="white-text">Links</h5>
       <ul>
         <li><Link class="grey-text text-lighten-3" href="/">Dashboard</Link></li>
-        <li><Link class="grey-text text-lighten-3" href="/profile">Profile</Link></li>
+        <li><Link class="grey-text text-lighten-3" href="/manage/members/me">Profile</Link></li>
         <li><Link class="grey-text text-lighten-3" href="/manage/members">Member List</Link></li>
       </ul>
     </div>

@@ -95,13 +95,13 @@
                       <th>{ member['Full Name'] }</th>
                       <th>{ member['Gender'] }</th>
                       <th>
-                        <Link href="/profile/{ member['id'] }" class="white-text">
+                        <Link href="/manage/members/{ member['id'] }/view" class="white-text">
                           <button class="btn waves-effect waves-light blue">
                             <i class="material-icons">remove_red_eye</i>
                           </button>
                         </Link>
 
-                        <Link href="/profile/{ member['id'] }/edit" class="white-text">
+                        <Link href="/manage/members/{ member['id'] }/edit" class="white-text">
                           <button class="btn waves-effect waves-light amber darken-4">
                             <i class="material-icons">mode_edit</i>
                           </button>

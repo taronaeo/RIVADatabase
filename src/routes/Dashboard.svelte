@@ -55,7 +55,7 @@
 
             <div class="row">
               <div class="col s12 m6 l6">
-                <Link href="/profile">
+                <Link href="/manage/members/me">
                   <div class="card grey darken-2">
                     <div class="card-content white-text center-align">
                       <p><i class="material-icons large myProfile">person</i></p>

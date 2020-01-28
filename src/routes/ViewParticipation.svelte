@@ -85,7 +85,7 @@
             <div class="row valign-wrapper">
               <div class="col s6 bold">Member ID</div>
               <div class="col s6 truncate">
-                <Link href="/profile/{ prt['Member ID'] }" class="red-text">{ prt['Member ID'] }</Link>
+                <Link href="/manage/members/{ prt['Member ID'] }/view" class="red-text">{ prt['Member ID'] }</Link>
               </div>
             </div>
 

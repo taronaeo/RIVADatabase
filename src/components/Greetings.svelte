@@ -1,7 +1,7 @@
 <script>
   export let firebase
 
-  import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
+  import { FirebaseApp, User } from 'sveltefire'
 
   import 'firebase/analytics'
   import 'firebase/performance'

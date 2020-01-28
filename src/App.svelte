@@ -7,14 +7,14 @@
 	import Users from './routes/Users.svelte'
 	import Events from './routes/Events.svelte'
 	import Members from './routes/Members.svelte'
-	import Profile from './routes/Profile.svelte'
 	import ViewUser from './routes/ViewUser.svelte'
 	import EditUser from './routes/EditUser.svelte'
 	import Dashboard from './routes/Dashboard.svelte'
 	import AddMember from './routes/AddMember.svelte'
 	import ViewEvent from './routes/ViewEvent.svelte'
 	import EditEvent from './routes/EditEvent.svelte'
-	import EditProfile from './routes/EditProfile.svelte'
+	import ViewMember from './routes/ViewMember.svelte'
+	import EditMember from './routes/EditMember.svelte'
 	import CreateEvent from './routes/CreateEvent.svelte'
 	import Participation from './routes/Participation.svelte'
 	import AddParticipation from './routes/AddParticipation.svelte'
@@ -47,11 +47,11 @@
 
 	<Router>
 		<Route exact path="/" component={ Dashboard } />
-		<Route exact path="/profile" component={ Profile } />
-		<Route exact path="/profile/:id" component={ Profile } />
-		<Route exact path="/profile/:id/edit" component={ EditProfile } />
 		<Route exact path="/manage/members" component={ Members } />
+		<Route exact path="/manage/members/me" component={ ViewMember } />
 		<Route exact path="/manage/members/add" component={ AddMember } />
+		<Route exact path="/manage/members/:id/view" component={ ViewMember } />
+		<Route exact path="/manage/members/:id/edit" component={ EditMember } />
 		<Route exact path="/manage/users" component={ Users } />
 		<Route exact path="/manage/users/:id/view" component={ ViewUser } />
 		<Route exact path="/manage/users/:id/edit" component={ EditUser } />

@@ -53,7 +53,7 @@
     }, { merge: true })
       .then(() => {
         M.toast({ html: 'Profile successfully updated.', displayLength: 3000 })
-        return navigateTo('/profile/' + router.params.id)
+        return navigateTo('/manage/members/' + router.params.id + '/view')
       })
       .catch(() => {
         return M.toast({ html: 'An error occurred.', displayLength: 3000 })
@@ -66,13 +66,25 @@
     padding: 0px 20px 0px 20px;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active  {
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+  }
+
+  input:-webkit-autofill {
+    -webkit-text-fill-color: #F44336 !important;
+  }
+
   .bold {
     font-weight: bold;
   }
 </style>
 
 <svelte:head>
-  <title>RIVAlumni | Edit Profile</title>
+  <title>RIVAlumni | Edit Membership</title>
 </svelte:head>
 
 <FirebaseApp { firebase } perf analytics>
@@ -96,7 +108,7 @@
             <nav class="white">
               <div class="nav-wrapper">
                 <div class="col s12">
-                  <Link href="/profile/{ memberData['Membership ID'] }" class="black-text left left-align">
+                  <Link href="/manage/members/{ memberData['Membership ID'] }/view" class="black-text left left-align">
                     <i class="material-icons left">block</i>
                     Cancel
                   </Link>
@@ -109,7 +121,7 @@
               </div>
             </nav>
 
-            <h3>Edit Profile</h3>
+            <h3>Edit Membership Profile</h3>
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Membership ID</div>
@@ -238,7 +250,7 @@
               <h3>Profile Remarks</h3>
 
               <p>
-                <Link href="/manage/profile/remarks/add" class="red-text">
+                <Link href="/manage/members/remarks/add" class="red-text">
                   Click here to add remarks.
                 </Link>
               </p>

@@ -26,7 +26,7 @@
     }, { merge: true })
     .then(() => {
       M.toast({ html: 'Profile successfully updated.', displayLength: 3000 })
-      return navigateTo('/profile/' + id)
+      return navigateTo('/manage/members/' + id + '/view')
     })
     .catch(() => {
       return M.toast({ html: 'An error has occurred.', displayLength: 3000 })
@@ -244,7 +244,7 @@
       </div>
     { :else }
       <div class="fixed-action-btn">
-        <Link href="/profile/{ id }/edit">
+        <Link href="/manage/members/{ id }/edit">
           <button class="btn-floating btn-large deep-orange pulse">
             <i class="material-icons">mode_edit</i>
           </button>

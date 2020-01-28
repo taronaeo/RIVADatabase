@@ -4,13 +4,13 @@
   import { Collection } from 'sveltefire'
 </script>
 
-<h3>Profile Remarks</h3>
+<h3>Membership Remarks</h3>
 
 <!-- TODO: Add pagination -->
 <Collection
   path={ 'members/' + id + '/remarks' }
   query={ ref => ref.orderBy('Date Occurred', 'asc').limit(5) }
-  traceId={ 'profileRemarks' }
+  traceId={ 'MemberRemarksDataCollection' }
   maxWait={ 5000 }
   let:data={ remarks }>
 
@@ -52,5 +52,4 @@
       An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
     </p>
   </div>
-
 </Collection>
