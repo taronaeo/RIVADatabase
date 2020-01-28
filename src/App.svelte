@@ -14,6 +14,7 @@
 	import AddMember from './routes/AddMember.svelte'
 	import ViewEvent from './routes/ViewEvent.svelte'
 	import EditEvent from './routes/EditEvent.svelte'
+	import EditProfile from './routes/EditProfile.svelte'
 	import CreateEvent from './routes/CreateEvent.svelte'
 	import Participation from './routes/Participation.svelte'
 	import AddParticipation from './routes/AddParticipation.svelte'
@@ -47,6 +48,8 @@
 	<Router>
 		<Route exact path="/" component={ Dashboard } />
 		<Route exact path="/profile" component={ Profile } />
+		<Route exact path="/profile/:id" component={ Profile } />
+		<Route exact path="/profile/:id/edit" component={ EditProfile } />
 		<Route exact path="/manage/members" component={ Members } />
 		<Route exact path="/manage/members/add" component={ AddMember } />
 		<Route exact path="/manage/users" component={ Users } />
@@ -61,8 +64,6 @@
 		<Route exact path="/manage/participation/add" component={ AddParticipation } />
 		<Route exact path="/manage/participation/:id/view" component={ ViewParticipation } />
 		<Route exact path="/manage/participation/:id/edit" component={ EditParticipation } />
-		<Route exact path="/profile/:id" component={ Profile } />
-		<Route exact path="/profile/:id/edit" component={ Profile } />
 		<Route fallback component={ Dashboard } />
 	</Router>
 
