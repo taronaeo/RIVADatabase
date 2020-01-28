@@ -247,7 +247,7 @@
             { #if userData.roles.Editor || userData.roles.Administrator }
               <div class="divider"></div>
 
-              <h3>Profile Remarks</h3>
+              <h3>Membership Remarks</h3>
 
               <p>
                 <Link href="/manage/members/remarks/add" class="red-text">
