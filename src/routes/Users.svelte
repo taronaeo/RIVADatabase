@@ -85,17 +85,21 @@
                       <th>{ user['displayName'] }</th>
                       <th>{ user['email'] }</th>
                       <th>
-                        <Link href="/manage/users/{ user['id'] }/view" class="white-text">
-                          <button class="btn waves-effect waves-light blue">
-                            <i class="material-icons">remove_red_eye</i>
-                          </button>
-                        </Link>
+                        <p>
+                          <Link href="/manage/users/{ user['id'] }/view" class="white-text">
+                            <button class="btn waves-effect waves-light blue">
+                              <i class="material-icons">remove_red_eye</i>
+                            </button>
+                          </Link>
+                        </p>
 
-                        <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
-                          <button class="btn waves-effect waves-light amber darken-4">
-                            <i class="material-icons">mode_edit</i>
-                          </button>
-                        </Link>
+                        <p>
+                          <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
+                            <button class="btn waves-effect waves-light amber darken-4">
+                              <i class="material-icons">mode_edit</i>
+                            </button>
+                          </Link>
+                        </p>
                       </th>
                     </tr>
                   { /each }

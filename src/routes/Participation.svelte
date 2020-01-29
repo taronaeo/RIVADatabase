@@ -76,17 +76,21 @@
                       <td>{ prt['Full Name'] }</td>
                       <td>{ prt['Role'] }</td>
                       <td>
-                        <Link href="/manage/participation/{ prt.id }/view" class="white-text">
-                          <button class="btn waves-effect waves-light blue">
-                            <i class="material-icons">remove_red_eye</i>
-                          </button>
-                        </Link>
+                        <p>
+                          <Link href="/manage/participation/{ prt.id }/view" class="white-text">
+                            <button class="btn waves-effect waves-light blue">
+                              <i class="material-icons">remove_red_eye</i>
+                            </button>
+                          </Link>
+                        </p>
 
-                        <Link href="/manage/participation/{ prt.id }/edit" class="white-text">
-                          <button class="btn waves-effect waves-light amber darken-4">
-                            <i class="material-icons">mode_edit</i>
-                          </button>
-                        </Link>
+                        <p>
+                          <Link href="/manage/participation/{ prt.id }/edit" class="white-text">
+                            <button class="btn waves-effect waves-light amber darken-4">
+                              <i class="material-icons">mode_edit</i>
+                            </button>
+                          </Link>
+                        </p>
                       </td>
                     </tr>
                   { /each }

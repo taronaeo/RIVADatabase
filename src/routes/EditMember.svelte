@@ -129,14 +129,14 @@
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Full Name</div>
+              <div class="col s6 bold">Full Name *</div>
               <div class="col s6">
                 <input id="fullName" type="text" value={ memberData['Full Name'] }>
               </div>
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Gender</div>
+              <div class="col s6 bold">Gender *</div>
               <div class="col s6">
                 <select id="gender">
                   <option value="Male" selected={ memberData['Gender'] === 'Male' }>Male</option>
@@ -160,7 +160,7 @@
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Contact Number</div>
+              <div class="col s6 bold">Contact Number *</div>
               <div class="col s6">
                 <input id="contactNumber" type="tel" value={ memberData['Contact Number'] }>
               </div>
@@ -174,7 +174,7 @@
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Graduating Class</div>
+              <div class="col s6 bold">Graduating Class *</div>
               <div class="col s6">
                 <!-- <input id="graduatingClass" type="text" value={ memberData['Graduating Class'] }> -->
                 <select id="graduatingClass">
@@ -186,7 +186,7 @@
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Graduating Year</div>
+              <div class="col s6 bold">Graduating Year *</div>
               <div class="col s6">
                 <!-- <input id="graduatingYear" type="number" value={ memberData['Graduating Year'] }> -->
                 <select id="graduatingYear">
@@ -199,7 +199,7 @@
 
             { #if userData.roles.Editor || userData.roles.Administrator }
               <div class="row valign-wrapper">
-                <div class="col s6 bold">Membership Status</div>
+                <div class="col s6 bold">Membership Status *</div>
                 <div class="col s6">
                   <select id="status">
                     <option value="ACTIVE" selected={ memberData['Membership Status'] === 'ACTIVE' }>ACTIVE</option>
@@ -209,30 +209,38 @@
               </div>
             { /if }
 
+            <p>
+              * Note: Fields must not be empty!
+            </p>
+
             <div class="divider"></div>
 
             <h3>Emergency Contact Details</h3>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Name Of Next-Of-Kin</div>
+              <div class="col s6 bold">Name Of Next-Of-Kin *</div>
               <div class="col s6">
                 <input id="nokName" type="text" value={ memberData['Name Of Next-Of-Kin'] }>
               </div>
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Relationship With Next-Of-Kin</div>
+              <div class="col s6 bold">Relationship With Next-Of-Kin *</div>
               <div class="col s6">
                 <input id="nokRelationship" type="text" value={ memberData['Relationship With Next-Of-Kin'] }>
               </div>
             </div>
 
             <div class="row valign-wrapper">
-              <div class="col s6 bold">Contact Number Of Next-Of-Kin</div>
+              <div class="col s6 bold">Contact Number Of Next-Of-Kin *</div>
               <div class="col s6">
                 <input id="nokNumber" type="tel" value={ memberData['Contact Number Of Next-Of-Kin'] }>
               </div>
             </div>
+
+            <p>
+              * Note: Fields must not be empty!
+            </p>
 
             <div class="divider"></div>
 

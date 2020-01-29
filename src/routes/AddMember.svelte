@@ -9,19 +9,25 @@
   import 'firebase/performance'
 
   function addMember() {
-    if (document.getElementById('fullName').value == '')
+    if (document.getElementById('fullName').value.trim() === '')
       return M.toast({ html: 'Full Name must not be blank!', displayLength: 3000 })
+
+    if (document.getElementById('email').value.trim() !== '') {
+      if (!/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g
+        .test(document.getElementById('email').value.trim()))
+          return M.toast({ html: 'Email Address must be valid!', displayLength: 3000 })
+    }
     
-    if (document.getElementById('contactNumber').value == '')
+    if (document.getElementById('contactNumber').value.trim() == '')
       return M.toast({ html: 'Contact Number must not be blank!', displayLength: 3000 })
 
-    if (document.getElementById('nokName').value == '')
+    if (document.getElementById('nokName').value.trim() == '')
       return M.toast({ html: 'Name Of Next-Of-Kin must not be blank!', displayLength: 3000 })
 
-    if (document.getElementById('nokRelationship').value == '')
+    if (document.getElementById('nokRelationship').value.trim() == '')
       return M.toast({ html: 'Relationship Of Next-Of-Kin must not be blank!', displayLength: 3000 })
 
-    if (document.getElementById('nokNumber').value == '')
+    if (document.getElementById('nokNumber').value.trim() == '')
       return M.toast({ html: 'Contact Number Of Next-Of-Kin must not be blank!', displayLength: 3000 })
 
     firebase.firestore().collection('/members').add({
@@ -137,7 +143,7 @@
           </div>
 
           <div class="row valign-wrapper">
-            <div class="col s6 bold">Gender</div>
+            <div class="col s6 bold">Gender *</div>
             <div class="col s6">
               <select id="gender">
                 <option value="Male">Male</option>
@@ -199,11 +205,16 @@
           <div class="row valign-wrapper">
             <div class="col s6 bold">Membership Status *</div>
             <div class="col s6">
-              <input id="status" type="text" value="ACTIVE">
+              <select id="status">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="BLACKLISTED">BLACKLISTED</option>
+              </select>
             </div>
           </div>
 
-          <p>* Note: Those fields must not be blank.</p>
+          <p>
+            * Note: Fields must not be empty!
+          </p>
 
           <div class="divider"></div>
 
@@ -230,7 +241,9 @@
             </div>
           </div>
 
-          <p>* Note: Those fields must not be blank.</p>
+          <p>
+            * Note: Fields must not be empty!
+          </p>
         { :else }
           <p>
             Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
