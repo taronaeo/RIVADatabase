@@ -433,20 +433,23 @@ exports.deleteEventAggregation = functions.firestore
   }).catch(err => console.error(err))
 })
 
-exports.deleteParticipationAggregation = functions.firestore
-  .document('participations/{participationID}')
-  .onDelete(async (snap, context) => {
-    await database.collection('participations').doc('dataAggregation').get().then(snapshot => {
-      const participationAggregation: ParticipationAggregation = {
-        'participations': snapshot.data()!['participations'],
-        'participationsCount': --snapshot.data()!['participationsCount'],
-      }
+// exports.deleteParticipationAggregation = functions.firestore
+//   .document('participations/{participationID}')
+//   .onDelete(async (snap, context) => {
+//     await database.collection('participations').doc('dataAggregation').get().then(snapshot => {
+//       const participationAggregation: ParticipationAggregation = {
+//         'participations': snapshot.data()!['participations'],
+//         'participationsCount': --snapshot.data()!['participationsCount'],
+//       }
 
-      participationAggregation.participations.filter((value: any) => {
-        return value['Member ID'] !== snap.data()!['Member ID']
-            && value['Event Code'] !== snap.data()!['Event Code']
-      })
+//       participationAggregation.participations.filter((value: any) => {
+//         console.log(snap.data()!['Member ID'])
+//         console.log(snap.data()!['Event Code'])
 
-      return snapshot.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  })
+//         return value['Member ID'] != snap.data()!['Member ID']
+//             && value['Event Code'] != snap.data()!['Event Code']
+//       })
+
+//       return snapshot.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
+//     }).catch(err => console.error(err))
+//   })
