@@ -363,7 +363,7 @@ exports.deleteUserAggregation = functions.firestore
 
 // deleteEventAggregation listens for any database
 // delete event that happens in the 'events'
-// collection
+// collection.
 //
 // Order of operations:
 // 1. Initialize eventID variable
