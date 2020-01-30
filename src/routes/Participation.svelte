@@ -16,18 +16,18 @@
 
   let query = ref => ref.orderBy('Full Name', 'asc').limit(10)
 
-  function rateLimit(func, duration) {
-    setTimeout(func, duration)
-
-    return 'Loading...'
-  }
-
   function paginate(item, action) {
     if (!item) return query = ref => ref.orderBy('Full Name', 'asc').limit(10)
     if (action == 'next') return query = ref => ref.orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
     if (action == 'previous') return query = ref => ref.orderBy('Full Name', 'asc').endBefore(item['Full Name']).limitToLast(10)
   }
 </script>
+
+<style>
+  i, .red-text {
+    cursor: pointer;
+  }
+</style>
 
 <svelte:head>
   <title>RIVAlumni | Participations</title>
@@ -56,7 +56,8 @@
 
             { #if participations.length < 1 }
               <p>
-                { rateLimit(paginate, 1000) }
+                No other data found.
+                <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
               </p>
             { :else }
               <table class="highlight">
@@ -76,21 +77,17 @@
                       <td>{ prt['Full Name'] }</td>
                       <td>{ prt['Role'] }</td>
                       <td>
-                        <p>
-                          <Link href="/manage/participation/{ prt.id }/view" class="white-text">
-                            <button class="btn waves-effect waves-light blue">
-                              <i class="material-icons">remove_red_eye</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/participation/{ prt.id }/view" class="white-text">
+                          <button class="btn waves-effect waves-light blue">
+                            <i class="material-icons">remove_red_eye</i>
+                          </button>
+                        </Link>
 
-                        <p>
-                          <Link href="/manage/participation/{ prt.id }/edit" class="white-text">
-                            <button class="btn waves-effect waves-light amber darken-4">
-                              <i class="material-icons">mode_edit</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/participation/{ prt.id }/edit" class="white-text">
+                          <button class="btn waves-effect waves-light amber darken-4">
+                            <i class="material-icons">mode_edit</i>
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   { /each }

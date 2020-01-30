@@ -361,13 +361,49 @@ exports.deleteUserAggregation = functions.firestore
     }).catch(err => console.error(err))
   })
 
+// deleteEventAggregation listens for any database
+// delete event that happens in the 'events'
+// collection
+//
+// Order of operations:
+// 1. Initialize eventID variable
+// 2. Get 'dataAggregation' document
+// 3. Extract eventsCount from the document
+// 4. Filter any Event ID that isn't equivalent
+//    to eventID
+// 5. Push new events array and eventsCount with
+//    the subtraction by 1 to the dataAggregation
+//    document
+// 6. Get 'participations' collection
+// 7. Extract any document with the Event Code that
+//    is equivalent to eventID
+// 8. Delete the document
+// 9. deleteParticipationAggregation will handle the
+//    rest for aggregation.
+exports.deleteEventAggregation = functions.firestore
+  .document('events/{eventID}')
+  .onDelete(async (snap, context) => {
+    await database.collection('events').doc('dataAggregation').get().then(snapshot => {
+      const eventAggregation: EventAggregation = {
+        'events': snapshot.data()!['events'],
+        'eventsCount': --snapshot.data()!['eventsCount'],
+      }
+
+      eventAggregation.events.filter((value: any) => {
+        return value['Event Code'] !== context.params.eventID
+      })
+
+      return snapshot.ref.set(eventAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
 // deleteMemberAggregation listens for any database
 // delete event that happens in the 'members'
 // collection.
 //
 // Order of operations:
 // 1. Initialize memberID variable
-// 2. Get 'dataAggregation document
+// 2. Get 'dataAggregation' document
 // 3. Extract membersCount from the document
 // 4. Filter any Membership ID that isn't equivalent
 //    to memberID

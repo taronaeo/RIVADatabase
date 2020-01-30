@@ -75,12 +75,24 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Email</div>
-              <div class="col s6 truncate">{ memberData['Email'] }</div>
+              { #if memberData['Email'] == '' }
+                <div class="col s6 truncate">
+                  <i>NO DATA</i>
+                </div>
+              { :else }
+                <div class="col s6 truncate">{ memberData['Email'] }</div>
+              { /if }
             </div>
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Current School</div>
-              <div class="col s6 truncate">{ memberData['Current School'] }</div>
+              { #if memberData['Current School'] == '' }
+                <div class="col s6 truncate">
+                  <i>NO DATA</i>
+                </div>
+              { :else }
+                <div class="col s6 truncate">{ memberData['Current School'] }</div>
+              { /if }
             </div>
 
             <div class="row valign-wrapper">
@@ -90,7 +102,13 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Home Number</div>
-              <div class="col s6 truncate">{ memberData['Home Number'] }</div>
+              { #if memberData['Home Number'] == '' }
+                <div class="col s6 truncate">
+                  <i>NO DATA</i>
+                </div>
+              { :else }
+                <div class="col s6 truncate">{ memberData['Home Number'] }</div>
+              { /if }
             </div>
 
             <div class="row valign-wrapper">

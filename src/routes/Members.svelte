@@ -9,12 +9,6 @@
 
   let query = ref => ref.orderBy('Full Name', 'asc').limit(10)
 
-  function rateLimit(func, duration) {
-    setTimeout(func, duration)
-
-    return 'Loading...'
-  }
-
   function paginate(item, action) {
     if (!item) return query = ref => ref.orderBy('Full Name', 'asc').limit(10)
     if (action == 'next') return query = ref => ref.orderBy('Full Name', 'asc').startAfter(item['Full Name']).limit(10)
@@ -27,16 +21,20 @@
 </script>
 
 <style>
-  tbody th {
-    font-weight: normal;
-  }
-
   /* nav {
     margin-bottom: 15px;
   } */
 
+  i, .red-text {
+    cursor: pointer;
+  }
+
   table {
     margin-bottom: 15px;
+  }
+
+  tbody th {
+    font-weight: normal;
   }
 </style>
 
@@ -77,7 +75,8 @@
 
             { #if members.length < 1 }
               <p>
-                { rateLimit(paginate, 1000) }
+                No other data found.
+                <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
               </p>
             { :else }
               <table class="highlight">
@@ -95,21 +94,17 @@
                       <th>{ member['Full Name'] }</th>
                       <th>{ member['Gender'] }</th>
                       <th>
-                        <p>
-                          <Link href="/manage/members/{ member['id'] }/view" class="white-text">
-                            <button class="btn waves-effect waves-light blue">
-                              <i class="material-icons">remove_red_eye</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/members/{ member['id'] }/view" class="white-text">
+                          <button class="btn waves-effect waves-light blue">
+                            <i class="material-icons">remove_red_eye</i>
+                          </button>
+                        </Link>
 
-                        <p>
-                          <Link href="/manage/members/{ member['id'] }/edit" class="white-text">
-                            <button class="btn waves-effect waves-light amber darken-4">
-                              <i class="material-icons">mode_edit</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/members/{ member['id'] }/edit" class="white-text">
+                          <button class="btn waves-effect waves-light amber darken-4">
+                            <i class="material-icons">mode_edit</i>
+                          </button>
+                        </Link>
                       </th>
                     </tr>
                   { /each }

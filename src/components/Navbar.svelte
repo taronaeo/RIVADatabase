@@ -29,6 +29,7 @@
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><Link href="/">Dashboard</Link></li>
         <li><Link href="/manage/members/me">Profile</Link></li>
+        <li><Link href="/request/letter">Request Letter</Link></li>
       </ul>
     </div>
   </div>
@@ -60,5 +61,6 @@
 
     <li><Link href="/" class="sidenav-close">Dashboard</Link></li>
     <li><Link href="/manage/members/me" class="sidenav-close">Profile</Link></li>
+    <li><Link href="/request/letter" class="sidenav-close">Request Letter</Link></li>
   </ul>
 </FirebaseApp>

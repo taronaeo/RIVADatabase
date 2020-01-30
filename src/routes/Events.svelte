@@ -9,18 +9,18 @@
 
   let query = ref => ref.orderBy('Event Year', 'desc').limit(5)
 
-  function rateLimit(func, duration) {
-    setTimeout(func, duration)
-
-    return 'Loading...'
-  }
-
   function paginate(item, action) {
     if (!item) return query = ref => ref.orderBy('Event Year', 'desc').limit(5)
     if (action == 'next') return query = ref => ref.orderBy('Event Year', 'desc').startAfter(item['Event Code']).limit(5)
     if (action == 'previous') return query = ref => ref.orderBy('Event Year', 'desc').endBefore(item['Event Code']).limitToLast(5)
   }
 </script>
+
+<style>
+  i, .red-text {
+    cursor: pointer;
+  }
+</style>
 
 <svelte:head>
   <title>RIVAlumni | Events</title>
@@ -48,7 +48,8 @@
 
             { #if events.length < 1 }
               <p>
-                { rateLimit(paginate, 1000) }
+                No other data found.
+                <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
               </p>
             { :else }
               <table class="highlight">
@@ -68,21 +69,17 @@
                       <td>{ event['Event Code'] }</td>
                       <td>{ event['Event Name'] }</td>
                       <td>
-                        <p>
-                          <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
-                            <button class="btn waves-effect waves-light blue">
-                              <i class="material-icons">remove_red_eye</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
+                          <button class="btn waves-effect waves-light blue">
+                            <i class="material-icons">remove_red_eye</i>
+                          </button>
+                        </Link>
 
-                        <p>
-                          <Link href="/manage/events/{ event['Event Code'] }/edit" class="white-text">
-                            <button class="btn waves-effect waves-light amber darken-4">
-                              <i class="material-icons">mode_edit</i>
-                            </button>
-                          </Link>
-                        </p>
+                        <Link href="/manage/events/{ event['Event Code'] }/edit" class="white-text">
+                          <button class="btn waves-effect waves-light amber darken-4">
+                            <i class="material-icons">mode_edit</i>
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   { /each }

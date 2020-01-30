@@ -63,21 +63,17 @@
 
                   { #if userData.roles.Editor || userData.roles.Administrator }
                     <td>
-                      <p>
-                        <Link href="/manage/events/{ event['Event Code' ]}/view">
-                          <button class="btn waves-effect waves-light blue">
-                            <i class="material-icons">remove_red_eye</i>
-                          </button>
-                        </Link>
-                      </p>
+                      <Link href="/manage/events/{ event['Event Code' ]}/view">
+                        <button class="btn waves-effect waves-light blue">
+                          <i class="material-icons">remove_red_eye</i>
+                        </button>
+                      </Link>
 
-                      <p>
-                        <Link href="/manage/events/{ event['Event Code' ]}/edit">
-                          <button class="btn waves-effect waves-light amber darken-4">
-                            <i class="material-icons">mode_edit</i>
-                          </button>
-                        </Link>
-                      </p>
+                      <Link href="/manage/events/{ event['Event Code' ]}/edit">
+                        <button class="btn waves-effect waves-light amber darken-4">
+                          <i class="material-icons">mode_edit</i>
+                        </button>
+                      </Link>
                     </td>
                   { /if }
                 </tr>
