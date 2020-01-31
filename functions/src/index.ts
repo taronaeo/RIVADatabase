@@ -437,22 +437,18 @@ exports.deleteParticipationAggregation = functions.firestore
   .document('participations/{participationID}')
   .onDelete(async (snap, context) => {
     await database.collection('participations').doc('dataAggregation').get().then(snapshot => {
+      const filteredParticipations = snapshot.data()!['participations'].filter((value: any) => {
+        return value['Member ID'] === snap.data()!['Member ID']
+            && value['Event Code'] === snap.data()!['Event Code']
+      })
+      
       const participationAggregation: ParticipationAggregation = {
-        'participations': snapshot.data()!['participations'],
+        'participations': filteredParticipations,
         'participationsCount': --snapshot.data()!['participationsCount'],
       }
 
-      participationAggregation.participations.filter((value: any) => {
-        console.log(snap.data()!['Member ID'])
-        console.log(snap.data()!['Event Code'])
-        console.log(value['Member ID'])
-        console.log(value['Event Code'])
-        console.log()
+      console.log(participationAggregation.participations.length)
 
-        return value['Member ID'] != snap.data()!['Member ID']
-            && value['Event Code'] != snap.data()!['Event Code']
-      })
-
-      return snapshot.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
+      // return snapshot.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
     }).catch(err => console.error(err))
   })
