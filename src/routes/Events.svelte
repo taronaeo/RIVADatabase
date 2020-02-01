@@ -99,6 +99,14 @@
                 </p>
               </div>
             { /if }
+            
+            <div class="fixed-action-btn">
+              <Link href="/manage/events/create">
+                <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
+                  <i class="material-icons">add</i>
+                </button>
+              </Link>
+            </div>
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.

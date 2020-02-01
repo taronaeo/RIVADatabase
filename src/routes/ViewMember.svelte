@@ -97,7 +97,9 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Contact Number</div>
-              <div class="col s6 truncate">{ memberData['Contact Number'] }</div>
+              <div class="col s6 truncate">
+                <a href="tel:+65{ memberData['Contact Number'] }" class="red-text">{ memberData['Contact Number'] }</a>
+              </div>
             </div>
 
             <div class="row valign-wrapper">
@@ -107,7 +109,9 @@
                   <i>NO DATA</i>
                 </div>
               { :else }
-                <div class="col s6 truncate">{ memberData['Home Number'] }</div>
+                <div class="col s6 truncate">
+                  <a href="tel:+65{ memberData['Home Number'] }">{ memberData['Home Number'] }</a>
+                </div>
               { /if }
             </div>
 
@@ -144,7 +148,9 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Contact Number Of Next-Of-Kin</div>
-              <div class="col s6 truncate">{ memberData['Contact Number Of Next-Of-Kin'] }</div>
+              <div class="col s6 truncate">
+                <a href="tel:+65{ memberData['Contact Number Of Next-Of-Kin'] }" class="red-text">{ memberData['Contact Number Of Next-Of-Kin'] }</a>
+              </div>
             </div>
 
             <div class="divider"></div>
