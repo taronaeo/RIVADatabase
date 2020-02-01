@@ -107,6 +107,7 @@ interface Participation {
   'Role': string;
   'VIA Hours': number;
   'Remarks': string | null;
+  'createdAt': admin.firestore.FieldValue;
 }
 
 interface UserAggregation {
@@ -226,6 +227,7 @@ exports.newEvent = functions.region('asia-east2').firestore
             'Role': 'OIC',
             'VIA Hours': 0,
             'Remarks': null,
+            'createdAt': admin.firestore.FieldValue.serverTimestamp(),
           }
 
           event['Event Overall In-Charge'] = doc.data()['Full Name']
@@ -245,6 +247,7 @@ exports.newEvent = functions.region('asia-east2').firestore
             'Role': 'AIC',
             'VIA Hours': 0,
             'Remarks': null,
+            'createdAt': admin.firestore.FieldValue.serverTimestamp(),
           }
 
           event['Event Assistant In-Charge'] = doc.data()['Full Name']
