@@ -48,6 +48,8 @@
           'Full Name': member['Full Name'],
           'Role': document.getElementById('role').value,
           'VIA Hours': Number(document.getElementById('viaHours').value),
+          'updatedAt': firebase.firestore.FieldValue.serverTimestamp(),
+          'createdAt': firebase.firestore.FieldValue.serverTimestamp(),
         }, { merge: true })
           .then(() => resolve())
           .catch(() => reject())

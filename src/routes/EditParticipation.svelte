@@ -28,6 +28,7 @@
     ref.set({
       'Role': document.getElementById('role').value,
       'VIA Hours': Number(document.getElementById('viaHours').value),
+      'updatedAt': firebase.firestore.FieldValue.serverTimestamp(),
     }, { merge: true })
       .then(() => {
         M.toast({ html: 'Participation successfully updated.', displayLength: 3000 })

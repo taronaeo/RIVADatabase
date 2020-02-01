@@ -126,13 +126,25 @@
                 <a
                   href="#confirmationModal"
                   class="btn waves-orange waves-effect modal-trigger red"
-                  class:disabled={ userData.roles.Administrator === false }
+                  class:disabled={
+                    userData.roles.Administrator === false ||
+                    new Date().getTime() < (prt['updatedAt'].seconds * 1000) + 120000 ||
+                    new Date().getTime() < (prt['createdAt'].seconds * 1000) + 120000
+                  }
                   on:click|preventDefault={ confirmDelete }>
 
                   Erase
                 </a>
               </div>
             </div>
+
+            { #if userData.roles.Administrator === true &&
+                  (new Date().getTime() < (prt['updatedAt'].seconds * 1000) + 120000 ||
+                  new Date().getTime() < (prt['createdAt'].seconds * 1000) + 120000) }
+              <div class="row valign-wrapper">
+                <code class="col s6 offset-s6 bold">Rate Limit: 2 minutes.</code>
+              </div>
+            { /if }
           { :else }
             <p>
               Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.

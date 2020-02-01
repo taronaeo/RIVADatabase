@@ -107,6 +107,7 @@ interface Participation {
   'Role': string;
   'VIA Hours': number;
   'Remarks': string | null;
+  'updatedAt': admin.firestore.FieldValue;
   'createdAt': admin.firestore.FieldValue;
 }
 
@@ -227,6 +228,7 @@ exports.newEvent = functions.region('asia-east2').firestore
             'Role': 'OIC',
             'VIA Hours': 0,
             'Remarks': null,
+            'updatedAt': admin.firestore.FieldValue.serverTimestamp(),
             'createdAt': admin.firestore.FieldValue.serverTimestamp(),
           }
 
@@ -247,6 +249,7 @@ exports.newEvent = functions.region('asia-east2').firestore
             'Role': 'AIC',
             'VIA Hours': 0,
             'Remarks': null,
+            'updatedAt': admin.firestore.FieldValue.serverTimestamp(),
             'createdAt': admin.firestore.FieldValue.serverTimestamp(),
           }
 
@@ -348,6 +351,51 @@ exports.newParticipationAggregation = functions.region('asia-east2').firestore
     }).catch(err => console.error(err))
   })
 
+// Firebase onUpdate event listeners
+
+// updateParticipationAggregation listens for any database
+// update event that happens in the 'participations'
+// collection.
+//
+// Order of operations:
+// 1. Check if the update is coming from 'dataAggregation'
+//    document.
+// 2. Get 'dataAggregation' document
+// 3. Extract participations array from the document
+// 4. Find the Participation ID that is equivalent to
+//    participationID, get the index
+// 5. Update the participation object of the index
+// 6. Push the new participations array and
+//    participationsCount with the effect of +/- 0 to the
+//    dataAggregation document
+exports.updateParticipationAggregation = functions.region('asia-east2').firestore
+  .document('participations/{participationID}')
+  .onUpdate(async (change, context) => {
+    if (context.params.participationID === 'dataAggregation') return
+
+    await database.collection('participations').doc('dataAggregation').get().then(aggregation => {      
+      const participationAggregation: ParticipationAggregation = {
+        'participations': aggregation.data()!['participations'],
+        'participationsCount': admin.firestore.FieldValue.increment(0),
+      }
+
+      const participationIndex = participationAggregation.participations
+        .findIndex(prt => prt['Participation ID'] === context.params.participationID)
+
+      participationAggregation.participations[participationIndex] = {
+        'Participation ID': participationAggregation.participations[participationIndex]['Participation ID'],
+        'Event Year': participationAggregation.participations[participationIndex]['Event Year'],
+        'Event Code': participationAggregation.participations[participationIndex]['Event Code'],
+        'Event Name': participationAggregation.participations[participationIndex]['Event Name'],
+        'Member ID': participationAggregation.participations[participationIndex]['Member ID'],
+        'Full Name': participationAggregation.participations[participationIndex]['Full Name'],
+        'VIA Hours': change.after.data()!['VIA Hours'],
+      }
+
+      return aggregation.ref.set(participationAggregation, { merge: true }).catch(err => console.error(err))
+    }).catch(err => console.error(err))
+  })
+
 // Firebase onDelete event listeners
 
 // deleteUserAggregation listens for any database
@@ -443,6 +491,17 @@ exports.deleteEventAggregation = functions.region('asia-east2').firestore
   }).catch(err => console.error(err))
 })
 
+// deleteParticipationAggregation listens for any database
+// delete event that happens in the 'participations'
+// collection.
+//
+// Order of operations:
+// 1. Get 'dataAggregation' document
+// 2. Filter out the Participation ID that is not
+//    equivalent to participationID
+// 3. Push the new participations array and
+//    participationsCount with the addition by 1 to the
+//    dataAggregation document
 exports.deleteParticipationAggregation = functions.region('asia-east2').firestore
   .document('participations/{participationID}')
   .onDelete(async (snap, context) => {
