@@ -172,12 +172,11 @@ function compareMembers(a: any, b: any) {
 exports.newMember = functions.region('asia-east2').firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
-    const memberID = context.params.memberID
     const member: Member = {
-      "Membership ID": memberID
+      'Membership ID': context.params.memberID
     }
 
-    return await database.collection('/members').doc(memberID)
+    return database.collection('/members').doc(context.params.memberID)
       .set(member, { merge: true })
       .catch(err => console.error(err))
   })
@@ -215,15 +214,15 @@ exports.newEvent = functions.region('asia-east2').firestore
   .document('events/{eventID}')
   .onCreate(async (snap, context) => {
     const event: Event = {}
-    const eventOIC = snap.data()!["Event Overall In-Charge"]
-    const eventAIC = snap.data()!["Event Assistant In-Charge"]
+    const eventOIC = snap.data()!['Event Overall In-Charge']
+    const eventAIC = snap.data()!['Event Assistant In-Charge']
 
     await database.collection('members').where('Membership ID', '==', eventOIC).limit(1).get()
       .then(snapshot => {
         snapshot.forEach(doc => {
           const participation: Participation = {
             'Event Code': snap.data()!['Event Code'],
-            'Member ID': snap.data()!["Event Overall In-Charge"],
+            'Member ID': snap.data()!['Event Overall In-Charge'],
             'Full Name': doc.data()['Full Name'],
             'Role': 'OIC',
             'VIA Hours': 0,
@@ -244,7 +243,7 @@ exports.newEvent = functions.region('asia-east2').firestore
         snapshot.forEach(doc => {
           const participation: Participation = {
             'Event Code': snap.data()!['Event Code'],
-            'Member ID': snap.data()!["Event Assistant In-Charge"],
+            'Member ID': snap.data()!['Event Assistant In-Charge'],
             'Full Name': doc.data()['Full Name'],
             'Role': 'AIC',
             'VIA Hours': 0,
@@ -270,7 +269,7 @@ exports.newUserAggregation = functions.region('asia-east2').firestore
   .onCreate(async (snap, context) => {
     await database.collection('users').doc('dataAggregation').get().then(snapshot => {
       const userAggregation: UserAggregation = {
-        usersCount: admin.firestore.FieldValue.increment(1),
+        'usersCount': admin.firestore.FieldValue.increment(1),
       }
 
       return snapshot.ref.set(userAggregation, { merge: true }).catch(err => console.error(err))
@@ -282,13 +281,13 @@ exports.newMemberAggregation = functions.region('asia-east2').firestore
   .onCreate(async (snap, context) => {
     await database.collection('members').doc('dataAggregation').get().then(snapshot => {
       const memberList: MembersList = {
-        "Membership ID": context.params.memberID,
-        "Full Name": snap.data()!['Full Name'],
+        'Membership ID': context.params.memberID,
+        'Full Name': snap.data()!['Full Name'],
       }
 
       const memberAggregation: MemberAggregation = {
-        members: snapshot.data()!['members'],
-        membersCount: admin.firestore.FieldValue.increment(1),
+        'members': snapshot.data()!['members'],
+        'membersCount': admin.firestore.FieldValue.increment(1),
       }
 
       memberAggregation.members.push(memberList)
@@ -303,13 +302,13 @@ exports.newEventAggregation = functions.region('asia-east2').firestore
   .onCreate(async (snap, context) => {
     await database.collection('events').doc('dataAggregation').get().then(snapshot => {
       const eventsList: EventsList = {
-        "Event Code": Number(context.params.eventID),
-        "Event Name": snap.data()!['Event Name'],
+        'Event Code': Number(context.params.eventID),
+        'Event Name': snap.data()!['Event Name'],
       }
 
       const eventAggregation: EventAggregation = {
-        events: snapshot.data()!['events'],
-        eventsCount: admin.firestore.FieldValue.increment(1),
+        'events': snapshot.data()!['events'],
+        'eventsCount': admin.firestore.FieldValue.increment(1),
       }
 
       eventAggregation.events.push(eventsList)

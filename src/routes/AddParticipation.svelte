@@ -41,8 +41,8 @@
     }
 
     const promise = new Promise((resolve, reject) => {
-      result.forEach(member => {
-        firebase.firestore().collection('/participations').doc().set({
+      result.forEach(async member => {
+        await firebase.firestore().collection('/participations').doc().set({
           'Event Code': Number(document.getElementById('eventCode').value),
           'Member ID': member['Member ID'],
           'Full Name': member['Full Name'],
@@ -56,7 +56,7 @@
       })
     })
 
-    await Promise.all([promise])
+    return Promise.all([promise])
       .then(() => {
         M.toast({ html: 'Participation successfully added.', displayLength: 3000 })
         return navigateTo('/manage/events/' + document.getElementById('eventCode').value + '/view')
