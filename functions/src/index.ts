@@ -36,6 +36,11 @@ admin.initializeApp()
 // variable
 const database = admin.firestore()
 
+// Indicates where the Cloud Functions are
+// supposed to be deployed for better
+// latency and throughput
+const DEPLOYMENT_REGION = 'asia-east2'
+
 // Interfaces provide a structure as to
 // how the database should present and/or
 // store data. All database operations
@@ -181,7 +186,8 @@ interface ParticipationAggregation {
 
 // Firestore onCreate event listeners
 
-exports.newMember = functions.region('asia-east2').firestore
+// TESTED SUCCESS ON 3RD FEBRUARY 2020
+exports.newMember = functions.region(DEPLOYMENT_REGION).firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
     if (context.params.memberID === 'dataAggregation') return
@@ -198,7 +204,7 @@ exports.newMember = functions.region('asia-east2').firestore
   })
 
 // TESTED SUCCESS ON 3RD FEBRUARY 2020
-exports.createUserAccount = functions.region('asia-east2').auth
+exports.createUserAccount = functions.region(DEPLOYMENT_REGION).auth
   .user()
   .onCreate(async user => {
     const userRef = database.collection('users').doc(user.uid)
@@ -233,7 +239,7 @@ exports.createUserAccount = functions.region('asia-east2').auth
   })
 
 // TESTED SUCCESS ON 3RD FEBRUARY 2020
-exports.newEvent = functions.region('asia-east2').firestore
+exports.newEvent = functions.region(DEPLOYMENT_REGION).firestore
   .document('events/{eventID}')
   .onCreate(async (snap, context) => {
     const prtRef = database.collection('participations')
@@ -299,7 +305,9 @@ exports.newEvent = functions.region('asia-east2').firestore
   })
 
 // Database aggregation functions
-exports.newUserAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 3RD FEBRUARY 2020
+exports.newUserAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('users/{userID}')
   .onCreate(async (snap, context) => {
     const batch = database.batch()
@@ -313,7 +321,7 @@ exports.newUserAggregation = functions.region('asia-east2').firestore
       .catch(err => console.error(err))
   })
 
-exports.newMemberAggregation = functions.region('asia-east2').firestore
+exports.newMemberAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
     if (context.params.memberID === 'dataAggregation') return
@@ -335,7 +343,8 @@ exports.newMemberAggregation = functions.region('asia-east2').firestore
       .catch(err => console.error(err))
   })
 
-exports.newEventAggregation = functions.region('asia-east2').firestore
+// TESTED SUCCESS ON 3RD FEBRUARY 2020
+exports.newEventAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('events/{eventID}')
   .onCreate(async (snap, context) => {
     if (context.params.eventID === 'dataAggregation') return
@@ -357,7 +366,8 @@ exports.newEventAggregation = functions.region('asia-east2').firestore
       .catch(err => console.error(err))
   })
 
-exports.newParticipationAggregation = functions.region('asia-east2').firestore
+// TESTED SUCCESS ON 3RD FEBRUARY 2020
+exports.newParticipationAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('participations/{participationID}')
   .onCreate(async (snap, context) => {
     if (context.params.participationID === 'dataAggregation') return
@@ -412,7 +422,9 @@ exports.newParticipationAggregation = functions.region('asia-east2').firestore
 // 6. Push the new participations array and
 //    participationsCount with the effect of +/- 0 to the
 //    dataAggregation document
-exports.updateParticipationAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
+exports.updateParticipationAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('participations/{participationID}')
   .onUpdate(async (change, context) => {
     if (context.params.participationID === 'dataAggregation') return
@@ -462,7 +474,9 @@ exports.updateParticipationAggregation = functions.region('asia-east2').firestor
 // 2. Extract the usersCount from the document
 // 3. Subtract usersCount by 1 and push the changes
 //    to the document
-exports.deleteUserAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
+exports.deleteUserAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('users/{userID}')
   .onDelete(async (snap, context) => {
     const batch = database.batch()
@@ -489,7 +503,9 @@ exports.deleteUserAggregation = functions.region('asia-east2').firestore
 // 5. Push new members array and membersCount with
 //    the subtraction by 1 to the dataAggregation
 //    document
-exports.deleteMemberAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
+exports.deleteMemberAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('members/{memberID}')
   .onDelete(async (snap, context) => {
     const memberRef = database.collection('members').doc('dataAggregation')
@@ -532,34 +548,30 @@ exports.deleteMemberAggregation = functions.region('asia-east2').firestore
 // 8. Delete the document
 // 9. deleteParticipationAggregation will handle the
 //    rest for aggregation.
-exports.deleteEventAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
+exports.deleteEventAggregation = functions.region(DEPLOYMENT_REGION).firestore
 .document('events/{eventID}')
 .onDelete(async (snap, context) => {
-  const eventRef = admin.firestore().collection('events').doc('dataAggregation')
-  const prtRef = admin.firestore().collection('participations').where('Event Code', '==', context.params.eventID)
+  const eventList: EventsList = {
+    'Event Code': snap.data()!['Event Code'],
+    'Event Name': snap.data()!['Event Name'],
+  }
 
-  return admin.firestore().runTransaction(transaction => {
-    return transaction.get(eventRef).then(async doc => {
-      if (!doc.exists) {
-        console.error('Document does not exist!')
-        return
-      }
+  const eventAggregation: EventAggregation = {
+    'events': admin.firestore.FieldValue.arrayRemove(eventList),
+    'eventsCount': admin.firestore.FieldValue.increment(-1),
+  }
 
-      const eventObj = (doc.data()!['events'] as Array<EventsList>).find(value => value['Event Code'] === Number(context.params.eventID))
-      const eventAggregation: EventAggregation = {
-        'events': admin.firestore.FieldValue.arrayRemove(eventObj),
-        'eventsCount': admin.firestore.FieldValue.increment(-1),
-      }
+  await database.collection('events').doc('dataAggregation').set(eventAggregation, { merge: true })
+    .catch(err => console.error(err))
 
-      await transaction.get(prtRef).then(collection => {
-        collection.forEach(prt => {
-          return prt.ref.delete().catch(err => console.error(err))
-        })
-      }).catch(err => console.error(err))
-
-      return transaction.set(eventRef, eventAggregation, { merge: true })
-    }).catch(err => console.error(err))
-  }).catch(err => console.error(err))
+  await database.collection('participations').where('Event Code', '==', Number(context.params.eventID)).get()
+    .then(snapshot => {
+      snapshot.forEach(doc => doc.ref.delete()
+        .catch(err => console.error(err)))
+    })
+    .catch(err => console.error(err))
 })
 
 // deleteParticipationAggregation listens for any database
@@ -573,7 +585,9 @@ exports.deleteEventAggregation = functions.region('asia-east2').firestore
 // 3. Push the new participations array and
 //    participationsCount with the addition by 1 to the
 //    dataAggregation document
-exports.deleteParticipationAggregation = functions.region('asia-east2').firestore
+
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
+exports.deleteParticipationAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('participations/{participationID}')
   .onDelete(async (snap, context) => {
     const prtRef = admin.firestore().collection('participations').doc('dataAggregation')
