@@ -110,7 +110,7 @@
                 </div>
               { :else }
                 <div class="col s6 truncate">
-                  <a href="tel:+65{ memberData['Home Number'] }">{ memberData['Home Number'] }</a>
+                  <a href="tel:+65{ memberData['Home Number'] }" class="red-text">{ memberData['Home Number'] }</a>
                 </div>
               { /if }
             </div>
