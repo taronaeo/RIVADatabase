@@ -545,19 +545,19 @@ exports.deleteEventAggregation = functions.region('asia-east2').firestore
         return
       }
 
-      const eventObj = (doc.data()!['events'] as Array<EventsList>).find(value => value['Event Code'] === context.params.eventID)
+      const eventObj = (doc.data()!['events'] as Array<EventsList>).find(value => value['Event Code'] === Number(context.params.eventID))
       const eventAggregation: EventAggregation = {
         'events': admin.firestore.FieldValue.arrayRemove(eventObj),
         'eventsCount': admin.firestore.FieldValue.increment(-1),
       }
 
-      await transaction.set(eventRef, eventAggregation, { merge: true })
-
-      return transaction.get(prtRef).then(collection => {
+      await transaction.get(prtRef).then(collection => {
         collection.forEach(prt => {
-          return transaction.delete(prt.ref)
+          return prt.ref.delete().catch(err => console.error(err))
         })
       }).catch(err => console.error(err))
+
+      return transaction.set(eventRef, eventAggregation, { merge: true })
     }).catch(err => console.error(err))
   }).catch(err => console.error(err))
 })
