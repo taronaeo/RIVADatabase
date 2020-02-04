@@ -5,6 +5,10 @@
   import { FirebaseApp, User, Doc } from 'sveltefire'
   import { years, classes } from '../plugins/graduationInformation.js'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -95,16 +99,16 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Doc
-        path={ '/members/' + router.params.id }
-        traceId={ 'MemberDataDoc' }
-        maxWait={ 5000 }
-        let:ref
-        let:data={ memberData }
-        on:data={ () => window.setTimeout(initializeSelect, 500) }>
+      { #if userData.roles.Alumni }
+        <Doc
+          path={ '/members/' + router.params.id }
+          traceId={ 'MemberDataDoc' }
+          maxWait={ 5000 }
+          let:ref
+          let:data={ memberData }
+          on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
-        <div class="container">
-          { #if userData.roles.Alumni }
+          <div class="container">
             <nav class="white">
               <div class="nav-wrapper">
                 <div class="col s12">
@@ -263,29 +267,23 @@
                 </Link>
               </p>
             { /if }
-          { :else }
-            <p>
-              Error 401, Unauthorized User. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              This error occurred because the account that you are currently signed into has not been linked to any RIVAlumni Membership Accounts.
-              If you believe this is an error or require further assistance, please contact Aaron Teo (aaron.teo@riv-alumni.com)
-            </p>
-          { /if }
-        </div>
+          </div>
 
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-          
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Doc>
+        </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -296,11 +294,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

@@ -2,6 +2,10 @@
   import { Link } from 'yrv'
   import { FirebaseApp, User, Collection, Doc } from 'sveltefire'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -34,103 +38,100 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Collection
-        path={ '/events' }
-        query={ query }
-        maxWait={ 5000 }
-        let:first
-        let:last
-        let:data={ events }>
+      { #if userData.roles.Alumni }
+        <Collection
+          path={ '/events' }
+          query={ query }
+          maxWait={ 5000 }
+          let:first
+          let:last
+          let:data={ events }>
 
-        <div class="container">
-          { #if userData.roles.Editor || userData.roles.Administrator }
-            <h3>Events Record</h3>
+          <div class="container">
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <h3>Events Record</h3>
 
-            { #if events.length < 1 }
-              <p>
-                No other data found.
-                <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
-              </p>
-            { :else }
-              <table class="highlight">
-                <thead>
-                  <tr>
-                    <th>Event Year</th>
-                    <th>Event Code</th>
-                    <th>Event Name</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  { #each events as event }
-                    <tr>
-                      <td>{ event['Event Year'] }</td>
-                      <td>{ event['Event Code'] }</td>
-                      <td>{ event['Event Name'] }</td>
-                      <td>
-                        <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
-                          <button class="btn waves-effect waves-light blue">
-                            <i class="material-icons">remove_red_eye</i>
-                          </button>
-                        </Link>
-
-                        <Link href="/manage/events/{ event['Event Code'] }/edit" class="white-text">
-                          <button class="btn waves-effect waves-light amber darken-4">
-                            <i class="material-icons">mode_edit</i>
-                          </button>
-                        </Link>
-                      </td>
-                    </tr>
-                  { /each }
-                </tbody>
-              </table>
-
-              <div class="row">
+              { #if events.length < 1 }
                 <p>
-                  <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
-                    <i class="material-icons left">navigate_before</i>
-                    Prev
-                  </button>
-                  <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
-                    <i class="material-icons right">navigate_next</i>
-                    Next
-                  </button>
+                  No other data found.
+                  <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
                 </p>
+              { :else }
+                <table class="highlight">
+                  <thead>
+                    <tr>
+                      <th>Event Year</th>
+                      <th>Event Code</th>
+                      <th>Event Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    { #each events as event }
+                      <tr>
+                        <td>{ event['Event Year'] }</td>
+                        <td>{ event['Event Code'] }</td>
+                        <td>{ event['Event Name'] }</td>
+                        <td>
+                          <Link href="/manage/events/{ event['Event Code'] }/view" class="white-text">
+                            <button class="btn waves-effect waves-light blue">
+                              <i class="material-icons">remove_red_eye</i>
+                            </button>
+                          </Link>
+
+                          <Link href="/manage/events/{ event['Event Code'] }/edit" class="white-text">
+                            <button class="btn waves-effect waves-light amber darken-4">
+                              <i class="material-icons">mode_edit</i>
+                            </button>
+                          </Link>
+                        </td>
+                      </tr>
+                    { /each }
+                  </tbody>
+                </table>
+
+                <div class="row">
+                  <p>
+                    <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
+                      <i class="material-icons left">navigate_before</i>
+                      Prev
+                    </button>
+                    <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
+                      <i class="material-icons right">navigate_next</i>
+                      Next
+                    </button>
+                  </p>
+                </div>
+              { /if }
+              
+              <div class="fixed-action-btn">
+                <Link href="/manage/events/create">
+                  <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
+                    <i class="material-icons">add</i>
+                  </button>
+                </Link>
               </div>
+            { :else }
+              <NoPermission />
             { /if }
-            
-            <div class="fixed-action-btn">
-              <Link href="/manage/events/create">
-                <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
-                  <i class="material-icons">add</i>
-                </button>
-              </Link>
-            </div>
-          { :else }
-            <p>
-              Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          { /if }
-        </div>
+          </div>
 
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Collection>
+        </Collection>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -141,11 +142,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

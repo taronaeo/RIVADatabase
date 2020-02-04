@@ -2,6 +2,9 @@
   import { Link } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -38,177 +41,189 @@
       let:data={ userData }
       on:data={ e => membershipID = e.detail.data.membershipID }>
 
-      <Doc
-        path={ '/events/dataAggregation' }
-        traceId={ 'EventsDataDoc' }
-        maxWait={ 5000 }
-        let:data={ events }>
-
+      { #if userData.roles.Alumni }
         <Doc
-          path={ '/participations/dataAggregation' }
-          traceId={ 'ParticipationsDataDoc' }
+          path={ '/events/dataAggregation' }
+          traceId={ 'EventsDataDoc' }
           maxWait={ 5000 }
-          let:data={ participations }>
+          let:data={ events }>
 
-          <div class="container">
-            <h3>About You</h3>
+          <Doc
+            path={ '/participations/dataAggregation' }
+            traceId={ 'ParticipationsDataDoc' }
+            maxWait={ 5000 }
+            let:data={ participations }>
 
-            <div class="row">
-              <div class="col s12 m6 l6">
-                <Link href="/manage/members/me">
+            <div class="container">
+              <h3>About You</h3>
+
+              <div class="row">
+                <div class="col s12 m6 l6">
+                  <Link href="/manage/members/me">
+                    <div class="card grey darken-2">
+                      <div class="card-content white-text center-align">
+                        <p><i class="material-icons large myProfile">person</i></p>
+                        <h6 class="bold truncate">My Profile</h6>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+
+                <div class="col s12 m6 l6">
                   <div class="card grey darken-2">
                     <div class="card-content white-text center-align">
-                      <p><i class="material-icons large myProfile">person</i></p>
-                      <h6 class="bold truncate">My Profile</h6>
+                      <h1>
+                        { participations['participations'].filter(myParticipations).length }
+                        /
+                        { events['events'].length }
+                      </h1>
+                      <h6 class="bold truncate">Events Completed So Far</h6>
                     </div>
-                  </div>
-                </Link>
-              </div>
-
-              <div class="col s12 m6 l6">
-                <div class="card grey darken-2">
-                  <div class="card-content white-text center-align">
-                    <h1>
-                      { participations['participations'].filter(myParticipations).length }
-                      /
-                      { events['events'].length }
-                    </h1>
-                    <h6 class="bold truncate">Events Completed So Far</h6>
                   </div>
                 </div>
               </div>
-            </div>
 
-            { #if userData.roles.Editor || userData.roles.Administrator }
-              <Doc
-                path={ '/users/dataAggregation' }
-                traceId={ 'UsersDataDoc' }
-                maxWait={ 5000 }
-                let:data={ users }>
-
+              { #if userData.roles.Editor || userData.roles.Administrator }
                 <Doc
-                  path={ '/members/dataAggregation' }
-                  traceId={ 'MembersDataDoc' }
+                  path={ '/users/dataAggregation' }
+                  traceId={ 'UsersDataDoc' }
                   maxWait={ 5000 }
-                  let:data={ members }>
+                  let:data={ users }>
 
-                  <h3>Management Panel</h3>
+                  <Doc
+                    path={ '/members/dataAggregation' }
+                    traceId={ 'MembersDataDoc' }
+                    maxWait={ 5000 }
+                    let:data={ members }>
 
-                  <div class="row">
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <p><i class="material-icons large">person</i></p>
-                          <span class="card-title bold truncate">Users</span>
-                          <p class="truncate">Manage Users</p>
+                    <h3>Management Panel</h3>
+
+                    <div class="row">
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <p><i class="material-icons large">person</i></p>
+                            <span class="card-title bold truncate">Users</span>
+                            <p class="truncate">Manage Users</p>
+                          </div>
+
+                          <div class="card-action">
+                            <Link href="/manage/users">
+                              <i class="material-icons white-text">remove_red_eye</i>
+                            </Link>
+                          </div>
                         </div>
+                      </div>
 
-                        <div class="card-action">
-                          <Link href="/manage/users">
-                            <i class="material-icons white-text">remove_red_eye</i>
-                          </Link>
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <p><i class="material-icons large">people</i></p>
+                            <span class="card-title bold truncate">Members</span>
+                            <p class="truncate">Manage Members</p>
+                          </div>
+
+                          <div class="card-action">
+                            <Link href="/manage/members/add">
+                              <i class="material-icons white-text">add</i>
+                            </Link>
+
+                            <Link href="/manage/members">
+                              <i class="material-icons white-text">remove_red_eye</i>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <p><i class="material-icons large">event</i></p>
+                            <span class="card-title bold truncate">Events</span>
+                            <p class="truncate">Manage Events</p>
+                          </div>
+
+                          <div class="card-action">
+                            <Link href="/manage/events/create">
+                              <i class="material-icons white-text">add</i>
+                            </Link>
+
+                            <Link href="/manage/events">
+                              <i class="material-icons white-text">remove_red_eye</i>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <p><i class="material-icons large">access_time</i></p>
+                            <span class="card-title bold truncate">Participations</span>
+                            <p class="truncate">Manage Participations</p>
+                          </div>
+
+                          <div class="card-action">
+                            <Link href="/manage/participation/add">
+                              <i class="material-icons white-text">add</i>
+                            </Link>
+
+                            <Link href="/manage/participation">
+                              <i class="material-icons white-text">remove_red_eye</i>
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <p><i class="material-icons large">people</i></p>
-                          <span class="card-title bold truncate">Members</span>
-                          <p class="truncate">Manage Members</p>
+                    <div class="row">
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <h1>{ users['usersCount'] }</h1>
+                            <h6 class="bold truncate">Users</h6>
+                          </div>
                         </div>
+                      </div>
 
-                        <div class="card-action">
-                          <Link href="/manage/members/add">
-                            <i class="material-icons white-text">add</i>
-                          </Link>
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <h1>{ members['membersCount'] }</h1>
+                            <h6 class="bold truncate">Members</h6>
+                          </div>
+                        </div>
+                      </div>
 
-                          <Link href="/manage/members">
-                            <i class="material-icons white-text">remove_red_eye</i>
-                          </Link>
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <h1>{ events['eventsCount'] }</h1>
+                            <h6 class="bold truncate">Events</h6>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col s12 m6 l3">
+                        <div class="card grey darken-2">
+                          <div class="card-content white-text center-align">
+                            <h1>{ participations['participationsCount'] }</h1>
+                            <h6 class="bold truncate">Participations</h6>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <p><i class="material-icons large">event</i></p>
-                          <span class="card-title bold truncate">Events</span>
-                          <p class="truncate">Manage Events</p>
-                        </div>
-
-                        <div class="card-action">
-                          <Link href="/manage/events/create">
-                            <i class="material-icons white-text">add</i>
-                          </Link>
-
-                          <Link href="/manage/events">
-                            <i class="material-icons white-text">remove_red_eye</i>
-                          </Link>
-                        </div>
+                    <div slot="loading">
+                      <div class="progress">
+                        <div class="indeterminate"></div>
                       </div>
                     </div>
 
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <p><i class="material-icons large">access_time</i></p>
-                          <span class="card-title bold truncate">Participations</span>
-                          <p class="truncate">Manage Participations</p>
-                        </div>
-
-                        <div class="card-action">
-                          <Link href="/manage/participation/add">
-                            <i class="material-icons white-text">add</i>
-                          </Link>
-
-                          <Link href="/manage/participation">
-                            <i class="material-icons white-text">remove_red_eye</i>
-                          </Link>
-                        </div>
-                      </div>
+                    <div slot="fallback">
+                      <Error />
                     </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <h1>{ users['usersCount'] }</h1>
-                          <h6 class="bold truncate">Users</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <h1>{ members['membersCount'] }</h1>
-                          <h6 class="bold truncate">Members</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <h1>{ events['eventsCount'] }</h1>
-                          <h6 class="bold truncate">Events</h6>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col s12 m6 l3">
-                      <div class="card grey darken-2">
-                        <div class="card-content white-text center-align">
-                          <h1>{ participations['participationsCount'] }</h1>
-                          <h6 class="bold truncate">Participations</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  </Doc>
 
                   <div slot="loading">
                     <div class="progress">
@@ -217,26 +232,24 @@
                   </div>
 
                   <div slot="fallback">
-                    <p>
-                      An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-                    </p>
+                    <Error />
                   </div>
                 </Doc>
+              { /if }
+            </div>
 
-                <div slot="loading">
-                  <div class="progress">
-                    <div class="indeterminate"></div>
-                  </div>
+            <div slot="loading">
+              <div class="container">
+                <div class="progress">
+                  <div class="indeterminate"></div>
                 </div>
+              </div>
+            </div>
 
-                <div slot="fallback">
-                  <p>
-                    An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-                  </p>
-                </div>
-              </Doc>
-            { /if }
-          </div>
+            <div slot="fallback">
+              <Error />
+            </div>
+          </Doc>
 
           <div slot="loading">
             <div class="container">
@@ -247,30 +260,12 @@
           </div>
 
           <div slot="fallback">
-            <div class="container">
-              <p>
-                An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-              </p>
-            </div>
+            <Error />
           </div>
         </Doc>
-
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
-            </div>
-          </div>
-        </div>
-
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          </div>
-        </div>
-      </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -281,11 +276,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

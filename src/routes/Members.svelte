@@ -1,3 +1,5 @@
+<!-- TODO: Rewrite this code -->
+
 <script>
   import { Link } from 'yrv'
   import { FirebaseApp, User, Doc, Collection } from 'sveltefire'
@@ -49,6 +51,7 @@
       traceId={ 'membersDoc' }
       maxWait={ 5000 }
       let:data={ userData }>
+
       <div class="container">
         { #if userData.roles.Editor || userData.roles.Administrator }
           <h3>Members Record</h3>

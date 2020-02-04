@@ -3,6 +3,10 @@
   import { FirebaseApp, Collection, User, Doc } from 'sveltefire'
   import { years } from '../plugins/graduationInformation.js'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -144,174 +148,171 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Doc
-        path={ '/members/dataAggregation' }
-        traceId={ 'MembersDataAggregationDoc' }
-        maxWait={ 5000 }
-        let:data={ members }
-        on:data={ generateRoles }
-        on:data={ () => window.setTimeout(initializeSelect, 500) }>
+      { #if userData.roles.Alumni }
+        <Doc
+          path={ '/members/dataAggregation' }
+          traceId={ 'MembersDataAggregationDoc' }
+          maxWait={ 5000 }
+          let:data={ members }
+          on:data={ generateRoles }
+          on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
-        <div class="container">
-          { #if userData.roles.Administrator === false }
-            <nav class="red">
-              <div class="nav-wrapper">
-                <div class="col s12 white-text">
-                  <i class="material-icons left">warning</i>
-                  Notice: You do not have permissions to create events.
+          <div class="container">
+            { #if userData.roles.Administrator === false }
+              <nav class="red">
+                <div class="nav-wrapper">
+                  <div class="col s12 white-text">
+                    <i class="material-icons left">warning</i>
+                    Notice: You do not have permissions to create events.
 
-                  <Link href="/manage/events" class="white-text right">
-                    <i class="material-icons right">keyboard_return</i>
+                    <Link href="/manage/events" class="white-text right">
+                      <i class="material-icons right">keyboard_return</i>
 
-                    Return
-                  </Link>
+                      Return
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </nav>
-          { :else }
-            <nav class="white">
-              <div class="nav-wrapper">
-                <div class="col s12">
-                  <Link href="/manage/events" class="black-text left left-align">
-                    <i class="material-icons left">block</i>
-                    Cancel
-                  </Link>
+              </nav>
+            { :else }
+              <nav class="white">
+                <div class="nav-wrapper">
+                  <div class="col s12">
+                    <Link href="/manage/events" class="black-text left left-align">
+                      <i class="material-icons left">block</i>
+                      Cancel
+                    </Link>
 
-                  <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ createEvent }>
-                    <i class="material-icons right">done</i>
-                    Create Event
-                  </a>
+                    <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ createEvent }>
+                      <i class="material-icons right">done</i>
+                      Create Event
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </nav>
-          { /if }
+              </nav>
+            { /if }
 
-          { #if userData.roles.Editor || userData.roles.Administrator }
-            <h3>Create Event</h3>
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <h3>Create Event</h3>
 
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Year</div>
-              <div class="col s6">
-                <select id="eventYear">
-                  { #each years as year }
-                    <option value="{ year }">{ year }</option>
-                  { /each }
-                </select>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Code *</div>
-              <div class="col s6">
-                <input id="eventCode" type="number" placeholder="YYYYMMDD">
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Name</div>
-              <div class="col s6">
-                <input id="eventName" type="text" placeholder="STUDENT LEADERSHIP CAMP">
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Google Drive</div>
-              <div class="col s6">
-                <input id="googleDrive" type="url" placeholder="https://drive.google.com/drive/...">
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Overall In-Charge *</div>
-              <div class="col s6">
-                <select id="eventOIC">
-                  { #each members['members'] as member }
-                    <option value="{ member['Membership ID'] }">{ member['Full Name'] }</option>
-                  { /each }
-                </select>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Assistant In-Charge *</div>
-              <div class="col s6">
-                <select id="eventAIC">
-                  { #each members['members'] as member }
-                    <option value="{ member['Membership ID'] }">{ member['Full Name'] }</option>
-                  { /each }
-                </select>
-              </div>
-            </div>
-
-            <p>* Note: Once event is created, it can never be changed unless requested personally.</p>
-
-            <div class="divider"></div>
-
-            <h3>Roles</h3>
-
-            <div class="row valign-wrapper">
-              <div class="col s5 m6 l6 bold">Definition</div>
-              <div class="col s5 m6 l6 bold">ID</div>
-              <div class="col s2 m1 l1 bold">Action</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s5 m6 l6">
-                <input id="newDefinition" type="text" placeholder="Overall In-Charge">
-              </div>
-
-              <div class="col s5 m6 l6">
-                <input id="newID" type="text" placeholder="OIC">
-              </div>
-
-              <div class="col s2 m1 l1">
-                <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
-                  <i class="material-icons">check</i>
-                </button>
-              </div>
-            </div>
-
-            { #each roles as role, i }
               <div class="row valign-wrapper">
-                <div class="col s5 m6 l6 truncate">{ role['Definition'] }</div>
-                <div class="col s5 m6 l6 truncate">{ role['ID'] }</div>
+                <div class="col s6 bold">Event Year</div>
+                <div class="col s6">
+                  <select id="eventYear">
+                    { #each years as year }
+                      <option value="{ year }">{ year }</option>
+                    { /each }
+                  </select>
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Code *</div>
+                <div class="col s6">
+                  <input id="eventCode" type="number" placeholder="YYYYMMDD">
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Name</div>
+                <div class="col s6">
+                  <input id="eventName" type="text" placeholder="STUDENT LEADERSHIP CAMP">
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Google Drive</div>
+                <div class="col s6">
+                  <input id="googleDrive" type="url" placeholder="https://drive.google.com/drive/...">
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Overall In-Charge *</div>
+                <div class="col s6">
+                  <select id="eventOIC">
+                    { #each members['members'] as member }
+                      <option value="{ member['Membership ID'] }">{ member['Full Name'] }</option>
+                    { /each }
+                  </select>
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Assistant In-Charge *</div>
+                <div class="col s6">
+                  <select id="eventAIC">
+                    { #each members['members'] as member }
+                      <option value="{ member['Membership ID'] }">{ member['Full Name'] }</option>
+                    { /each }
+                  </select>
+                </div>
+              </div>
+
+              <p>* Note: Once event is created, it can never be changed unless requested personally.</p>
+
+              <div class="divider"></div>
+
+              <h3>Roles</h3>
+
+              <div class="row valign-wrapper">
+                <div class="col s5 m6 l6 bold">Definition</div>
+                <div class="col s5 m6 l6 bold">ID</div>
+                <div class="col s2 m1 l1 bold">Action</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s5 m6 l6">
+                  <input id="newDefinition" type="text" placeholder="Overall In-Charge">
+                </div>
+
+                <div class="col s5 m6 l6">
+                  <input id="newID" type="text" placeholder="OIC">
+                </div>
+
                 <div class="col s2 m1 l1">
-                  <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
-                    <i class="material-icons">close</i>
+                  <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
+                    <i class="material-icons">check</i>
                   </button>
                 </div>
               </div>
-            { /each }
 
-            <div class="divider"></div>
+              { #each roles as role, i }
+                <div class="row valign-wrapper">
+                  <div class="col s5 m6 l6 truncate">{ role['Definition'] }</div>
+                  <div class="col s5 m6 l6 truncate">{ role['ID'] }</div>
+                  <div class="col s2 m1 l1">
+                    <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
+                      <i class="material-icons">close</i>
+                    </button>
+                  </div>
+                </div>
+              { /each }
 
-            <h3>Participation Records</h3>
+              <div class="divider"></div>
 
-            <p>The event must be created first in order for participation records to be added</p>
-          { :else }
-            <p>
-              Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          { /if }
-        </div>
+              <h3>Participation Records</h3>
 
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
+              <p>The event must be created first in order for participation records to be added</p>
+            { :else }
+              <NoPermission />
+            { /if }
+          </div>
+
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Doc>
+        </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -322,11 +323,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

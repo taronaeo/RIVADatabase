@@ -9,6 +9,10 @@
   import { Link } from 'yrv'
   import { FirebaseApp, User, Collection, Doc } from 'sveltefire'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -50,94 +54,91 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Collection
-        path={ '/users' }
-        query={ query }
-        traceId={ 'UserDataCollection' }
-        maxWait={ 5000 }
-        let:first
-        let:last
-        let:data={ users }>
+      { #if userData.roles.Alumni }
+        <Collection
+          path={ '/users' }
+          query={ query }
+          traceId={ 'UserDataCollection' }
+          maxWait={ 5000 }
+          let:first
+          let:last
+          let:data={ users }>
 
-        <div class="container">
-          { #if userData.roles.Editor || userData.roles.Administrator }
-            <h3>Users Record</h3>
+          <div class="container">
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <h3>Users Record</h3>
 
-            { #if users.length < 1 }
-              <p>
-                No other data found.
-                <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
-              </p>
-            { :else }
-              <table class="highlight">
-                <thead>
-                  <tr>
-                    <th>Display Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  { #each users as user }
+              { #if users.length < 1 }
+                <p>
+                  No other data found.
+                  <i class="red-text" on:click|preventDefault|stopPropagation={ () => paginate() }>Click here to retry.</i>
+                </p>
+              { :else }
+                <table class="highlight">
+                  <thead>
                     <tr>
-                      <th>{ user['displayName'] }</th>
-                      <th>{ user['email'] }</th>
-                      <th>
-                        <Link href="/manage/users/{ user['id'] }/view" class="white-text">
-                          <button class="btn waves-effect waves-light blue">
-                            <i class="material-icons">remove_red_eye</i>
-                          </button>
-                        </Link>
-
-                        <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
-                          <button class="btn waves-effect waves-light amber darken-4">
-                            <i class="material-icons">mode_edit</i>
-                          </button>
-                        </Link>
-                      </th>
+                      <th>Display Name</th>
+                      <th>Email</th>
+                      <th>Action</th>
                     </tr>
-                  { /each }
-                </tbody>
-              </table>
+                  </thead>
+
+                  <tbody>
+                    { #each users as user }
+                      <tr>
+                        <th>{ user['displayName'] }</th>
+                        <th>{ user['email'] }</th>
+                        <th>
+                          <Link href="/manage/users/{ user['id'] }/view" class="white-text">
+                            <button class="btn waves-effect waves-light blue">
+                              <i class="material-icons">remove_red_eye</i>
+                            </button>
+                          </Link>
+
+                          <Link href="/manage/users/{ user['id'] }/edit" class="white-text">
+                            <button class="btn waves-effect waves-light amber darken-4">
+                              <i class="material-icons">mode_edit</i>
+                            </button>
+                          </Link>
+                        </th>
+                      </tr>
+                    { /each }
+                  </tbody>
+                </table>
+              { /if }
+
+              <div class="row">
+                <p>
+                  <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
+                    <i class="material-icons left">navigate_before</i>
+                    Prev
+                  </button>
+                  <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
+                    <i class="material-icons right">navigate_next</i>
+                    Next
+                  </button>
+                </p>
+              </div>
+            { :else }
+              <NoPermission />
             { /if }
+          </div>
 
-            <div class="row">
-              <p>
-                <button class="left waves-effect waves-light btn amber darken-4" on:click={ () => paginate(first, 'previous') }>
-                  <i class="material-icons left">navigate_before</i>
-                  Prev
-                </button>
-                <button class="right waves-effect waves-light btn amber darken-4" on:click={ () => paginate(last, 'next') }>
-                  <i class="material-icons right">navigate_next</i>
-                  Next
-                </button>
-              </p>
-            </div>
-          { :else }
-            <p>
-              Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          { /if }
-        </div>
-
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Collection>
+        </Collection>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -148,11 +149,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

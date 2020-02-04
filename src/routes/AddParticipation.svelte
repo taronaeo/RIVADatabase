@@ -2,6 +2,10 @@
   import { Link, navigateTo } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -89,138 +93,147 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Doc
-        path={ '/events/dataAggregation' }
-        traceId={ 'EventsDataDoc' }
-        maxWait={ 5000 }
-        let:data={ events }>
-
+      { #if userData.roles.Alumni }
         <Doc
-          path={ '/members/dataAggregation' }
-          traceId={ 'MembersDataDoc' }
+          path={ '/events/dataAggregation' }
+          traceId={ 'EventsDataDoc' }
           maxWait={ 5000 }
-          let:data={ members }
-          on:data={ () => window.setTimeout(initializeSelect, 500) }>
+          let:data={ events }>
 
-          <div class="container">
-            { #if userData.roles.Administrator === false }
-              <nav class="red">
-                <div class="nav-wrapper">
-                  <div class="col s12 white-text">
-                    <i class="material-icons left">warning</i>
-                    Notice: You do not have permissions to add participations.
+          <Doc
+            path={ '/members/dataAggregation' }
+            traceId={ 'MembersDataDoc' }
+            maxWait={ 5000 }
+            let:data={ members }
+            on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
-                    <Link href="/manage/participation" class="white-text right">
-                      <i class="material-icons right">keyboard_return</i>
+            <div class="container">
+              { #if userData.roles.Administrator === false }
+                <nav class="red">
+                  <div class="nav-wrapper">
+                    <div class="col s12 white-text">
+                      <i class="material-icons left">warning</i>
+                      Notice: You do not have permissions to add participations.
 
-                      Return
-                    </Link>
+                      <Link href="/manage/participation" class="white-text right">
+                        <i class="material-icons right">keyboard_return</i>
+
+                        Return
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </nav>
-            { :else }
-              <nav class="white">
-                <div class="nav-wrapper">
-                  <div class="col s12">
-                    <Link href="/manage/participation" class="black-text left left-align">
-                      <i class="material-icons left">block</i>
-                      Cancel
-                    </Link>
+                </nav>
+              { :else }
+                <nav class="white">
+                  <div class="nav-wrapper">
+                    <div class="col s12">
+                      <Link href="/manage/participation" class="black-text left left-align">
+                        <i class="material-icons left">block</i>
+                        Cancel
+                      </Link>
 
-                    <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ addParticipation }>
-                      <i class="material-icons right">done</i>
-                      Add Participation
-                    </a>
+                      <a href="#!" class="black-text right right-align modal-trigger" on:click|preventDefault|stopPropagation={ addParticipation }>
+                        <i class="material-icons right">done</i>
+                        Add Participation
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </nav>
-            { /if }
+                </nav>
+              { /if }
 
-            { #if userData.roles.Editor || userData.roles.Administrator }
-              <h3>Participation Data</h3>
+              { #if userData.roles.Editor || userData.roles.Administrator }
+                <h3>Participation Data</h3>
 
-              <div class="row valign-wrapper">
-                <div class="col s6 bold">Event Code</div>
-                <div class="col s6">
-                  <select id="eventCode" on:change={ selectChange }>
-                    { #each events['events'] as event }
-                      <option value={ event['Event Code'] }>{ event['Event Code'] } - { event['Event Name'] }</option>
-                    { /each }
-                  </select>
-                </div>
-              </div>
-
-              <div class="row valign-wrapper">
-                <div class="col s6 bold">Full Name</div>
-                <div class="col s6">
-                  <select id="names" multiple>
-                    { #each members['members'] as member }
-                      <option value={ member['Membership ID'] }>{ member['Full Name'] }</option>
-                    { /each }
-                  </select>
-                </div>
-              </div>
-
-              { #if showRoles }
                 <div class="row valign-wrapper">
-                  <div class="col s6 bold">Roles</div>
+                  <div class="col s6 bold">Event Code</div>
                   <div class="col s6">
-                    <select id="role">
-                      { #each roles as role }
-                        <option value="{ role['ID'] }">{ role['Definition'] }</option>
+                    <select id="eventCode" on:change={ selectChange }>
+                      { #each events['events'] as event }
+                        <option value={ event['Event Code'] }>{ event['Event Code'] } - { event['Event Name'] }</option>
                       { /each }
                     </select>
                   </div>
                 </div>
-              { /if }
 
-              <div class="row valign-wrapper">
-                <div class="col s6 bold">VIA Hours</div>
-                <div class="col s6">
-                  <input id="viaHours" type="number" value="0" min="0">
+                <div class="row valign-wrapper">
+                  <div class="col s6 bold">Full Name</div>
+                  <div class="col s6">
+                    <select id="names" multiple>
+                      { #each members['members'] as member }
+                        <option value={ member['Membership ID'] }>{ member['Full Name'] }</option>
+                      { /each }
+                    </select>
+                  </div>
+                </div>
+
+                { #if showRoles }
+                  <div class="row valign-wrapper">
+                    <div class="col s6 bold">Roles</div>
+                    <div class="col s6">
+                      <select id="role">
+                        { #each roles as role }
+                          <option value="{ role['ID'] }">{ role['Definition'] }</option>
+                        { /each }
+                      </select>
+                    </div>
+                  </div>
+                { /if }
+
+                <div class="row valign-wrapper">
+                  <div class="col s6 bold">VIA Hours</div>
+                  <div class="col s6">
+                    <input id="viaHours" type="number" value="0" min="0">
+                  </div>
+                </div>
+
+                { #if showRoles }
+                  <div class="divider"></div>
+
+                  <h3>Event Roles</h3>
+
+                  <Doc
+                    path={ '/events/' + currentEvent }
+                    traceId={ 'EventsDataDoc' }
+                    maxWait={ 5000 }
+                    let:data={ eventData }
+                    on:data={ () => window.setTimeout(initializeSelect, 500) }
+                    on:data={ e => assignRoles(e) }>
+
+                    { #each eventData['Roles'] as role }
+                      <div class="row valign-wrapper">
+                        <div class="col s6 bold">{ role['Definition'] }</div>
+                        <div class="col s6">{ role['ID'] }</div>
+                      </div>
+                    { /each }
+
+                    <div slot="loading">
+                      <div class="progress">
+                        <div class="indeterminate"></div>
+                      </div>
+                    </div>
+
+                    <div slot="fallback">
+                      <Error />
+                    </div>
+                  </Doc>
+                { /if }
+              { :else }
+                <NoPermission />
+              { /if }
+            </div>
+
+            <div slot="loading">
+              <div class="container">
+                <div class="progress">
+                  <div class="indeterminate"></div>
                 </div>
               </div>
+            </div>
 
-              { #if showRoles }
-                <div class="divider"></div>
-
-                <h3>Event Roles</h3>
-
-                <Doc
-                  path={ '/events/' + currentEvent }
-                  traceId={ 'EventsDataDoc' }
-                  maxWait={ 5000 }
-                  let:data={ eventData }
-                  on:data={ () => window.setTimeout(initializeSelect, 500) }
-                  on:data={ e => assignRoles(e) }>
-
-                  { #each eventData['Roles'] as role }
-                    <div class="row valign-wrapper">
-                      <div class="col s6 bold">{ role['Definition'] }</div>
-                      <div class="col s6">{ role['ID'] }</div>
-                    </div>
-                  { /each }
-
-                  <div slot="loading">
-                    <div class="progress">
-                      <div class="indeterminate"></div>
-                    </div>
-                  </div>
-
-                  <div slot="fallback">
-                    <p>
-                      An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-                    </p>
-                  </div>
-                </Doc>
-              { /if }
-            { :else }
-              <p>
-                Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-                Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-              </p>
-            { /if }
-          </div>
+            <div slot="fallback">
+              <Error />
+            </div>
+          </Doc>
 
           <div slot="loading">
             <div class="container">
@@ -231,30 +244,12 @@
           </div>
 
           <div slot="fallback">
-            <div class="container">
-              <p>
-                An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-              </p>
-            </div>
+            <Error />
           </div>
         </Doc>
-
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
-            </div>
-          </div>
-        </div>
-
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          </div>
-        </div>
-      </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -265,11 +260,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

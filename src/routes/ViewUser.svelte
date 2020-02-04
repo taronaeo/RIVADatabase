@@ -11,6 +11,10 @@
   import { Link, navigateTo } from 'yrv'
   import { FirebaseApp, User, Doc } from 'sveltefire'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -87,133 +91,130 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Doc
-        path={ '/users/' + router.params.id }
-        traceId={ 'UserProfileDoc' }
-        maxWait={ 5000 }
-        let:ref
-        let:data={ user }>
+      { #if userData.roles.Alumni }
+        <Doc
+          path={ '/users/' + router.params.id }
+          traceId={ 'UserProfileDoc' }
+          maxWait={ 5000 }
+          let:ref
+          let:data={ user }>
 
-        <div class="container">
-          { #if userData.roles.Editor || userData.roles.Administrator }
-            <nav class="white">
-              <div class="nav-wrapper">
-                <div class="col s12">
-                  <Link href="/manage/users" class="black-text left left-align">
-                    <i class="material-icons left">arrow_back</i>
-                    Go Back
-                  </Link>
+          <div class="container">
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <nav class="white">
+                <div class="nav-wrapper">
+                  <div class="col s12">
+                    <Link href="/manage/users" class="black-text left left-align">
+                      <i class="material-icons left">arrow_back</i>
+                      Go Back
+                    </Link>
 
-                  <Link href="/manage/users/{ router.params.id }/edit" class="black-text right right-align">
-                    <i class="material-icons right">mode_edit</i>
-                    Edit User
-                  </Link>
+                    <Link href="/manage/users/{ router.params.id }/edit" class="black-text right right-align">
+                      <i class="material-icons right">mode_edit</i>
+                      Edit User
+                    </Link>
+                  </div>
+                </div>
+              </nav>
+
+              <h3>User Information</h3>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">User UID</div>
+                <div class="col s6 truncate">{ router.params.id }</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Membership ID</div>
+                
+                { #if typeof user['membershipID'] == 'object' }
+                  <div class="col s6 truncate">
+                    No Membership Found.
+                    <a href="#!" on:click|preventDefault|stopPropagation={ () => checkMembership(ref, user['email']) }>
+                      Re-check?
+                    </a>
+                  </div>
+                { :else }
+                  <div class="col s6 truncate">{ user['membershipID'] }</div>
+                { /if }
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Display Name</div>
+                <div class="col s6 truncate">{ user['displayName'] }</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Email</div>
+                <div class="col s6 truncate">{ user['email'] }</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Roles</div>
+                <div class="col s6 truncate">
+                  { #if user['roles'].Alumni }
+                    Alumni 
+                  { /if }
+
+                  { #if user['roles'].Editor }
+                    Editor 
+                  { /if }
+
+                  { #if user['roles'].Administrator }
+                    Administrator 
+                  { /if }
                 </div>
               </div>
-            </nav>
 
-            <h3>User Information</h3>
+              <div id="confirmationModal" class="modal">
+                <div class="modal-content">
+                  <h3 class="truncate">Confirmation</h3>
+                  <p>Are you sure you want to delete the following account?</p>
+                  <p class="bold" style="word-break: break-all;">{ user['email'] } ({ router.params.id })</p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="modal-close waves-effect waves-red btn-flat red-text"
+                    on:click={ () => deleteAccount(ref) }>
+                    Confirm
+                  </button>
+                  <button class="modal-close waves-effect waves-green btn-flat bold green-text">Reject</button>
+                </div>
+              </div>
 
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">User UID</div>
-              <div class="col s6 truncate">{ router.params.id }</div>
-            </div>
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Erase Account</div>
+                <div class="col s6">
+                  <a
+                    href="#confirmationModal"
+                    class="btn waves-orange waves-effect modal-trigger red"
+                    class:disabled={ userData.roles.Administrator === false }
+                    on:click|preventDefault={ confirmDelete }>
 
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Membership ID</div>
-              
-              { #if typeof user['membershipID'] == 'object' }
-                <div class="col s6 truncate">
-                  No Membership Found.
-                  <a href="#!" on:click|preventDefault|stopPropagation={ () => checkMembership(ref, user['email']) }>
-                    Re-check?
+                    Erase
                   </a>
                 </div>
-              { :else }
-                <div class="col s6 truncate">{ user['membershipID'] }</div>
-              { /if }
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Display Name</div>
-              <div class="col s6 truncate">{ user['displayName'] }</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Email</div>
-              <div class="col s6 truncate">{ user['email'] }</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Roles</div>
-              <div class="col s6 truncate">
-                { #if user['roles'].Alumni }
-                  Alumni 
-                { /if }
-
-                { #if user['roles'].Editor }
-                  Editor 
-                { /if }
-
-                { #if user['roles'].Administrator }
-                  Administrator 
-                { /if }
               </div>
-            </div>
+            { :else }
+              <NoPermission />
+            { /if }
+          </div>
 
-            <div id="confirmationModal" class="modal">
-              <div class="modal-content">
-                <h3 class="truncate">Confirmation</h3>
-                <p>Are you sure you want to delete the following account?</p>
-                <p class="bold" style="word-break: break-all;">{ user['email'] } ({ router.params.id })</p>
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
               </div>
-              <div class="modal-footer">
-                <button
-                  class="modal-close waves-effect waves-red btn-flat red-text"
-                  on:click={ () => deleteAccount(ref) }>
-                  Confirm
-                </button>
-                <button class="modal-close waves-effect waves-green btn-flat bold green-text">Reject</button>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Erase Account</div>
-              <div class="col s6">
-                <a
-                  href="#confirmationModal"
-                  class="btn waves-orange waves-effect modal-trigger red"
-                  class:disabled={ userData.roles.Administrator === false }
-                  on:click|preventDefault={ confirmDelete }>
-
-                  Erase
-                </a>
-              </div>
-            </div>
-          { :else }
-            <p>
-              Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          { /if }
-        </div>
-
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Doc>
+        </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -224,11 +225,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

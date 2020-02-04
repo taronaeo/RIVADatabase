@@ -12,6 +12,10 @@
   import { FirebaseApp, User, Doc } from 'sveltefire'
   import { years } from '../plugins/graduationInformation.js'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -98,136 +102,133 @@
       maxWait={ 5000 }
       let:data={ userData }>
 
-      <Doc
-        path={ '/events/' + router.params.id }
-        traceId={ 'EventDataDoc' }
-        maxWait={ 5000 }
-        let:ref
-        let:data={ event }
-        on:data={ e => syncRoles(e) }
-        on:data={ () => window.setTimeout(initializeSelect, 500) }>
+      { #if userData.roles.Alumni }
+        <Doc
+          path={ '/events/' + router.params.id }
+          traceId={ 'EventDataDoc' }
+          maxWait={ 5000 }
+          let:ref
+          let:data={ event }
+          on:data={ e => syncRoles(e) }
+          on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
-        <div class="container">
-          { #if userData.roles.Editor || userData.roles.Administrator }
-            <nav class="white">
-              <div class="nav-wrapper">
-                <div class="col s12">
-                  <Link href="/manage/events/{ router.params.id }/view" class="black-text left left-align">
-                    <i class="material-icons left">block</i>
-                    Cancel
-                  </Link>
+          <div class="container">
+            { #if userData.roles.Editor || userData.roles.Administrator }
+              <nav class="white">
+                <div class="nav-wrapper">
+                  <div class="col s12">
+                    <Link href="/manage/events/{ router.params.id }/view" class="black-text left left-align">
+                      <i class="material-icons left">block</i>
+                      Cancel
+                    </Link>
 
-                  <a href="#!" class="black-text right right-align" on:click|preventDefault|stopPropagation={ () => saveChanges(ref) }>
-                    <i class="material-icons right">done</i>
-                    Save Changes
-                  </a>
+                    <a href="#!" class="black-text right right-align" on:click|preventDefault|stopPropagation={ () => saveChanges(ref) }>
+                      <i class="material-icons right">done</i>
+                      Save Changes
+                    </a>
+                  </div>
+                </div>
+              </nav>
+
+              <h3>Edit Event</h3>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Year</div>
+                <div class="col s6">
+                  <select id="eventYear">
+                    { #each years as year }
+                      <option value="{ year }" selected="{ event['Event Year'] == year }">{ year }</option>
+                    { /each }
+                  </select>
                 </div>
               </div>
-            </nav>
 
-            <h3>Edit Event</h3>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Year</div>
-              <div class="col s6">
-                <select id="eventYear">
-                  { #each years as year }
-                    <option value="{ year }" selected="{ event['Event Year'] == year }">{ year }</option>
-                  { /each }
-                </select>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Code</div>
-              <div class="col s6 truncate">{ router.params.id }</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Name</div>
-              <div class="col s6">
-                <input id="eventName" type="text" value={ event['Event Name'] }>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Google Drive</div>
-              <div class="col s6">
-                <input id="googleDrive" type="text" value={ event['Google Drive'] }>
-              </div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Overall In-Charge</div>
-              <div class="col s6 truncate">{ event['Event Overall In-Charge']}</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s6 bold">Event Assistant In-Charge</div>
-              <div class="col s6 truncate">{ event['Event Assistant In-Charge'] }</div>
-            </div>
-
-            <div class="divider"></div>
-
-            <h3>Roles</h3>
-
-            <div class="row valign-wrapper">
-              <div class="col s5 m6 l6 bold">Definition</div>
-              <div class="col s5 m6 l6 bold">ID</div>
-              <div class="col s2 m1 l1 bold">Action</div>
-            </div>
-
-            <div class="row valign-wrapper">
-              <div class="col s5 m6 l6">
-                <input id="newDefinition" type="text" placeholder="Overall In-Charge">
-              </div>
-
-              <div class="col s5 m6 l6">
-                <input id="newID" type="text" placeholder="OIC">
-              </div>
-
-              <div class="col s2 m1 l1">
-                <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
-                  <i class="material-icons">check</i>
-                </button>
-              </div>
-            </div>
-
-            { #each roles as role, i }
               <div class="row valign-wrapper">
-                <div class="col s5 m6 l6 truncate">{ role['Definition'] }</div>
-                <div class="col s5 m6 l6 truncate">{ role['ID'] }</div>
+                <div class="col s6 bold">Event Code</div>
+                <div class="col s6 truncate">{ router.params.id }</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Name</div>
+                <div class="col s6">
+                  <input id="eventName" type="text" value={ event['Event Name'] }>
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Google Drive</div>
+                <div class="col s6">
+                  <input id="googleDrive" type="text" value={ event['Google Drive'] }>
+                </div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Overall In-Charge</div>
+                <div class="col s6 truncate">{ event['Event Overall In-Charge']}</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Event Assistant In-Charge</div>
+                <div class="col s6 truncate">{ event['Event Assistant In-Charge'] }</div>
+              </div>
+
+              <div class="divider"></div>
+
+              <h3>Roles</h3>
+
+              <div class="row valign-wrapper">
+                <div class="col s5 m6 l6 bold">Definition</div>
+                <div class="col s5 m6 l6 bold">ID</div>
+                <div class="col s2 m1 l1 bold">Action</div>
+              </div>
+
+              <div class="row valign-wrapper">
+                <div class="col s5 m6 l6">
+                  <input id="newDefinition" type="text" placeholder="Overall In-Charge">
+                </div>
+
+                <div class="col s5 m6 l6">
+                  <input id="newID" type="text" placeholder="OIC">
+                </div>
+
                 <div class="col s2 m1 l1">
-                  <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
-                    <i class="material-icons">close</i>
+                  <button class="btn-flat waves-effect waves-light" on:click={ addRole }>
+                    <i class="material-icons">check</i>
                   </button>
                 </div>
               </div>
-            { /each }
-          { :else }
-            <p>
-              Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-              Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
-          { /if }
-        </div>
 
-        <div slot="loading">
-          <div class="container">
-            <div class="progress">
-              <div class="indeterminate"></div>
+              { #each roles as role, i }
+                <div class="row valign-wrapper">
+                  <div class="col s5 m6 l6 truncate">{ role['Definition'] }</div>
+                  <div class="col s5 m6 l6 truncate">{ role['ID'] }</div>
+                  <div class="col s2 m1 l1">
+                    <button class="btn-flat waves-effect waves-light" on:click={ () => removeRole(i) }>
+                      <i class="material-icons">close</i>
+                    </button>
+                  </div>
+                </div>
+              { /each }
+            { :else }
+              <NoPermission />
+            { /if }
+          </div>
+
+          <div slot="loading">
+            <div class="container">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div slot="fallback">
-          <div class="container">
-            <p>
-              An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-            </p>
+          <div slot="fallback">
+            <Error />
           </div>
-        </div>
-      </Doc>
+        </Doc>
+      { :else }
+        <NoMembership />
+      { /if }
 
       <div slot="loading">
         <div class="container">
@@ -238,11 +239,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>

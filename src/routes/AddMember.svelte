@@ -3,6 +3,10 @@
   import { FirebaseApp, User, Doc } from 'sveltefire'
   import { classes, years } from '../plugins/graduationInformation'
 
+  import Error from '../components/Error.svelte'
+  import NoMembership from '../components/NoMembership.svelte'
+  import NoPermission from '../components/NoPermission.svelte'
+
   import firebase from 'firebase/app'
   import 'firebase/firestore'
   import 'firebase/analytics'
@@ -90,165 +94,166 @@
   <User let:user>
     <Doc
       path={ '/users/' + user.uid }
-      traceId={ 'AddMember' }
+      traceId={ 'UserDataDoc' }
       maxWait={ 5000 }
       let:data={ userData }
       on:data={ () => window.setTimeout(initializeSelect, 500) }>
 
       <div class="container">
-        { #if userData.roles.Administrator === false }
-          <nav class="red">
-            <div class="nav-wrapper">
-              <div class="col s12 white-text">
-                <i class="material-icons left">warning</i>
-                Notice: You do not have permissions to add members.
+        { #if userData.roles.Alumni }
+          { #if userData.roles.Administrator === false }
+            <nav class="red">
+              <div class="nav-wrapper">
+                <div class="col s12 white-text">
+                  <i class="material-icons left">warning</i>
+                  Notice: You do not have permissions to add members.
 
-                <Link href="/manage/members" class="white-text right">
-                  <i class="material-icons right">keyboard_return</i>
+                  <Link href="/manage/members" class="white-text right">
+                    <i class="material-icons right">keyboard_return</i>
 
-                  Return
-                </Link>
+                    Return
+                  </Link>
+                </div>
+              </div>
+            </nav>
+          { :else }
+            <nav class="white">
+              <div class="nav-wrapper">
+                <div class="col s12">
+                  <Link href="/manage/members" class="black-text left left-align">
+                    <i class="material-icons left">block</i>
+                    Cancel
+                  </Link>
+
+                  <a
+                    href="#!"
+                    class="black-text right right-align modal-trigger"
+                    on:click|preventDefault|stopPropagation={ addMember }>
+                    <i class="material-icons right">done</i>
+                    Add Member
+                  </a>
+                </div>
+              </div>
+            </nav>
+          { /if }
+
+          { #if userData.roles.Editor || userData.roles.Administrator }
+            <h3>Personal Information</h3>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Full Name *</div>
+              <div class="col s6">
+                <input id="fullName" type="text" placeholder="Alston Tan">
               </div>
             </div>
-          </nav>
-        { :else }
-          <nav class="white">
-            <div class="nav-wrapper">
-              <div class="col s12">
-                <Link href="/manage/members" class="black-text left left-align">
-                  <i class="material-icons left">block</i>
-                  Cancel
-                </Link>
 
-                <a
-                  href="#!"
-                  class="black-text right right-align modal-trigger"
-                  on:click|preventDefault|stopPropagation={ addMember }>
-                  <i class="material-icons right">done</i>
-                  Add Member
-                </a>
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Gender *</div>
+              <div class="col s6">
+                <select id="gender">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </div>
             </div>
-          </nav>
-        { /if }
 
-        { #if userData.roles.Editor || userData.roles.Administrator }
-          <h3>Personal Information</h3>
-
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Full Name *</div>
-            <div class="col s6">
-              <input id="fullName" type="text" placeholder="Alston Tan">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Email</div>
+              <div class="col s6">
+                <input id="email" type="email" placeholder="someone@riv-alumni.com">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Gender *</div>
-            <div class="col s6">
-              <select id="gender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Current School</div>
+              <div class="col s6">
+                <input id="school" type="text" placeholder="Anderson Secondary School">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Email</div>
-            <div class="col s6">
-              <input id="email" type="email" placeholder="someone@riv-alumni.com">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Contact Number *</div>
+              <div class="col s6">
+                <input id="contactNumber" type="tel" placeholder="81234567">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Current School</div>
-            <div class="col s6">
-              <input id="school" type="text" placeholder="Anderson Secondary School">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Home Number</div>
+              <div class="col s6">
+                <input id="homeNumber" type="tel" placeholder="61234567">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Contact Number *</div>
-            <div class="col s6">
-              <input id="contactNumber" type="tel" placeholder="81234567">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Graduating Class *</div>
+              <div class="col s6">
+                <select id="class">
+                  { #each classes as cls }
+                    <option value="{ cls.id }">{ cls.name }</option>
+                  { /each }
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Home Number</div>
-            <div class="col s6">
-              <input id="homeNumber" type="tel" placeholder="61234567">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Graduating Year *</div>
+              <div class="col s6">
+                <select id="year">
+                  { #each years as year }
+                    <option value="{ year }">{ year }</option>
+                  { /each }
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Graduating Class *</div>
-            <div class="col s6">
-              <select id="class">
-                { #each classes as cls }
-                  <option value="{ cls.id }">{ cls.name }</option>
-                { /each }
-              </select>
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Membership Status *</div>
+              <div class="col s6">
+                <select id="status">
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="BLACKLISTED">BLACKLISTED</option>
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Graduating Year *</div>
-            <div class="col s6">
-              <select id="year">
-                { #each years as year }
-                  <option value="{ year }">{ year }</option>
-                { /each }
-              </select>
+            <p>
+              * Note: Fields must not be empty!
+            </p>
+
+            <div class="divider"></div>
+
+            <h3>Emergency Contact Details</h3>
+
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Name Of Next-Of-Kin *</div>
+              <div class="col s6">
+                <input id="nokName" type="text" placeholder="Agnes Lee">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Membership Status *</div>
-            <div class="col s6">
-              <select id="status">
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="BLACKLISTED">BLACKLISTED</option>
-              </select>
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Relationship With Next-Of-Kin *</div>
+              <div class="col s6">
+                <input id="nokRelationship" type="text" placeholder="Mother">
+              </div>
             </div>
-          </div>
 
-          <p>
-            * Note: Fields must not be empty!
-          </p>
-
-          <div class="divider"></div>
-
-          <h3>Emergency Contact Details</h3>
-
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Name Of Next-Of-Kin *</div>
-            <div class="col s6">
-              <input id="nokName" type="text" placeholder="Agnes Lee">
+            <div class="row valign-wrapper">
+              <div class="col s6 bold">Contact Number Of Next-Of-Kin *</div>
+              <div class="col s6">
+                <input id="nokNumber" type="tel" placeholder="81234567">
+              </div>
             </div>
-          </div>
 
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Relationship With Next-Of-Kin *</div>
-            <div class="col s6">
-              <input id="nokRelationship" type="text" placeholder="Mother">
-            </div>
-          </div>
-
-          <div class="row valign-wrapper">
-            <div class="col s6 bold">Contact Number Of Next-Of-Kin *</div>
-            <div class="col s6">
-              <input id="nokNumber" type="tel" placeholder="81234567">
-            </div>
-          </div>
-
-          <p>
-            * Note: Fields must not be empty!
-          </p>
+            <p>
+              * Note: Fields must not be empty!
+            </p>
+          { :else }
+            <NoPermission />
+          { /if }
         { :else }
-          <p>
-            Error 403, Forbidden Route. The user { userData.displayName } ({ userData.email }) is unauthorized to access this page.
-            Should this be a technical error, please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
+          <NoMembership />
         { /if }
       </div>
 
@@ -261,11 +266,7 @@
       </div>
 
       <div slot="fallback">
-        <div class="container">
-          <p>
-            An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-          </p>
-        </div>
+        <Error />
       </div>
     </Doc>
   </User>
