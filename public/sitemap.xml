@@ -1,0 +1,109 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url>
+    <loc>https://ops.riv-alumni.com/</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>1</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/members</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/members/me</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/members/add</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/members/*/view</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/members/*/edit</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/users</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/users/*/view</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/users/*/edit</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/events</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/events/*</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/events/*/view</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/events/*/edit</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/events/create</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/participation</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/participation/add</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/participation/*/view</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://ops.riv-alumni.com/manage/participation/*/edit</loc>
+    <lastmod>2020-02-01T15:04:35+00:00</lastmod>
+    <priority>0.5</priority>
+  </url>
+</urlset>

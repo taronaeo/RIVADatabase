@@ -1,0 +1,5 @@
+User-agent: *
+Crawl-delay: 120
+Disallow: *.png
+Disallow: /manage/
+Sitemap: https://ops.riv-alumni.com/sitemap.xml

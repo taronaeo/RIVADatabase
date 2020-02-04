@@ -321,6 +321,7 @@ exports.newUserAggregation = functions.region(DEPLOYMENT_REGION).firestore
       .catch(err => console.error(err))
   })
 
+// TESTED SUCCESS ON 4TH FEBRUARY 2020
 exports.newMemberAggregation = functions.region(DEPLOYMENT_REGION).firestore
   .document('members/{memberID}')
   .onCreate(async (snap, context) => {
