@@ -34,6 +34,11 @@
   }
 
   function removeRole(i) {
+    if (roles[i]['ID'] === 'AVR' ||
+        roles[i]['ID'] === 'OIC' ||
+        roles[i]['ID'] === 'AIC')
+        return M.toast({ html: 'That role cannot be removed!', displayLength: 3000 })
+
     roles.splice(i, 1)
 
     document.getElementById('newDefinition').focus()
