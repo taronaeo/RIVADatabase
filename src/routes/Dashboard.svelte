@@ -22,7 +22,7 @@
     font-weight: bold !important;
   }
 
-  .myProfile {
+  .large-icon {
     font-size: 7.5rem;
     line-height: 110%
   }
@@ -58,18 +58,29 @@
               <h3>About You</h3>
 
               <div class="row">
-                <div class="col s12 m6 l6">
+                <div class="col s12 m4 l4">
                   <Link href="/manage/members/me">
                     <div class="card grey darken-2">
                       <div class="card-content white-text center-align">
-                        <p><i class="material-icons large myProfile">person</i></p>
+                        <p><i class="material-icons large-icon">person</i></p>
                         <h6 class="bold truncate">My Profile</h6>
                       </div>
                     </div>
                   </Link>
                 </div>
 
-                <div class="col s12 m6 l6">
+                <div class="col s12 m4 l4">
+                  <Link href="/request/letter">
+                    <div class="card grey darken-2">
+                      <div class="card-content white-text center-align">
+                        <p><i class="material-icons large-icon">add</i></p>
+                        <h6 class="bold truncate">Request Letter</h6>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+
+                <div class="col s12 m4 l4">
                   <div class="card grey darken-2">
                     <div class="card-content white-text center-align">
                       <h1>
@@ -164,11 +175,11 @@
                           </div>
 
                           <div class="card-action">
-                            <Link href="/manage/participation/add">
+                            <Link href="/manage/participations/add">
                               <i class="material-icons white-text">add</i>
                             </Link>
 
-                            <Link href="/manage/participation">
+                            <Link href="/manage/participations">
                               <i class="material-icons white-text">remove_red_eye</i>
                             </Link>
                           </div>

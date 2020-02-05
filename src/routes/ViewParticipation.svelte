@@ -22,7 +22,7 @@
     ref.delete()
       .then(() => {
         M.toast({ html: 'Participation successfully deleted.', displayLength: 3000 })
-        return navigateTo('/manage/participation')
+        return navigateTo('/manage/participations')
       })
       .catch(() => {
         return M.toast({ html: 'An error occurred.', displayLength: 3000 })
@@ -65,12 +65,12 @@
               <nav class="white">
                 <div class="nav-wrapper">
                   <div class="col s12">
-                    <Link href="/manage/participation" class="black-text left left-align">
+                    <Link href="/manage/participations" class="black-text left left-align">
                       <i class="material-icons left">arrow_back</i>
                       Go Back
                     </Link>
 
-                    <Link href="/manage/participation/{ router.params.id }/edit" class="black-text right right-align">
+                    <Link href="/manage/participations/{ router.params.id }/edit" class="black-text right right-align">
                       <i class="material-icons right">mode_edit</i>
                       Edit Participation
                     </Link>

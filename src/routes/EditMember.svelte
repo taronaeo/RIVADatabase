@@ -251,7 +251,7 @@
             <h3>Events Participated</h3>
 
             <p>
-              <Link href="/manage/participation/add" class="red-text">
+              <Link href="/manage/participations/add" class="red-text">
                 Click here to add participations.
               </Link>
             </p>

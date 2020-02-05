@@ -19,7 +19,7 @@
 <nav>
   <div class="nav-wrapper red">
     <div class="container">
-      <a href="/" class="brand-logo">
+      <a href="/" class="brand-logo truncate">
         RIVAlumni
         <b>Beta</b>
       </a>

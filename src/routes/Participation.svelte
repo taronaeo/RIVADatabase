@@ -82,13 +82,13 @@
                         <td>{ prt['Full Name'] }</td>
                         <td>{ prt['Role'] }</td>
                         <td>
-                          <Link href="/manage/participation/{ prt.id }/view" class="white-text">
+                          <Link href="/manage/participations/{ prt.id }/view" class="white-text">
                             <button class="btn waves-effect waves-light blue">
                               <i class="material-icons">remove_red_eye</i>
                             </button>
                           </Link>
 
-                          <Link href="/manage/participation/{ prt.id }/edit" class="white-text">
+                          <Link href="/manage/participations/{ prt.id }/edit" class="white-text">
                             <button class="btn waves-effect waves-light amber darken-4">
                               <i class="material-icons">mode_edit</i>
                             </button>
@@ -114,7 +114,7 @@
               { /if }
 
               <div class="fixed-action-btn">
-                <Link href="/manage/participation/add">
+                <Link href="/manage/participations/add">
                   <button class="btn-floating btn-large waves-effect waves-light deep-orange pulse">
                     <i class="material-icons">add</i>
                   </button>

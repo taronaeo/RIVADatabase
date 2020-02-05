@@ -36,7 +36,7 @@
     }, { merge: true })
       .then(() => {
         M.toast({ html: 'Participation successfully updated.', displayLength: 3000 })
-        return navigateTo('/manage/participation/' + router.params.id + '/view')
+        return navigateTo('/manage/participations/' + router.params.id + '/view')
       })
       .catch(() => {
         return M.toast({ html: 'An error occurred.', displayLength: 3000 })
@@ -87,7 +87,7 @@
                 <nav class="white">
                   <div class="nav-wrapper">
                     <div class="col s12">
-                      <Link href="/manage/participation/{ router.params.id }/view" class="black-text left left-align">
+                      <Link href="/manage/participations/{ router.params.id }/view" class="black-text left left-align">
                         <i class="material-icons left">block</i>
                         Cancel
                       </Link>

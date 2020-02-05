@@ -52,13 +52,13 @@
             <td>{ prt['Role'] }</td>
             <td>{ prt['VIA Hours'] }</td>
             <td>
-              <Link href="/manage/participation/{ prt.id }/view">
+              <Link href="/manage/participations/{ prt.id }/view">
                 <button class="btn waves-effect waves-light blue">
                   <i class="material-icons">remove_red_eye</i>
                 </button>
               </Link>
 
-              <Link href="/manage/participation/{ prt.id }/edit">
+              <Link href="/manage/participations/{ prt.id }/edit">
                 <button class="btn waves-effect waves-light amber darken-4">
                   <i class="material-icons">mode_edit</i>
                 </button>

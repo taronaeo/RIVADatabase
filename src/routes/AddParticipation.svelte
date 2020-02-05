@@ -115,7 +115,7 @@
                       <i class="material-icons left">warning</i>
                       Notice: You do not have permissions to add participations.
 
-                      <Link href="/manage/participation" class="white-text right">
+                      <Link href="/manage/participations" class="white-text right">
                         <i class="material-icons right">keyboard_return</i>
 
                         Return
@@ -127,7 +127,7 @@
                 <nav class="white">
                   <div class="nav-wrapper">
                     <div class="col s12">
-                      <Link href="/manage/participation" class="black-text left left-align">
+                      <Link href="/manage/participations" class="black-text left left-align">
                         <i class="material-icons left">block</i>
                         Cancel
                       </Link>
