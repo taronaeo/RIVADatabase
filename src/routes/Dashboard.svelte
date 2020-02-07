@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="col s12 m4 l4">
-                  <Link href="/request/letter">
+                  <Link href="/request/letters/new">
                     <div class="card grey darken-2">
                       <div class="card-content white-text center-align">
                         <p><i class="material-icons large-icon">add</i></p>

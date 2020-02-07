@@ -29,7 +29,7 @@
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><Link href="/">Dashboard</Link></li>
         <li><Link href="/manage/members/me">Profile</Link></li>
-        <li><Link href="/request/letter">Request Letter</Link></li>
+        <li><Link href="/request/letters/new">Request Letter</Link></li>
       </ul>
     </div>
   </div>

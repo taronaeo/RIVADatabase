@@ -17,6 +17,7 @@
 	import EditMember from './routes/EditMember.svelte'
 	import CreateEvent from './routes/CreateEvent.svelte'
 	import Participation from './routes/Participation.svelte'
+	import RequestLetter from './routes/RequestLetter.svelte'
 	import AddParticipation from './routes/AddParticipation.svelte'
 	import ViewParticipation from './routes/ViewParticipation.svelte'
 	import EditParticipation from './routes/EditParticipation.svelte'
@@ -64,6 +65,7 @@
 		<Route exact path="/manage/participations/add" component={ AddParticipation } />
 		<Route exact path="/manage/participations/:id/view" component={ ViewParticipation } />
 		<Route exact path="/manage/participations/:id/edit" component={ EditParticipation } />
+		<Route exact path="/request/letters/new" component={ RequestLetter } />
 		<Route fallback component={ Dashboard } />
 	</Router>
 

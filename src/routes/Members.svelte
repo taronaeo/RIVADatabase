@@ -45,7 +45,7 @@
 </svelte:head>
 
 <FirebaseApp { firebase } perf analytics>
-  <User let:user={ user }>
+  <User let:user>
     <Doc
       path={ 'users/' + user.uid }
       traceId={ 'membersDoc' }
