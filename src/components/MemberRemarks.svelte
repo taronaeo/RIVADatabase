@@ -2,11 +2,12 @@
   export let id
 
   import { Collection } from 'sveltefire'
+
+  import Error from './Error.svelte'
 </script>
 
 <h3>Membership Remarks</h3>
 
-<!-- TODO: Add pagination -->
 <Collection
   path={ 'members/' + id + '/remarks' }
   query={ ref => ref.orderBy('Date Occurred', 'asc').limit(5) }
@@ -29,7 +30,6 @@
 
       <tbody>
         { #each remarks as remark }
-
           <tr>
             <td>{ remark['Event Code'] }</td>
             <td>{ new Date(remark['Date Occurred'].seconds * 1000).toLocaleDateString() }</td>
@@ -39,6 +39,8 @@
         { /each }
       </tbody>
     </table>
+
+    <p>* Note: Only the 5 recent remarks will be shown.</p>
   { /if }
 
   <div slot="loading">
@@ -48,8 +50,6 @@
   </div>
 
   <div slot="fallback">
-    <p>
-      An error has occurred. Please contact Aaron Teo (aaron.teo@riv-alumni.com) for assistance.
-    </p>
+    <Error />
   </div>
 </Collection>

@@ -106,7 +106,7 @@
 
             <div class="row valign-wrapper">
               <div class="col s6 bold">Home Number</div>
-              { #if memberData['Home Number'] == '' }
+              { #if memberData['Home Number'] == '' || typeof memberData['Home Number'] == 'object' }
                 <div class="col s6 truncate">
                   <i>NO DATA</i>
                 </div>
