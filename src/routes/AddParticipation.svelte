@@ -52,6 +52,7 @@
           'Full Name': member['Full Name'],
           'Role': document.getElementById('role').value,
           'VIA Hours': Number(document.getElementById('viaHours').value),
+          'Remarks': document.getElementById('remarks').value,
           'updatedAt': firebase.firestore.FieldValue.serverTimestamp(),
           'createdAt': firebase.firestore.FieldValue.serverTimestamp(),
         }, { merge: true })
@@ -183,6 +184,13 @@
                   <div class="col s6 bold">VIA Hours</div>
                   <div class="col s6">
                     <input id="viaHours" type="number" value="0" min="0">
+                  </div>
+                </div>
+
+                <div class="row valign-wrapper">
+                  <div class="col s6 bold">Remarks</div>
+                  <div class="col s6">
+                    <textarea id="remarks" class="materialize-textarea"></textarea>
                   </div>
                 </div>
 

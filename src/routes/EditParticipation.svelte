@@ -32,6 +32,7 @@
     ref.set({
       'Role': document.getElementById('role').value,
       'VIA Hours': Number(document.getElementById('viaHours').value),
+      'Remarks': document.getElementById('remarks').value,
       'updatedAt': firebase.firestore.FieldValue.serverTimestamp(),
     }, { merge: true })
       .then(() => {
@@ -138,6 +139,13 @@
                   <div class="col s6 bold">VIA Hours</div>
                   <div class="col s6">
                     <input id="viaHours" type="number" value={ prt['VIA Hours'] } min="0">
+                  </div>
+                </div>
+
+                <div class="row valign-wrapper">
+                  <div class="col s6 bold">Remarks</div>
+                  <div class="col s6">
+                    <textarea id="remarks" class="materialize-textarea">{ prt['Remarks'] }</textarea>
                   </div>
                 </div>
 

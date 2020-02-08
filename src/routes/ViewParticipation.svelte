@@ -109,6 +109,17 @@
                 <div class="col s6 truncate">{ prt['VIA Hours'] }</div>
               </div>
 
+              <div class="row valign-wrapper">
+                <div class="col s6 bold">Remarks</div>
+                { #if prt['Remarks'] == '' || typeof prt['Remarks'] == 'object' }
+                  <div class="col s6 truncate">
+                    <i>NO DATA</i>
+                  </div>
+                { :else }
+                  <div class="col s6">{ prt['Remarks'] }</div>
+                { /if }
+              </div>
+
               <div id="confirmationModal" class="modal">
                 <div class="modal-content">
                   <h3 class="truncate">Confirmation</h3>
