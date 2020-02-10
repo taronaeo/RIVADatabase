@@ -43,25 +43,6 @@
             </div>
           </nav>
 
-          <div class="row valign-wrapper">
-            <div class="col s10">
-              <h5>From</h5>
-            </div>
-
-            <div class="col s2"></div>
-          </div>
-
-          <div class="row valign-wrapper">
-            <div class="col s10">
-              <select id="collection">
-                <option value="users">Users</option>
-                <option value="members">Members</option>
-                <option value="events">Events</option>
-                <option value="participations">Participations</option>
-              </select>
-            </div>
-          </div>
-
           { #if userData.roles.Editor || userData.roles.Administrator }
 
           { :else }
