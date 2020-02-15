@@ -17,7 +17,6 @@
 	import EditMember from './routes/EditMember.svelte'
 	import CreateEvent from './routes/CreateEvent.svelte'
 	import Participation from './routes/Participation.svelte'
-	import SearchDatabase from './routes/SearchDatabase.svelte'
 	import NewRequestLetter from './routes/NewRequestLetter.svelte'
 	import AddParticipation from './routes/AddParticipation.svelte'
 	import ViewParticipation from './routes/ViewParticipation.svelte'
@@ -49,7 +48,6 @@
 
 	<Router>
 		<Route exact path="/" component={ Dashboard } />
-		<Route exact path="/search" component={ SearchDatabase } />
 		<Route exact path="/manage/members" component={ Members } />
 		<Route exact path="/manage/members/me" component={ ViewMember } />
 		<Route exact path="/manage/members/add" component={ AddMember } />
